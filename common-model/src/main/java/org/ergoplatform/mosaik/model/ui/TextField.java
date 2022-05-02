@@ -4,21 +4,29 @@ import org.ergoplatform.mosaik.model.actions.Action;
 
 import javax.annotation.Nullable;
 
+/**
+ * A text input element
+ */
 public abstract class TextField<T> extends ViewElement implements InputElement<T> {
     @Nullable
-    private Icon endIcon;
+    private IconType endIconType;
     @Nullable
     private Action onEndIconClicked;
     @Nullable
     private String errorMessage;
+    @Nullable
+    private T value;
+    @Nullable
+    private Action onValueChangedAction;
+    private boolean enabled = true;
 
     @Nullable
-    public Icon getEndIcon() {
-        return endIcon;
+    public IconType getEndIcon() {
+        return endIconType;
     }
 
-    public void setEndIcon(@Nullable Icon endIcon) {
-        this.endIcon = endIcon;
+    public void setEndIcon(@Nullable IconType endIconType) {
+        this.endIconType = endIconType;
     }
 
     @Nullable
@@ -37,5 +45,37 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
 
     public void setErrorMessage(@Nullable String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    @Override
+    @Nullable
+    public T getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(@Nullable T value) {
+        this.value = value;
+    }
+
+    @Override
+    @Nullable
+    public Action getOnValueChangedAction() {
+        return onValueChangedAction;
+    }
+
+    @Override
+    public void setOnValueChangedAction(@Nullable Action onValueChangedAction) {
+        this.onValueChangedAction = onValueChangedAction;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

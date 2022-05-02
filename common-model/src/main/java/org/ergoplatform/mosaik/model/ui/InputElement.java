@@ -11,7 +11,7 @@ public interface InputElement<T> {
     void setValue(@Nullable T value);
 
     @Nullable
-    Action onValueChangedAction();
+    Action getOnValueChangedAction();
 
     void setOnValueChangedAction(Action action);
 
