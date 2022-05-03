@@ -13,7 +13,7 @@ public interface InputElement<T> {
     @Nullable
     Action getOnValueChangedAction();
 
-    void setOnValueChangedAction(Action action);
+    void setOnValueChangedAction(@Nullable Action action);
 
     boolean isEnabled();
 
