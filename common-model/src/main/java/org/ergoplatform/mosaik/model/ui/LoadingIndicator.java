@@ -2,6 +2,8 @@ package org.ergoplatform.mosaik.model.ui;
 
 import org.ergoplatform.mosaik.model.actions.Action;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -26,9 +28,8 @@ public class LoadingIndicator extends ViewElement {
                 this.getClass().getSimpleName());
     }
 
-    @Nullable
     @Override
-    public Action getOnLongPressAction() {
+    public void setOnLongPressAction(@Nullable Action action) {
         throw new IllegalArgumentException("OnOnLongPressAction can't be set for" +
                 this.getClass().getSimpleName());
     }
@@ -36,5 +37,19 @@ public class LoadingIndicator extends ViewElement {
     public enum Size {
         SMALL,
         MEDIUM
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LoadingIndicator that = (LoadingIndicator) o;
+        return getSize() == that.getSize();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getSize());
     }
 }

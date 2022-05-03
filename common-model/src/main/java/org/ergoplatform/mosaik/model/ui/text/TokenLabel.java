@@ -4,6 +4,8 @@ import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 
 /**
@@ -60,5 +62,19 @@ public class TokenLabel extends ViewElement {
 
     public void setAmount(long amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TokenLabel that = (TokenLabel) o;
+        return getDecimals() == that.getDecimals() && getAmount() == that.getAmount() && Objects.equals(getTokenId(), that.getTokenId()) && Objects.equals(getTokenName(), that.getTokenName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getTokenId(), getTokenName(), getDecimals(), getAmount());
     }
 }

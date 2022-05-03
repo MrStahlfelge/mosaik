@@ -4,6 +4,8 @@ import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.IconType;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 
 /**
@@ -79,5 +81,19 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TextField<?> textField = (TextField<?>) o;
+        return isEnabled() == textField.isEnabled() && endIconType == textField.endIconType && Objects.equals(getOnEndIconClicked(), textField.getOnEndIconClicked()) && Objects.equals(getErrorMessage(), textField.getErrorMessage()) && Objects.equals(getValue(), textField.getValue()) && Objects.equals(getOnValueChangedAction(), textField.getOnValueChangedAction());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), endIconType, getOnEndIconClicked(), getErrorMessage(), getValue(), getOnValueChangedAction(), isEnabled());
     }
 }

@@ -4,6 +4,8 @@ import org.ergoplatform.mosaik.model.ui.ForegroundColor;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -85,5 +87,19 @@ public class StyleableTextLabel<T> extends ViewElement implements StyleableLabel
     @Override
     public void setTextAlignment(@Nonnull HAlignment textAlignment) {
         this.textAlignment = textAlignment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        StyleableTextLabel<?> that = (StyleableTextLabel<?>) o;
+        return getMaxLines() == that.getMaxLines() && getStyle() == that.getStyle() && getTextColor() == that.getTextColor() && Objects.equals(getText(), that.getText()) && getTruncationType() == that.getTruncationType() && getTextAlignment() == that.getTextAlignment();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getStyle(), getTextColor(), getText(), getMaxLines(), getTruncationType(), getTextAlignment());
     }
 }

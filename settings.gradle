@@ -9,3 +9,4 @@
 
 rootProject.name = 'ergo-mosaik'
 include('common-model')
+include('serialization-gson')

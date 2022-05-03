@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui.text;
 
+import java.util.Objects;
+
 /**
  * Shows nanoERG amount in user's currency, formatted
  */
@@ -15,5 +17,19 @@ public class FiatAmountLabel extends StyleableTextLabel<Long> {
 
     public void setFallbackToErg(boolean fallbackToErg) {
         this.fallbackToErg = fallbackToErg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        FiatAmountLabel that = (FiatAmountLabel) o;
+        return isFallbackToErg() == that.isFallbackToErg();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), isFallbackToErg());
     }
 }

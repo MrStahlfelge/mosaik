@@ -4,6 +4,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -62,5 +63,19 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     public int getChildWeight(@Nonnull ViewElement element) {
         int pos = getChildPos(element);
         return childWeight.get(pos);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LinearLayout<?> that = (LinearLayout<?>) o;
+        return getPadding() == that.getPadding() && getChildren().equals(that.getChildren()) && childAlignment.equals(that.childAlignment) && childWeight.equals(that.childWeight);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getPadding(), getChildren(), childAlignment, childWeight);
     }
 }

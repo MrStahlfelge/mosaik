@@ -4,6 +4,7 @@ import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -55,5 +56,19 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
     public void setOnClickAction(@Nullable Action action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
                 this.getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        WalletChooseButton that = (WalletChooseButton) o;
+        return isEnabled() == that.isEnabled() && Objects.equals(addresses, that.addresses) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), addresses, getOnValueChangedAction(), isEnabled());
     }
 }

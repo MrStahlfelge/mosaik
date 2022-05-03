@@ -3,6 +3,8 @@ package org.ergoplatform.mosaik.model.ui.input;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 
 /**
@@ -51,5 +53,19 @@ public class ErgoAddressChooseButton extends ViewElement implements InputElement
     public void setOnClickAction(@Nullable Action action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
                 this.getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ErgoAddressChooseButton that = (ErgoAddressChooseButton) o;
+        return isEnabled() == that.isEnabled() && Objects.equals(address, that.address) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), address, getOnValueChangedAction(), isEnabled());
     }
 }

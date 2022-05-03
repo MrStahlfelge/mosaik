@@ -4,6 +4,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -54,5 +55,19 @@ public class Box extends ViewElement implements LayoutElement {
 
     public List<VAlignment> getChildVAlignment() {
         return childVAlignment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Box box = (Box) o;
+        return getPadding() == box.getPadding() && getChildren().equals(box.getChildren()) && getChildHAlignment().equals(box.getChildHAlignment()) && getChildVAlignment().equals(box.getChildVAlignment());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getPadding(), getChildren(), getChildHAlignment(), getChildVAlignment());
     }
 }

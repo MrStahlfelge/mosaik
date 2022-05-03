@@ -3,6 +3,8 @@ package org.ergoplatform.mosaik.model.ui.text;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -63,6 +65,20 @@ public class Button extends ViewElement implements TextLabel<String> {
 
     public void setStyle(@Nonnull ButtonStyle style) {
         this.style = style;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Button button = (Button) o;
+        return getMaxLines() == button.getMaxLines() && Objects.equals(getText(), button.getText()) && getTruncationType() == button.getTruncationType() && getTextAlignment() == button.getTextAlignment() && getStyle() == button.getStyle();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getText(), getMaxLines(), getTruncationType(), getTextAlignment(), getStyle());
     }
 
     public enum ButtonStyle {
