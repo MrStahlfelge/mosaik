@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.ui.layout.Box;
+
 import javax.annotation.Nonnull;
 
 /**

@@ -11,7 +11,7 @@ public class Icon extends ViewElement {
     @Nonnull
     private Size iconSize = Size.SMALL;
     @Nonnull
-    private LabelColor tintColor = LabelColor.DEFAULT;
+    private ForegroundColor tintColor = ForegroundColor.DEFAULT;
 
     @Nonnull
     public IconType getIconType() {
@@ -32,11 +32,11 @@ public class Icon extends ViewElement {
     }
 
     @Nonnull
-    public LabelColor getTintColor() {
+    public ForegroundColor getTintColor() {
         return tintColor;
     }
 
-    public void setTintColor(@Nonnull LabelColor tintColor) {
+    public void setTintColor(@Nonnull ForegroundColor tintColor) {
         this.tintColor = tintColor;
     }
 
