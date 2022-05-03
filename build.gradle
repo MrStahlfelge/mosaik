@@ -5,4 +5,7 @@ allprojects {
         // Use Maven Central for resolving dependencies.
         mavenCentral()
     }
+
+    version = "0.1"
+    group = 'com.github.MrStahlfelge.ergo-mosaik'
 }
