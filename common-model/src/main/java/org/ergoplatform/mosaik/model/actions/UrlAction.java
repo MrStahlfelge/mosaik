@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 public class UrlAction implements Action {
@@ -16,5 +18,18 @@ public class UrlAction implements Action {
 
     public void setUrl(@Nonnull String url) {
         this.url = url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UrlAction urlAction = (UrlAction) o;
+        return Objects.equals(getUrl(), urlAction.getUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUrl());
     }
 }

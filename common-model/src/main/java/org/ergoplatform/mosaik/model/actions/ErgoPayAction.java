@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 
 /**
@@ -17,5 +19,19 @@ public class ErgoPayAction extends UrlAction {
 
     public void setOnFinished(@Nullable Action onFinished) {
         this.onFinished = onFinished;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ErgoPayAction that = (ErgoPayAction) o;
+        return Objects.equals(getOnFinished(), that.getOnFinished());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getOnFinished());
     }
 }

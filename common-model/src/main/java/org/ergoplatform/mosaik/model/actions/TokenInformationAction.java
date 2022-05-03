@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -23,5 +25,18 @@ public class TokenInformationAction implements Action {
 
     public void setTokenId(@Nonnull String tokenId) {
         this.tokenId = tokenId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TokenInformationAction that = (TokenInformationAction) o;
+        return Objects.equals(getTokenId(), that.getTokenId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTokenId());
     }
 }

@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -60,5 +62,18 @@ public class DialogAction implements Action {
 
     public void setOnNegativeButtonClicked(@Nullable Action onNegativeButtonClicked) {
         this.onNegativeButtonClicked = onNegativeButtonClicked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DialogAction that = (DialogAction) o;
+        return Objects.equals(getMessage(), that.getMessage()) && Objects.equals(getPositiveButtonText(), that.getPositiveButtonText()) && Objects.equals(getNegativeButtonText(), that.getNegativeButtonText()) && Objects.equals(getOnPositiveButtonClicked(), that.getOnPositiveButtonClicked()) && Objects.equals(getOnNegativeButtonClicked(), that.getOnNegativeButtonClicked());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMessage(), getPositiveButtonText(), getNegativeButtonText(), getOnPositiveButtonClicked(), getOnNegativeButtonClicked());
     }
 }

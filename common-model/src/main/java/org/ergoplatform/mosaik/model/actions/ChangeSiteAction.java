@@ -2,6 +2,8 @@ package org.ergoplatform.mosaik.model.actions;
 
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -25,5 +27,18 @@ public class ChangeSiteAction implements Action {
 
     public void setElement(@Nonnull ViewElement element) {
         this.element = element;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChangeSiteAction that = (ChangeSiteAction) o;
+        return Objects.equals(getElement(), that.getElement());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getElement());
     }
 }

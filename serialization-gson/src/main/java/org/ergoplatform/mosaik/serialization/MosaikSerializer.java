@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik.serialization;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 public class MosaikSerializer {
@@ -14,6 +15,7 @@ public class MosaikSerializer {
     private static Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ViewElement.class, new ViewElementAdapter());
+        gsonBuilder.registerTypeAdapter(Action.class, new ActionAdapter());
         return gsonBuilder.create();
     }
 

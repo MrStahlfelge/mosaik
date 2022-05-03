@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -19,5 +21,18 @@ public class CopyClipboardAction implements Action {
 
     public void setText(@Nonnull String text) {
         this.text = text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CopyClipboardAction that = (CopyClipboardAction) o;
+        return Objects.equals(getText(), that.getText());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getText());
     }
 }
