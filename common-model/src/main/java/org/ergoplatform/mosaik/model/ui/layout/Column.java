@@ -5,7 +5,7 @@ package org.ergoplatform.mosaik.model.ui.layout;
  */
 public class Column extends LinearLayout<HAlignment> {
     @Override
-    protected HAlignment defaultChildAlignment() {
+    public HAlignment defaultChildAlignment() {
         return HAlignment.CENTER;
     }
 }

@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
@@ -36,26 +37,29 @@ import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public class ViewElementAdapter implements JsonSerializer<ViewElement>, JsonDeserializer<ViewElement> {
+public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonDeserializer<ViewElement> {
 
-    public static final String TYPE_ELEMENT_NAME = "type";
+    public static final String KEY_VISIBLE = "visible";
+    public static final String KEY_ID = "id";
+    public static final String KEY_LONG_PRESS = "onLongPress";
+    public static final String KEY_CLICK = "onClick";
 
     @Override
     public JsonElement serialize(ViewElement src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
-        JsonObject superObject = context.serialize(src).getAsJsonObject().getAsJsonObject();
-        jsonObject.add(TYPE_ELEMENT_NAME, new JsonPrimitive(src.getClass().getSimpleName()));
 
-        for (Map.Entry<String, JsonElement> entry : superObject.entrySet()) {
-            boolean addEntry = true;
-
-            // include isVisible field only when not visible
-            if (entry.getKey().equals("isVisible") && src.isVisible())
-                addEntry = false;
-
-            if (addEntry) {
-                jsonObject.add(entry.getKey(), entry.getValue());
-            }
+        jsonObject.add(MosaikSerializer.TYPE_ELEMENT_NAME, new JsonPrimitive(src.getClass().getSimpleName()));
+        if (!src.isVisible()) {
+            jsonObject.add(KEY_VISIBLE, new JsonPrimitive(src.isVisible()));
+        }
+        if (src.getId() != null) {
+            jsonObject.add(KEY_ID, new JsonPrimitive(src.getId()));
+        }
+        if (src.getOnLongPressAction() != null) {
+            jsonObject.add(KEY_LONG_PRESS, context.serialize(src.getOnLongPressAction(), Action.class));
+        }
+        if (src.getOnClickAction() != null) {
+            jsonObject.add(KEY_CLICK, context.serialize(src.getOnClickAction(), Action.class));
         }
 
         return jsonObject;
@@ -63,7 +67,7 @@ public class ViewElementAdapter implements JsonSerializer<ViewElement>, JsonDese
 
     @Override
     public ViewElement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        String elementName = json.getAsJsonObject().get(TYPE_ELEMENT_NAME).getAsString();
+        String elementName = json.getAsJsonObject().get(MosaikSerializer.TYPE_ELEMENT_NAME).getAsString();
 
         // no reflection used here, this runs on mobile devices
         Class<?> clazz;
@@ -139,5 +143,20 @@ public class ViewElementAdapter implements JsonSerializer<ViewElement>, JsonDese
         }
 
         return context.deserialize(json, clazz);
+    }
+
+    public static void deserializeCommon(JsonObject json, ViewElement element, JsonDeserializationContext context) {
+        if (json.has(KEY_VISIBLE)) {
+            element.setVisible(json.get(KEY_VISIBLE).getAsBoolean());
+        }
+        if (json.has(KEY_ID)) {
+            element.setId(json.get(KEY_ID).getAsString());
+        }
+        if (json.has(KEY_CLICK)) {
+            element.setOnClickAction(context.<Action>deserialize(json.get(KEY_CLICK), Action.class));
+        }
+        if (json.has(KEY_LONG_PRESS)) {
+            element.setOnLongPressAction(context.<Action>deserialize(json.get(KEY_CLICK), Action.class));
+        }
     }
 }

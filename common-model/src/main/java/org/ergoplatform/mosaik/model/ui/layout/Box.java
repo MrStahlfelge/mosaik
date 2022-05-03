@@ -37,7 +37,7 @@ public class Box extends ViewElement implements LayoutElement {
     }
 
     @Override
-    public void addChildren(@Nonnull ViewElement element) {
+    public void addChild(@Nonnull ViewElement element) {
         addChildren(element, HAlignment.CENTER, VAlignment.CENTER);
     }
 

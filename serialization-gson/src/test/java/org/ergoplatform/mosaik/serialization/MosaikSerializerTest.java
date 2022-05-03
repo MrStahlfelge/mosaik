@@ -12,6 +12,7 @@ import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.junit.Assert;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -70,11 +71,13 @@ public class MosaikSerializerTest extends TestCase {
                     }
                 }
 
-                column.addChildren(element);
+                column.addChild(element);
             } catch (InstantiationException | IllegalAccessException ignored) {
                 // abstract classes etc
             }
         }
+
+        column.addChild(new Box(), HAlignment.END, 2);
 
         String json = MosaikSerializer.toJson(column);
         System.out.println(json);

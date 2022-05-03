@@ -5,7 +5,7 @@ package org.ergoplatform.mosaik.model.ui.layout;
  */
 public class Row extends LinearLayout<VAlignment> {
     @Override
-    protected VAlignment defaultChildAlignment() {
+    public VAlignment defaultChildAlignment() {
         return VAlignment.CENTER;
     }
 }

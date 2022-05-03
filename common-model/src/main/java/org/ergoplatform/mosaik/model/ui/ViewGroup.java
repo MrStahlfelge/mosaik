@@ -17,5 +17,5 @@ public interface ViewGroup {
     /**
      * adds a child view element
      */
-    void addChildren(@Nonnull ViewElement element);
+    void addChild(@Nonnull ViewElement element);
 }

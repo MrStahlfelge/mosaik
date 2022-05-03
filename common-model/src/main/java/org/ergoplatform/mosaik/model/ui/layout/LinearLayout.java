@@ -36,22 +36,26 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     }
 
     @Override
-    public void addChildren(@Nonnull ViewElement element) {
-        addChildren(element, defaultChildAlignment(), 1);
+    public void addChild(@Nonnull ViewElement element) {
+        addChild(element, defaultChildAlignment(), 1);
     }
 
-    protected abstract CSA defaultChildAlignment();
+    public abstract CSA defaultChildAlignment();
 
-    public void addChildren(@Nonnull ViewElement element,
-                            @Nonnull CSA hAlignment,
-                            int childWeight) {
+    public void addChild(@Nonnull ViewElement element,
+                         @Nonnull CSA alignment,
+                         int childWeight) {
         children.add(element);
-        childAlignment.add(hAlignment);
+        childAlignment.add(alignment);
         this.childWeight.add(childWeight);
     }
 
     private int getChildPos(ViewElement element) {
-        return children.indexOf(element);
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) == element)
+                return i;
+        }
+        return -1;
     }
 
     @Nonnull
