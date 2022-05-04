@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.text;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 
@@ -8,6 +9,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@Since(0)
 public class Button extends ViewElement implements TextLabel<String> {
     @Nullable private String text;
     private int maxLines;

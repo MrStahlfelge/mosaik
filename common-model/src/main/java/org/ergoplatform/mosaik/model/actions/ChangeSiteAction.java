@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.Objects;
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
  * If the new element's id is present in the current view, only that element is replaced. Thus it is
  * possible to change only very few elements of the tree.
  */
+@Since(0)
 public class ChangeSiteAction implements Action {
     private ViewElement element;
 

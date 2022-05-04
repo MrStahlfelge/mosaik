@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -14,6 +16,7 @@ import javax.annotation.Nonnull;
  * <p>
  * Response can result in any other action.
  */
+@Since(0)
 public class ServerRequestAction extends UrlAction {
     private boolean postDataValues;
 

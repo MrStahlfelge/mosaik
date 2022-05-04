@@ -12,5 +12,9 @@
     "onFinished": {
       "$ref": "action.json"
     }
-  }
+  },
+  "required": [
+    "type",
+    "url"
+  ]
 }

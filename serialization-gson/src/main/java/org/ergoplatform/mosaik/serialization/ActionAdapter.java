@@ -20,7 +20,6 @@ import org.ergoplatform.mosaik.model.actions.NavigateAction;
 import org.ergoplatform.mosaik.model.actions.QrCodeAction;
 import org.ergoplatform.mosaik.model.actions.ServerRequestAction;
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction;
-import org.ergoplatform.mosaik.model.actions.UrlAction;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -75,9 +74,6 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
                 break;
             case "NavigateAction":
                 clazz = NavigateAction.class;
-                break;
-            case "UrlAction":
-                clazz = UrlAction.class;
                 break;
             case "ErgoAuthAction":
                 clazz = ErgoAuthAction.class;

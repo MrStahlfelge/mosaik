@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -8,6 +10,7 @@ import javax.annotation.Nullable;
 /**
  * Shows an error or info dialog that is shown modal on top of the current view.
  */
+@Since(0)
 public class DialogAction implements Action {
     String message;
     @Nullable String positiveButtonText;

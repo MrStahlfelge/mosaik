@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-public class UrlAction implements Action {
+public abstract class UrlAction implements Action {
     private String url;
 
     @Nonnull

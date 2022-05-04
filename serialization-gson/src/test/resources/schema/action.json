@@ -3,6 +3,15 @@
   "oneOf": [
     {
       "$ref": "ergopayaction.json"
+    },
+    {
+      "$ref": "serverrequestaction.json"
+    },
+    {
+      "$ref": "dialogaction.json"
+    },
+    {
+      "$ref": "changesiteaction.json"
     }
   ]
 }

@@ -37,29 +37,15 @@ public class MosaikSerializer {
     private Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ViewElement.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(DecimalTextField.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(ErgAmountTextField.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(IntegerTextField.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(PasswordTextField.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(TextInputField.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(WalletChooseButton.class, new ViewElementSerializer());
         gsonBuilder.registerTypeAdapter(Box.class, new BoxSerializer());
-        gsonBuilder.registerTypeAdapter(Card.class, new ViewElementSerializer());
         gsonBuilder.registerTypeAdapter(Row.class, new LinearLayoutSerializer());
         gsonBuilder.registerTypeAdapter(Row.class, new RowDeserializer());
-        gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(Button.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(ErgAmountLabel.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(ErgoAddressLabel.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(FiatAmountLabel.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(Label.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(QrCode.class, new ViewElementSerializer());
         gsonBuilder.registerTypeAdapter(Column.class, new LinearLayoutSerializer());
         gsonBuilder.registerTypeAdapter(Column.class, new ColumnDeserializer());
         gsonBuilder.registerTypeAdapter(TokenLabel.class, new TokenLabelSerializer());
         gsonBuilder.registerTypeAdapter(Action.class, new ActionAdapter());
+        gsonBuilder.registerTypeAdapter(TextInputField.class, new TextFieldSerializer<>(String.class, TextInputField.class));
+        gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
         return gsonBuilder.create();
     }
 

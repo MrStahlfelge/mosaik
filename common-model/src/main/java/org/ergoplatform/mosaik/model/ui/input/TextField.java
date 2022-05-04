@@ -19,6 +19,8 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Nullable
     private String errorMessage;
     @Nullable
+    private String placeholder;
+    @Nullable
     private T value;
     @Nullable
     private Action onValueChangedAction;
@@ -71,6 +73,15 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Override
     public void setOnValueChangedAction(@Nullable Action onValueChangedAction) {
         this.onValueChangedAction = onValueChangedAction;
+    }
+
+    @Nullable
+    public String getPlaceHolder() {
+        return placeholder;
+    }
+
+    public void setPlaceHolder(@Nullable String placeHolder) {
+        this.placeholder = placeHolder;
     }
 
     @Override
