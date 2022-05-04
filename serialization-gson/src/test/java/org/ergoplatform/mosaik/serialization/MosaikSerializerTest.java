@@ -8,6 +8,7 @@ import net.jimblackler.jsonschemafriend.SchemaStore;
 import net.jimblackler.jsonschemafriend.ValidationException;
 import net.jimblackler.jsonschemafriend.Validator;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.ChangeSiteAction;
 import org.ergoplatform.mosaik.model.actions.CopyClipboardAction;
@@ -29,29 +30,36 @@ import java.util.Set;
 
 public class MosaikSerializerTest extends TestCase {
 
+    public static int TEST_MOSAIK_VERSION = 0;
+
     public void testJsonRoundTrip() throws GenerationException, ValidationException {
         // collect available actions
         LinkedList<Action> actions = new LinkedList<>();
         for (Class<? extends Action> actionClass : findAllActions(Action.class.getPackage().getName())) {
-            try {
-                Action action = actionClass.newInstance();
+            Since annotation = actionClass.getAnnotation(Since.class);
+            int sinceVersion = annotation != null ? annotation.value() : 1;
 
-                // add needed properties
-                if (action instanceof UrlAction) {
-                    ((UrlAction) action).setUrl("url");
-                } else if (action instanceof DialogAction) {
-                    ((DialogAction) action).setMessage("message");
-                } else if (action instanceof ChangeSiteAction) {
-                    ((ChangeSiteAction) action).setElement(new Box());
-                } else if (action instanceof NavigateAction) {
-                    ((NavigateAction) action).setElement(new Box());
-                } else if (action instanceof CopyClipboardAction) {
-                    ((CopyClipboardAction) action).setText("text");
+            if (sinceVersion <= TEST_MOSAIK_VERSION) {
+                try {
+                    Action action = actionClass.newInstance();
+
+                    // add needed properties
+                    if (action instanceof UrlAction) {
+                        ((UrlAction) action).setUrl("url");
+                    } else if (action instanceof DialogAction) {
+                        ((DialogAction) action).setMessage("message");
+                    } else if (action instanceof ChangeSiteAction) {
+                        ((ChangeSiteAction) action).setElement(new Box());
+                    } else if (action instanceof NavigateAction) {
+                        ((NavigateAction) action).setElement(new Box());
+                    } else if (action instanceof CopyClipboardAction) {
+                        ((CopyClipboardAction) action).setText("text");
+                    }
+
+                    actions.add(action);
+                } catch (InstantiationException | IllegalAccessException ignored) {
+                    // abstract classes etc
                 }
-
-                actions.add(action);
-            } catch (InstantiationException | IllegalAccessException ignored) {
-                // abstract classes etc
             }
         }
 
@@ -60,29 +68,34 @@ public class MosaikSerializerTest extends TestCase {
         Column column = new Column();
 
         for (Class<? extends ViewElement> viewElementClass : findAllViewElements(ViewElement.class.getPackage().getName())) {
-            try {
-                ViewElement element = viewElementClass.newInstance();
+            Since annotation = viewElementClass.getAnnotation(Since.class);
+            int sinceVersion = annotation != null ? annotation.value() : 1;
 
-                // add needed properties
-                if (element instanceof LazyLoadBox) {
-                    ((LazyLoadBox) element).setRequestUrl("...");
-                } else if (element instanceof TokenLabel) {
-                    ((TokenLabel) element).setTokenId("tokenid");
-                }
+            if (sinceVersion <= TEST_MOSAIK_VERSION) {
+                try {
+                    ViewElement element = viewElementClass.newInstance();
 
-                // add actions from queue
-                if (!actions.isEmpty()) {
-                    try {
-                        element.setOnClickAction(actions.getFirst());
-                        actions.removeFirst();
-                    } catch (IllegalArgumentException e) {
-                        // some elements don't let set actions
+                    // add needed properties
+                    if (element instanceof LazyLoadBox) {
+                        ((LazyLoadBox) element).setRequestUrl("...");
+                    } else if (element instanceof TokenLabel) {
+                        ((TokenLabel) element).setTokenId("tokenid");
                     }
-                }
 
-                // TODO column.addChild(element);
-            } catch (InstantiationException | IllegalAccessException ignored) {
-                // abstract classes etc
+                    // add actions from queue
+                    if (!actions.isEmpty()) {
+                        try {
+                            element.setOnClickAction(actions.getFirst());
+                            actions.removeFirst();
+                        } catch (IllegalArgumentException e) {
+                            // some elements don't let set actions
+                        }
+                    }
+
+                    column.addChild(element);
+                } catch (InstantiationException | IllegalAccessException ignored) {
+                    // abstract classes etc
+                }
             }
         }
 

@@ -12,11 +12,11 @@
     },
     "onLongPress": {
       "description": "Action to be started when long press is performed",
-      "type": "object"
+      "$ref": "action.json"
     },
     "onClick": {
       "description": "Action to be started when click or tap is performed",
-      "type": "object"
+      "$ref": "action.json"
     },
     "visible": {
       "description": "Visibility of this object. Optional, defaults to true",
@@ -40,6 +40,9 @@
     }
   },
   "required": [
-    "type", "tokenId", "amount", "decimals"
+    "type",
+    "tokenId",
+    "amount",
+    "decimals"
   ]
 }

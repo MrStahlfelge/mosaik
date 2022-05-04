@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.text;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
@@ -13,6 +14,7 @@ import javax.annotation.Nullable;
  * Label showing a token name and balance formatted. The label is clickable with a default
  * TokenInformationAction if no other action is set
  */
+@Since(0)
 public class TokenLabel extends ViewElement {
     @Nullable private String tokenId;
     @Nullable private String tokenName;

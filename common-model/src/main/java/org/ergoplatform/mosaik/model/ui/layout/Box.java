@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.layout;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import javax.annotation.Nonnull;
 /**
  * Use Box to put elements on top of another
  */
+@Since(0)
 public class Box extends ViewElement implements LayoutElement {
     @Nonnull
     private Padding padding = Padding.NONE;

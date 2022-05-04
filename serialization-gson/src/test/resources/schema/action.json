@@ -1,0 +1,8 @@
+{
+  "title": "Action",
+  "oneOf": [
+    {
+      "$ref": "ergopayaction.json"
+    }
+  ]
+}
