@@ -3,14 +3,17 @@ plugins {
     id 'maven-publish'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
-}
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+compileTestJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 publishing {
@@ -31,4 +34,5 @@ dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.reflections:reflections:0.9.12'
+    testImplementation 'net.jimblackler.jsonschemafriend:core:0.11.3'
 }

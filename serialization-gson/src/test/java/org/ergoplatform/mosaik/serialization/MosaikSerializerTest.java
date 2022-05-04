@@ -2,6 +2,12 @@ package org.ergoplatform.mosaik.serialization;
 
 import junit.framework.TestCase;
 
+import net.jimblackler.jsonschemafriend.GenerationException;
+import net.jimblackler.jsonschemafriend.Schema;
+import net.jimblackler.jsonschemafriend.SchemaStore;
+import net.jimblackler.jsonschemafriend.ValidationException;
+import net.jimblackler.jsonschemafriend.Validator;
+
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.ChangeSiteAction;
 import org.ergoplatform.mosaik.model.actions.CopyClipboardAction;
@@ -22,7 +28,7 @@ import java.util.Set;
 
 public class MosaikSerializerTest extends TestCase {
 
-    public void testJsonRoundTrip() {
+    public void testJsonRoundTrip() throws GenerationException, ValidationException {
         // collect available actions
         LinkedList<Action> actions = new LinkedList<>();
         for (Class<? extends Action> actionClass : findAllActions(Action.class.getPackage().getName())) {
@@ -81,6 +87,12 @@ public class MosaikSerializerTest extends TestCase {
 
         String json = new MosaikSerializer().toJson(column);
         System.out.println(json);
+
+        SchemaStore schemaStore = new SchemaStore(); // Initialize a SchemaStore.
+        // Load the schema.
+        Schema schema = schemaStore.loadSchema(MosaikSerializerTest.class.getResource("/schema/viewelement.json"));
+        Validator validator = new Validator(); // Create a validator.
+        validator.validateJson(schema, json);
 
         ViewElement element = new MosaikSerializer().viewElementFromJson(json);
         Assert.assertEquals(column, element);

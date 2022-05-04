@@ -1,0 +1,36 @@
+{
+  "title": "Row",
+  "description": "Use Row to place items horizontally on the screen",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "Row"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "object"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "object"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "children": {
+      "description": "Children in this view",
+      "type": "array",
+      "items": {
+        "$ref": "viewelement.json"
+      }
+    }
+  },
+  "required": [
+    "type", "children"
+  ]
+}
