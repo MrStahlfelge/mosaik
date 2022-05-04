@@ -142,7 +142,11 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 throw new JsonParseException("View Element with name " + elementName + " not known.");
         }
 
-        return context.deserialize(json, clazz);
+        try {
+            return context.deserialize(json, clazz);
+        } catch (StackOverflowError e) {
+            throw new IllegalArgumentException("No deserializer for element type " + elementName);
+        }
     }
 
     public static void deserializeCommon(JsonObject json, ViewElement element, JsonDeserializationContext context) {

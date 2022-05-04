@@ -38,23 +38,31 @@ public class Box extends ViewElement implements LayoutElement {
 
     @Override
     public void addChild(@Nonnull ViewElement element) {
-        addChildren(element, HAlignment.CENTER, VAlignment.CENTER);
+        addChild(element, HAlignment.CENTER, VAlignment.CENTER);
     }
 
-    public void addChildren(@Nonnull ViewElement element,
-                            @Nonnull HAlignment hAlignment,
-                            @Nonnull VAlignment vAlignment) {
+    public void addChild(@Nonnull ViewElement element,
+                         @Nonnull HAlignment hAlignment,
+                         @Nonnull VAlignment vAlignment) {
         children.add(element);
         childHAlignment.add(hAlignment);
         childVAlignment.add(vAlignment);
     }
 
-    public List<HAlignment> getChildHAlignment() {
-        return childHAlignment;
+    private int getChildPos(ViewElement element) {
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) == element)
+                return i;
+        }
+        return -1;
     }
 
-    public List<VAlignment> getChildVAlignment() {
-        return childVAlignment;
+    public HAlignment getChildHAlignment(@Nonnull ViewElement element) {
+        return childHAlignment.get(getChildPos(element));
+    }
+
+    public VAlignment getChildVAlignment(@Nonnull ViewElement element) {
+        return childVAlignment.get(getChildPos(element));
     }
 
     @Override
@@ -63,11 +71,11 @@ public class Box extends ViewElement implements LayoutElement {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Box box = (Box) o;
-        return getPadding() == box.getPadding() && getChildren().equals(box.getChildren()) && getChildHAlignment().equals(box.getChildHAlignment()) && getChildVAlignment().equals(box.getChildVAlignment());
+        return getPadding() == box.getPadding() && getChildren().equals(box.getChildren()) && childHAlignment.equals(box.childHAlignment) && childVAlignment.equals(box.childVAlignment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getPadding(), getChildren(), getChildHAlignment(), getChildVAlignment());
+        return Objects.hash(super.hashCode(), getPadding(), getChildren(), childHAlignment, childVAlignment);
     }
 }

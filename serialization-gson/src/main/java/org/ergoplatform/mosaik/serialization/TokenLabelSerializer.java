@@ -16,18 +16,23 @@ import java.lang.reflect.Type;
 
 public class TokenLabelSerializer implements JsonSerializer<TokenLabel>, JsonDeserializer<TokenLabel> {
 
+    public static final String KEY_TOKEN_ID = "tokenId";
+    public static final String KEY_TOKEN_NAME = "tokenName";
+    public static final String KEY_DECIMALS = "decimals";
+    public static final String KEY_AMOUNT = "amount";
+
     @Override
     public JsonElement serialize(TokenLabel src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = context.serialize(src, ViewElement.class).getAsJsonObject();
 
         if (src.getTokenName() != null) {
-            jsonObject.add("tokenId", context.serialize(src.getTokenId()));
+            jsonObject.add(KEY_TOKEN_ID, context.serialize(src.getTokenId()));
         }
         if (src.getTokenId() != null) {
-            jsonObject.add("tokenName", context.serialize(src.getTokenName()));
+            jsonObject.add(KEY_TOKEN_NAME, context.serialize(src.getTokenName()));
         }
-        jsonObject.add("decimals", new JsonPrimitive(src.getDecimals()));
-        jsonObject.add("amount", new JsonPrimitive(src.getAmount()));
+        jsonObject.add(KEY_DECIMALS, new JsonPrimitive(src.getDecimals()));
+        jsonObject.add(KEY_AMOUNT, new JsonPrimitive(src.getAmount()));
 
         return jsonObject;
     }
@@ -35,7 +40,23 @@ public class TokenLabelSerializer implements JsonSerializer<TokenLabel>, JsonDes
     @Override
     public TokenLabel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         TokenLabel tokenLabel = new TokenLabel();
-        ViewElementSerializer.deserializeCommon(json.getAsJsonObject(), tokenLabel, context);
+        JsonObject jsonObject = json.getAsJsonObject();
+
+        ViewElementSerializer.deserializeCommon(jsonObject, tokenLabel, context);
+
+        if (jsonObject.has(KEY_TOKEN_ID)) {
+            tokenLabel.setTokenId(jsonObject.get(KEY_TOKEN_ID).getAsString());
+        }
+        if (jsonObject.has(KEY_TOKEN_NAME)) {
+            tokenLabel.setTokenName(jsonObject.get(KEY_TOKEN_NAME).getAsString());
+        }
+        if (jsonObject.has(KEY_DECIMALS)) {
+            tokenLabel.setDecimals(jsonObject.get(KEY_DECIMALS).getAsInt());
+        }
+        if (jsonObject.has(KEY_AMOUNT)) {
+            tokenLabel.setAmount(jsonObject.get(KEY_AMOUNT).getAsLong());
+        }
+
         return tokenLabel;
     }
 }
