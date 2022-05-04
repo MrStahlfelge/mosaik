@@ -25,10 +25,8 @@ public class TokenLabelSerializer implements JsonSerializer<TokenLabel>, JsonDes
     public JsonElement serialize(TokenLabel src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = context.serialize(src, ViewElement.class).getAsJsonObject();
 
+        jsonObject.add(KEY_TOKEN_ID, context.serialize(src.getTokenId()));
         if (src.getTokenName() != null) {
-            jsonObject.add(KEY_TOKEN_ID, context.serialize(src.getTokenId()));
-        }
-        if (src.getTokenId() != null) {
             jsonObject.add(KEY_TOKEN_NAME, context.serialize(src.getTokenName()));
         }
         jsonObject.add(KEY_DECIMALS, new JsonPrimitive(src.getDecimals()));

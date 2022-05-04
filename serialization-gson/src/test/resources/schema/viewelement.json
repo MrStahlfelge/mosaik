@@ -8,6 +8,9 @@
       "$ref": "column.json"
     },
     {
+      "$ref": "tokenlabel.json"
+    },
+    {
       "$ref": "box.json"
     }
   ]

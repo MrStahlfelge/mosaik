@@ -6,6 +6,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -30,8 +31,12 @@ public class TokenLabel extends ViewElement {
         }
     }
 
-    @Nullable
+    @Nonnull
     public String getTokenId() {
+        if (tokenId == null) {
+            throw new IllegalStateException("No tokenId provided for " + this.getClass().getSimpleName());
+        }
+
         return tokenId;
     }
 

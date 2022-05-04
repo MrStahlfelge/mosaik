@@ -19,6 +19,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
+import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 import org.junit.Assert;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -65,6 +66,8 @@ public class MosaikSerializerTest extends TestCase {
                 // add needed properties
                 if (element instanceof LazyLoadBox) {
                     ((LazyLoadBox) element).setRequestUrl("...");
+                } else if (element instanceof TokenLabel) {
+                    ((TokenLabel) element).setTokenId("tokenid");
                 }
 
                 // add actions from queue
