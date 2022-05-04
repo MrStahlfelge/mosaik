@@ -20,6 +20,18 @@
       "$ref": "button.json"
     },
     {
+      "$ref": "label.json"
+    },
+    {
+      "$ref": "loadingindicator.json"
+    },
+    {
+      "$ref": "lazyloadbox.json"
+    },
+    {
+      "$ref": "icon.json"
+    },
+    {
       "$ref": "box.json"
     }
   ]

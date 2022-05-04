@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 
 import java.util.Objects;
@@ -16,6 +17,7 @@ import javax.annotation.Nonnull;
  * for fetching informational data that is not mandatory. The request response must be a
  * {@link ViewElement}
  */
+@Since(0)
 public class LazyLoadBox extends Box {
     private String requestUrl;
 

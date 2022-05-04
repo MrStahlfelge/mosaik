@@ -4,25 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.ergoplatform.mosaik.model.actions.Action;
+import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
-import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
-import org.ergoplatform.mosaik.model.ui.input.DecimalTextField;
-import org.ergoplatform.mosaik.model.ui.input.ErgAmountTextField;
-import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
-import org.ergoplatform.mosaik.model.ui.input.IntegerTextField;
-import org.ergoplatform.mosaik.model.ui.input.PasswordTextField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
-import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
-import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
-import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
-import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel;
-import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
@@ -46,6 +36,10 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(Action.class, new ActionAdapter());
         gsonBuilder.registerTypeAdapter(TextInputField.class, new TextFieldSerializer<>(String.class, TextInputField.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
+        gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer());
+        gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());
+        gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
+        gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
         return gsonBuilder.create();
     }
 

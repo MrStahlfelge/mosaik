@@ -27,7 +27,12 @@ public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box>
     @Override
     public JsonElement serialize(Box src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = context.serialize(src, ViewElement.class).getAsJsonObject();
+        serializeCommon(src, context, jsonObject);
 
+        return jsonObject;
+    }
+
+    public static void serializeCommon(Box src, JsonSerializationContext context, JsonObject jsonObject) {
         if (src.getPadding() != Padding.NONE) {
             jsonObject.add(KEY_PADDING, context.serialize(src.getPadding()));
         }
@@ -45,8 +50,6 @@ public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box>
             children.add(childJson);
         }
         jsonObject.add(KEY_CHILDREN, children);
-
-        return jsonObject;
     }
 
     @Override
@@ -55,7 +58,12 @@ public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box>
         JsonObject jsonObject = json.getAsJsonObject();
 
         ViewElementSerializer.deserializeCommon(jsonObject, box, context);
+        deserializeCommon(context, box, jsonObject);
 
+        return box;
+    }
+
+    public static void deserializeCommon(JsonDeserializationContext context, Box box, JsonObject jsonObject) {
         if (jsonObject.has(KEY_PADDING)) {
             box.setPadding(context.<Padding>deserialize(jsonObject.get(KEY_PADDING), Padding.class));
         }
@@ -67,7 +75,5 @@ public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box>
             VAlignment vAlignment = childJsonObject.has(KEY_V_ALIGN) ? context.<VAlignment>deserialize(childJsonObject.get(KEY_V_ALIGN), VAlignment.class) : VAlignment.CENTER;
             box.addChild(childElement, hAlignment, vAlignment);
         }
-
-        return box;
     }
 }

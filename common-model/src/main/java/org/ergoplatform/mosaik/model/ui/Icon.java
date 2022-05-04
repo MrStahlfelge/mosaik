@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -7,6 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * Shows an icon
  */
+@Since(0)
 public class Icon extends ViewElement {
     @Nonnull
     private IconType iconType = IconType.INFO;

@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.actions.Action;
 
 import java.util.Objects;
@@ -10,6 +11,7 @@ import javax.annotation.Nullable;
 /**
  * Shows a spinner/loading indicator
  */
+@Since(0)
 public class LoadingIndicator extends ViewElement {
     @Nonnull private Size size = Size.SMALL;
 

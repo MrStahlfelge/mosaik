@@ -1,0 +1,37 @@
+{
+  "title": "LoadingIndicator",
+  "description": "Shows a spinner/loading indicator",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "LoadingIndicator"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "$ref": "action.json"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "$ref": "action.json"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "size": {
+      "description": "Size of the indicator",
+      "type": "string",
+      "enum": [
+        "SMALL",
+        "MEDIUM"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

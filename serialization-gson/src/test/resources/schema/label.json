@@ -1,0 +1,57 @@
+{
+  "title": "Label",
+  "description": "Shows text",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "Label"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "$ref": "action.json"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "$ref": "action.json"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "style": {
+      "description": "Style of the label",
+      "type": "string",
+      "enum": [
+        "BODY1",
+        "BODY1BOLD",
+        "BODY1LINK",
+        "BODY2",
+        "BODY2BOLD",
+        "HEADLINE1",
+        "HEADLINE2"
+      ]
+    },
+    "truncationType": {
+      "$ref": "truncationtype.json"
+    },
+    "textAlignment": {
+      "$ref": "halignment.json"
+    },
+    "maxLines": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "string"
+    },
+    "textColor": {
+      "$ref": "foregroundcolor.json"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}
