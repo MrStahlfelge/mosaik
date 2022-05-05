@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 /**
  * Action containing an ErgoPay URL that will make the wallet app switch to ErgoPay.
- * When user navigates back, they will come back to the current {@link org.ergoplatform.mosaik.model.ui.RootView}.
+ * When user navigates back, they will come back to the current view.
  */
 @Since(0)
 public class ErgoPayAction extends UrlAction {

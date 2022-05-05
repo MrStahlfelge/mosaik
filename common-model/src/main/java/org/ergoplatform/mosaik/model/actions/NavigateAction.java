@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Action containing a new {@link org.ergoplatform.mosaik.model.ui.ViewElement} to replace the
- * current {@link org.ergoplatform.mosaik.model.ui.RootView}'s content with.
+ * current view's content with.
  * <p>
  * The current content is left with an animation and the user can navigate back.
  */

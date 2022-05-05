@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Makes a Request to URL. If postDataValues is true, it is a POST request and the body contains all
- * data values of the current {@link org.ergoplatform.mosaik.model.ui.RootView}.
+ * data values of the current view.
  * <p>
  * User data input is disabled while the action runs. If you only want to fetch informational data
  * and don't need to lock the user input, consider using

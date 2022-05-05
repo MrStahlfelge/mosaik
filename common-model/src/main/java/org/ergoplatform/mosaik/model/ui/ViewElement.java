@@ -7,20 +7,10 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 public abstract class ViewElement implements BaseAttributes {
-    private ViewElement parent;
     private boolean isVisible = true;
     private String elementId;
     private Action onLongPressAction;
     private Action onClickAction;
-
-    @Nullable
-    public ViewElement getParent() {
-        return parent;
-    }
-
-    public void setParent(@Nullable ViewElement parent) {
-        this.parent = parent;
-    }
 
     @Override
     public boolean isVisible() {
