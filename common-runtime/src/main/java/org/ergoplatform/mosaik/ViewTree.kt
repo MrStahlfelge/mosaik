@@ -12,8 +12,10 @@ import kotlin.collections.HashMap
  * the complete tree of [ViewElement]'s.
  */
 class ViewTree(val guid: String) {
-    private var content: TreeElement? = null
+    var content: TreeElement? = null
+        private set
     var cacheLifeTime: Long = 0
+        private set
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
@@ -98,11 +100,11 @@ class TreeElement(
     val element: ViewElement,
     val parent: TreeElement?
 ) {
-    private val children = ArrayList<TreeElement>()
+    private val _children = ArrayList<TreeElement>()
 
     init {
         if (element is ViewGroup) {
-            children.addAll(element.children.map { TreeElement(it, this) })
+            _children.addAll(element.children.map { TreeElement(it, this) })
         }
     }
 
@@ -113,6 +115,8 @@ class TreeElement(
     val hasValue get() = hasId && element is InputElement<*>
 
     val value get() = if (hasValue) (element as InputElement<*>).value else null
+
+    val children: List<TreeElement> get() = _children
 
     override fun equals(other: Any?): Boolean {
         return if (other is TreeElement) {
@@ -131,16 +135,16 @@ class TreeElement(
         while (queue.isNotEmpty()) {
             val first = queue.removeFirst()
             visitor(first)
-            first.children.forEach { queue.add(it) }
+            first._children.forEach { queue.add(it) }
         }
     }
 
     fun replaceChildElement(replacedElement: TreeElement, newTreeElement: TreeElement) {
-        val indexOfChild = children.indexOf(replacedElement)
+        val indexOfChild = _children.indexOf(replacedElement)
         if (indexOfChild < 0) {
             throw IllegalArgumentException("Could not find child to replace")
         }
-        children[indexOfChild] = newTreeElement
+        _children[indexOfChild] = newTreeElement
         (element as ViewGroup).replaceChild(replacedElement.element, newTreeElement.element)
     }
 }

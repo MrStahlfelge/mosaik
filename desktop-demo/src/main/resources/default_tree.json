@@ -1,0 +1,18 @@
+{
+  "type": "Column",
+  "children": [
+    {
+      "type": "Label",
+      "text": "Label",
+      "style": "BODY1"
+    },
+    {
+      "type": "Button",
+      "text": "Button"
+    },
+    {
+      "type": "Box",
+      "children": []
+    }
+  ]
+}

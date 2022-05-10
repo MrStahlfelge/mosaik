@@ -21,7 +21,7 @@ publishing {
 }
 
 dependencies {
-    implementation project(path: ':common-model')
+    api project(path: ':common-model')
 
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
