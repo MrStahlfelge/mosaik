@@ -18,4 +18,9 @@ public interface ViewGroup {
      * adds a child view element
      */
     void addChild(@Nonnull ViewElement element);
+
+    /**
+     * replaces a child element, retaining its layout and position
+     */
+    void replaceChild(@Nonnull ViewElement elementToReplace, @Nonnull ViewElement newElement);
 }

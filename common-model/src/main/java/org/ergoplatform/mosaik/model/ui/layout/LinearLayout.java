@@ -50,6 +50,11 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
         this.childWeight.add(childWeight);
     }
 
+    @Override
+    public void replaceChild(@Nonnull ViewElement elementToReplace, @Nonnull ViewElement newElement) {
+        children.set(getChildPos(elementToReplace), newElement);
+    }
+
     private int getChildPos(ViewElement element) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) == element)

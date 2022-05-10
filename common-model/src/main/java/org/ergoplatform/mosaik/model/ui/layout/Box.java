@@ -51,6 +51,11 @@ public class Box extends ViewElement implements LayoutElement {
         childVAlignment.add(vAlignment);
     }
 
+    @Override
+    public void replaceChild(@Nonnull ViewElement elementToReplace, @Nonnull ViewElement newElement) {
+        children.set(getChildPos(elementToReplace), newElement);
+    }
+
     private int getChildPos(ViewElement element) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) == element)
