@@ -64,10 +64,12 @@ public class Box extends ViewElement implements LayoutElement {
         return -1;
     }
 
+    @Nonnull
     public HAlignment getChildHAlignment(@Nonnull ViewElement element) {
         return childHAlignment.get(getChildPos(element));
     }
 
+    @Nonnull
     public VAlignment getChildVAlignment(@Nonnull ViewElement element) {
         return childVAlignment.get(getChildPos(element));
     }

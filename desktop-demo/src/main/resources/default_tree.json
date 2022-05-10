@@ -11,6 +11,34 @@
       "text": "Button"
     },
     {
+      "type": "Row",
+      "children": [
+        {
+          "type": "Box",
+          "padding": "DEFAULT",
+          "children": [
+            {
+              "type": "Label",
+              "text": "Label",
+              "style": "BODY1"
+            }
+          ]
+        },
+        {
+          "type": "Label",
+          "text": "Label (alignment top)",
+          "align": "TOP",
+          "style": "BODY1"
+        }
+      ]
+    },
+    {
+      "type": "Label",
+      "text": "Label (alignment end)",
+      "align": "END",
+      "style": "BODY1"
+    },
+    {
       "type": "Box",
       "children": []
     }
