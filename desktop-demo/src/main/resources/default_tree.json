@@ -3,19 +3,19 @@
   "children": [
     {
       "type": "Label",
-      "text": "Label",
-      "style": "BODY1"
+      "text": "This is a headline 2 label",
+      "style": "HEADLINE2"
     },
     {
       "id": "clickButton",
       "type": "Button",
-      "text": "Button",
+      "text": "Clickin this buton will run a ChangeSiteAction",
       "onClick": {
         "type": "ChangeSiteAction",
         "element": {
           "id": "clickButton",
           "type": "Button",
-          "text": "Clicked"
+          "text": "ChangeSiteAction replace the button"
         }
       }
     },
@@ -25,27 +25,43 @@
         {
           "type": "Box",
           "padding": "DEFAULT",
+          "weight": 2,
           "children": [
             {
               "type": "Label",
-              "text": "Label",
+              "text": "This label is surrounded by a padding and\ntakes 2 times the space than the label on the right",
+              "textAlignment": "CENTER",
               "style": "BODY1"
             }
           ]
         },
         {
           "type": "Label",
-          "text": "Label (alignment top)",
+          "text": "Label (alignment top, truncated)",
           "align": "TOP",
+          "weight": 1,
+          "maxLines": 1,
           "style": "BODY1"
         }
       ]
     },
     {
+      "id": "clickLabel",
       "type": "Label",
-      "text": "Label (alignment end)",
+      "text": "Label (alignment end, click it)",
       "align": "END",
-      "style": "BODY1"
+      "style": "BODY1BOLD",
+      "onClick": {
+        "type": "ChangeSiteAction",
+        "element": {
+          "id": "clickLabel",
+          "type": "Label",
+          "text": "Label (alignment end, already clicked)",
+          "align": "END",
+          "style": "BODY1BOLD",
+          "textColor": "PRIMARY"
+        }
+      }
     },
     {
       "type": "Box",
