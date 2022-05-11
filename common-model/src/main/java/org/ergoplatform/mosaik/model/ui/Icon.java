@@ -24,6 +24,7 @@ public class Icon extends ViewElement {
     }
 
     public void setIconType(@Nonnull IconType iconType) {
+        Objects.requireNonNull(iconType);
         this.iconType = iconType;
     }
 
@@ -33,6 +34,7 @@ public class Icon extends ViewElement {
     }
 
     public void setIconSize(@Nonnull Size iconSize) {
+        Objects.requireNonNull(iconSize);
         this.iconSize = iconSize;
     }
 
@@ -42,6 +44,7 @@ public class Icon extends ViewElement {
     }
 
     public void setTintColor(@Nonnull ForegroundColor tintColor) {
+        Objects.requireNonNull(tintColor);
         this.tintColor = tintColor;
     }
 

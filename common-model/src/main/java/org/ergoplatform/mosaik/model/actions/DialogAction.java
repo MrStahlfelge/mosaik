@@ -28,6 +28,7 @@ public class DialogAction implements Action {
     }
 
     public void setMessage(@Nonnull String message) {
+        Objects.requireNonNull(message);
         this.message = message;
     }
 

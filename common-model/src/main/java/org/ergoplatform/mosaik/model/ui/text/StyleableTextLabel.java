@@ -32,6 +32,7 @@ public class StyleableTextLabel<T> extends ViewElement implements StyleableLabel
 
     @Override
     public void setStyle(@Nonnull LabelStyle style) {
+        Objects.requireNonNull(style);
         this.style = style;
     }
 
@@ -43,6 +44,7 @@ public class StyleableTextLabel<T> extends ViewElement implements StyleableLabel
 
     @Override
     public void setTextColor(@Nonnull ForegroundColor textColor) {
+        Objects.requireNonNull(textColor);
         this.textColor = textColor;
     }
 
@@ -75,6 +77,7 @@ public class StyleableTextLabel<T> extends ViewElement implements StyleableLabel
 
     @Override
     public void setTruncationType(@Nonnull TruncationType truncationType) {
+        Objects.requireNonNull(truncationType);
         this.truncationType = truncationType;
     }
 
@@ -86,6 +89,7 @@ public class StyleableTextLabel<T> extends ViewElement implements StyleableLabel
 
     @Override
     public void setTextAlignment(@Nonnull HAlignment textAlignment) {
+        Objects.requireNonNull(textAlignment);
         this.textAlignment = textAlignment;
     }
 

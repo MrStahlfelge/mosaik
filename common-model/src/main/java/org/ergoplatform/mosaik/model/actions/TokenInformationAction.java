@@ -24,6 +24,7 @@ public class TokenInformationAction implements Action {
     }
 
     public void setTokenId(@Nonnull String tokenId) {
+        Objects.requireNonNull(tokenId);
         this.tokenId = tokenId;
     }
 

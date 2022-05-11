@@ -30,6 +30,7 @@ public class LazyLoadBox extends Box {
     }
 
     public void setRequestUrl(@Nonnull String requestUrl) {
+        Objects.requireNonNull(requestUrl);
         this.requestUrl = requestUrl;
     }
 

@@ -20,6 +20,7 @@ public class CopyClipboardAction implements Action {
     }
 
     public void setText(@Nonnull String text) {
+        Objects.requireNonNull(text);
         this.text = text;
     }
 

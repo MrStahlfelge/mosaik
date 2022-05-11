@@ -26,6 +26,7 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
 
     @Override
     public void setPadding(@Nonnull Padding padding) {
+        Objects.requireNonNull(padding);
         this.padding = padding;
     }
 
@@ -45,6 +46,8 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     public void addChild(@Nonnull ViewElement element,
                          @Nonnull CSA alignment,
                          int childWeight) {
+        Objects.requireNonNull(element);
+        Objects.requireNonNull(alignment);
         children.add(element);
         childAlignment.add(alignment);
         this.childWeight.add(childWeight);
@@ -52,6 +55,8 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
 
     @Override
     public void replaceChild(@Nonnull ViewElement elementToReplace, @Nonnull ViewElement newElement) {
+        Objects.requireNonNull(elementToReplace);
+        Objects.requireNonNull(newElement);
         children.set(getChildPos(elementToReplace), newElement);
     }
 

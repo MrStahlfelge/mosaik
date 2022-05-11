@@ -21,6 +21,7 @@ public class LoadingIndicator extends ViewElement {
     }
 
     public void setSize(@Nonnull Size size) {
+        Objects.requireNonNull(size);
         this.size = size;
     }
 

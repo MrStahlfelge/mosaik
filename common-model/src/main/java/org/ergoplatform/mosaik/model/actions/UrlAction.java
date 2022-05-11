@@ -17,6 +17,7 @@ public abstract class UrlAction implements Action {
     }
 
     public void setUrl(@Nonnull String url) {
+        Objects.requireNonNull(url);
         this.url = url;
     }
 

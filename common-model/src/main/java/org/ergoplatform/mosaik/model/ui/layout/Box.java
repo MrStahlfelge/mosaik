@@ -29,6 +29,7 @@ public class Box extends ViewElement implements LayoutElement {
 
     @Override
     public void setPadding(@Nonnull Padding padding) {
+        Objects.requireNonNull(padding);
         this.padding = padding;
     }
 
@@ -46,6 +47,9 @@ public class Box extends ViewElement implements LayoutElement {
     public void addChild(@Nonnull ViewElement element,
                          @Nonnull HAlignment hAlignment,
                          @Nonnull VAlignment vAlignment) {
+        Objects.requireNonNull(element);
+        Objects.requireNonNull(hAlignment);
+        Objects.requireNonNull(vAlignment);
         children.add(element);
         childHAlignment.add(hAlignment);
         childVAlignment.add(vAlignment);
@@ -53,6 +57,8 @@ public class Box extends ViewElement implements LayoutElement {
 
     @Override
     public void replaceChild(@Nonnull ViewElement elementToReplace, @Nonnull ViewElement newElement) {
+        Objects.requireNonNull(elementToReplace);
+        Objects.requireNonNull(newElement);
         children.set(getChildPos(elementToReplace), newElement);
     }
 

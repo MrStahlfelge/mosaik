@@ -24,6 +24,7 @@ public class Image extends ViewElement {
     }
 
     public void setUrl(@Nonnull String url) {
+        Objects.requireNonNull(url);
         this.url = url;
     }
 
@@ -33,6 +34,7 @@ public class Image extends ViewElement {
     }
 
     public void setIconSize(@Nonnull Size iconSize) {
+        Objects.requireNonNull(iconSize);
         this.iconSize = iconSize;
     }
 

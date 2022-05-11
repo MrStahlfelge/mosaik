@@ -28,6 +28,7 @@ public class ChangeSiteAction implements Action {
     }
 
     public void setElement(@Nonnull ViewElement element) {
+        Objects.requireNonNull(element);
         this.element = element;
     }
 

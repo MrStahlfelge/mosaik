@@ -46,6 +46,7 @@ public class Button extends ViewElement implements TextLabel<String> {
 
     @Override
     public void setTruncationType(@Nonnull TruncationType truncationType) {
+        Objects.requireNonNull(truncationType);
         this.truncationType = truncationType;
     }
 
@@ -57,6 +58,7 @@ public class Button extends ViewElement implements TextLabel<String> {
 
     @Override
     public void setTextAlignment(@Nonnull HAlignment textAlignment) {
+        Objects.requireNonNull(textAlignment);
         this.textAlignment = textAlignment;
     }
 
@@ -66,6 +68,7 @@ public class Button extends ViewElement implements TextLabel<String> {
     }
 
     public void setStyle(@Nonnull ButtonStyle style) {
+        Objects.requireNonNull(style);
         this.style = style;
     }
 
