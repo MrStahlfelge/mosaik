@@ -8,11 +8,12 @@ import org.ergoplatform.mosaik.model.ui.ViewElement
  * the complete tree of [ViewElement]'s and is context.
  */
 class ViewTree(val guid: String, val actionRunner: ActionRunner) {
-    private var content: TreeElement? = null
+    var content: TreeElement? = null
+        private set
     var cacheLifeTime: Long = 0
         private set
-    private val _stateFlow = MutableStateFlow<TreeElement?>(null)
-    val contentState: StateFlow<TreeElement?> get() = _stateFlow
+    private val _modificationFlow = MutableStateFlow<Pair<Int, TreeElement?>>(Pair(0, null))
+    val contentState: StateFlow<Pair<Int, TreeElement?>> get() = _modificationFlow
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
@@ -55,7 +56,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
 
             addIdsAndValues(newTreeElement)
         }
-        _stateFlow.value = content
+        _modificationFlow.value = Pair(_modificationFlow.value.first + 1, content)
     }
 
     private fun addIdsAndValues(element: TreeElement) {

@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 class TreeElement(
     val element: ViewElement,
     val parent: TreeElement?,
-    val viewTree: ViewTree,
+    private val viewTree: ViewTree,
 ) {
     private val _children = ArrayList<TreeElement>()
 
@@ -32,6 +32,8 @@ class TreeElement(
     val value get() = if (hasValue) (element as InputElement<*>).value else null
 
     val children: List<TreeElement> get() = _children
+
+    val respondsToClick: Boolean get() = element.onClickAction != null
 
     override fun equals(other: Any?): Boolean {
         return if (other is TreeElement) {
@@ -61,5 +63,9 @@ class TreeElement(
         }
         _children[indexOfChild] = newTreeElement
         (element as ViewGroup).replaceChild(replacedElement.element, newTreeElement.element)
+    }
+
+    fun clicked() {
+        viewTree.onItemClicked(this)
     }
 }
