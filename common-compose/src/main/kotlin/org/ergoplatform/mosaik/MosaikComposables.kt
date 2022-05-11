@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -72,15 +73,60 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
             renderRow(newModifier, treeElement)
         }
         is Button -> {
-            Button(
-                onClick = treeElement::clicked,
-                modifier = newModifier
-            ) {
-                Text(element.text ?: "")
-            }
+            renderButton(treeElement, newModifier)
         }
         else -> {
             throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
+        }
+    }
+}
+
+@Composable
+private fun renderButton(
+    treeElement: TreeElement,
+    newModifier: Modifier
+) {
+    val element = treeElement.element as Button
+    if (element.style == Button.ButtonStyle.TEXT) {
+        Text(
+            element.text ?: "",
+            modifier = newModifier.padding(Padding.HALF_DEFAULT.toCompose()),
+            maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
+            textAlign = (when (element.textAlignment) {
+                HAlignment.START -> TextAlign.Start
+                HAlignment.CENTER -> TextAlign.Center
+                HAlignment.END -> TextAlign.End
+            }),
+            color = if (element.isEnabled) textButtonTextColor else textButtonColorDisabled,
+            overflow = TextOverflow.Ellipsis,
+        )
+    } else {
+        Button(
+            onClick = treeElement::clicked,
+            modifier = newModifier,
+            colors = when (element.style) {
+                Button.ButtonStyle.PRIMARY -> ButtonDefaults.buttonColors(
+                    primaryLabelColor,
+                    primaryButtonTextColor
+                )
+                Button.ButtonStyle.SECONDARY -> ButtonDefaults.buttonColors(
+                    secondaryButtonColor,
+                    secondaryButtonTextColor
+                )
+                Button.ButtonStyle.TEXT -> throw UnsupportedOperationException("Unreachable code")
+            },
+            enabled = element.isEnabled
+        ) {
+            Text(
+                element.text ?: "",
+                maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
+                textAlign = (when (element.textAlignment) {
+                    HAlignment.START -> TextAlign.Start
+                    HAlignment.CENTER -> TextAlign.Center
+                    HAlignment.END -> TextAlign.End
+                }),
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
@@ -246,10 +292,20 @@ var labelStyle: (LabelStyle) -> TextStyle = { labelStyle ->
     }
 }
 
+// TODO Dark mode
+var primaryLabelColor = Color(0xffff3b30)
+var secondaryLabelColor = Color(0xffBBBBBB)
+var primaryButtonTextColor = Color.White
+var secondaryButtonTextColor = Color.White
+var secondaryButtonColor = Color.Black
+var textButtonTextColor = primaryLabelColor
+var textButtonColorDisabled = secondaryLabelColor
+
 var foregroundColor: (ForegroundColor) -> Color = { color ->
+    // TODO Dark mode
     when (color) {
-        ForegroundColor.PRIMARY -> Color(0xffff3b30)
+        ForegroundColor.PRIMARY -> primaryLabelColor
         ForegroundColor.DEFAULT -> Color.Unspecified
-        ForegroundColor.SECONDARY -> Color(0xffBBBBBB)
+        ForegroundColor.SECONDARY -> secondaryLabelColor
     }
 }

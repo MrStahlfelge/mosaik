@@ -9,13 +9,14 @@
     {
       "id": "clickButton",
       "type": "Button",
-      "text": "Clickin this buton will run a ChangeSiteAction",
+      "text": "Clicking this button will run a ChangeSiteAction",
       "onClick": {
         "type": "ChangeSiteAction",
         "element": {
           "id": "clickButton",
           "type": "Button",
-          "text": "ChangeSiteAction replace the button"
+          "enabled": false,
+          "text": "ChangeSiteAction replaced the button"
         }
       }
     },
