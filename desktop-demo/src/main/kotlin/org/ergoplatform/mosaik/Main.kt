@@ -22,6 +22,7 @@ fun main() {
         val windowState = rememberWindowState()
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
+        val renderer = ViewTreeRenderer()
 
         Window(
             onCloseRequest = ::exitApplication,
@@ -50,7 +51,7 @@ fun main() {
                 ) {
                     Row {
                         if (viewTree != null) {
-                            renderTreeElement(viewTree.content!!, Modifier.weight(2.0f))
+                            renderer.renderTreeElement(viewTree.content!!, Modifier.weight(2.0f))
                         } else {
                             Box(Modifier.weight(2.0f))
                         }
