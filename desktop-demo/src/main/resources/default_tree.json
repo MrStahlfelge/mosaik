@@ -7,8 +7,17 @@
       "style": "BODY1"
     },
     {
+      "id": "clickButton",
       "type": "Button",
-      "text": "Button"
+      "text": "Button",
+      "onClick": {
+        "type": "ChangeSiteAction",
+        "element": {
+          "id": "clickButton",
+          "type": "Button",
+          "text": "Clicked"
+        }
+      }
     },
     {
       "type": "Row",

@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -27,7 +30,9 @@ import org.ergoplatform.mosaik.model.ui.text.Label
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.ergoplatform.mosaik.model.ui.text.TruncationType
 
+@OptIn(ExperimentalFoundationApi::class)
 open class ViewTreeRenderer {
+
     @Composable
     fun renderTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         val element = treeElement.element
@@ -37,7 +42,14 @@ open class ViewTreeRenderer {
         } else {
             modifier
         }.alpha(if (element.isVisible) 1.0f else 0.0f)
-        // TODO: long press, on click
+            .combinedClickable(
+                onClick = {
+                    treeElement.viewTree.onItemClicked(treeElement)
+                },
+                onLongClick = {
+                    // TODO
+                }
+            )
 
         when (element) {
             is Box -> {
@@ -55,7 +67,7 @@ open class ViewTreeRenderer {
             is Button -> {
                 Button(
                     onClick = {
-                        // TODO
+                        treeElement.viewTree.onItemClicked(treeElement)
                     }, modifier = newModifier
                 ) {
                     Text(element.text ?: "")
@@ -110,24 +122,26 @@ open class ViewTreeRenderer {
         val element = treeElement.element as Box
 
         Box(modifier) {
-            treeElement.children.forEach {
-                renderTreeElement(
-                    it,
-                    Modifier.align(
-                        BiasAlignment(
-                            when (element.getChildHAlignment(it.element)) {
-                                HAlignment.START -> -1.0f
-                                HAlignment.CENTER -> 0.0f
-                                HAlignment.END -> 1.0f
-                            },
-                            when (element.getChildVAlignment(it.element)) {
-                                VAlignment.TOP -> -1.0f
-                                VAlignment.CENTER -> 0.0f
-                                VAlignment.BOTTOM -> 1.0f
-                            },
+            treeElement.children.forEach { childElement ->
+                key(childElement.id ?: childElement.hashCode().toString()) {
+                    renderTreeElement(
+                        childElement,
+                        Modifier.align(
+                            BiasAlignment(
+                                when (element.getChildHAlignment(childElement.element)) {
+                                    HAlignment.START -> -1.0f
+                                    HAlignment.CENTER -> 0.0f
+                                    HAlignment.END -> 1.0f
+                                },
+                                when (element.getChildVAlignment(childElement.element)) {
+                                    VAlignment.TOP -> -1.0f
+                                    VAlignment.CENTER -> 0.0f
+                                    VAlignment.BOTTOM -> 1.0f
+                                },
+                            )
                         )
                     )
-                )
+                }
             }
         }
     }
@@ -140,11 +154,16 @@ open class ViewTreeRenderer {
         val element = treeElement.element as Row
 
         Row(modifier) {
-            treeElement.children.forEach {
-                renderTreeElement(
-                    it,
-                    Modifier.align(element.getChildAlignment(it.element).toCompose())
-                )
+            treeElement.children.forEach { childElement ->
+                key(childElement.id ?: childElement.hashCode()) {
+                    val weight = element.getChildWeight(childElement.element)
+                    renderTreeElement(
+                        childElement,
+                        Modifier.align(element.getChildAlignment(childElement.element).toCompose())
+                            .then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+
+                    )
+                }
             }
         }
     }
@@ -157,11 +176,15 @@ open class ViewTreeRenderer {
         val element = treeElement.element as Column
 
         Column(modifier) {
-            treeElement.children.forEach {
-                renderTreeElement(
-                    it,
-                    Modifier.align(element.getChildAlignment(it.element).toCompose())
-                )
+            treeElement.children.forEach { childElement ->
+                key(childElement.id ?: childElement.hashCode().toString()) {
+                    val weight = element.getChildWeight(childElement.element)
+                    renderTreeElement(
+                        childElement,
+                        Modifier.align(element.getChildAlignment(childElement.element).toCompose())
+                            .then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+                    )
+                }
             }
         }
     }

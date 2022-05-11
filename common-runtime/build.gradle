@@ -22,6 +22,7 @@ publishing {
 
 dependencies {
     api project(path: ':common-model')
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$coroutines_version"
 
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'

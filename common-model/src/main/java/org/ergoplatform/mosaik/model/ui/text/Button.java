@@ -16,6 +16,15 @@ public class Button extends ViewElement implements TextLabel<String> {
     @Nonnull private TruncationType truncationType = TruncationType.END;
     @Nonnull private HAlignment textAlignment = HAlignment.CENTER;
     @Nonnull ButtonStyle style = ButtonStyle.PRIMARY;
+    private boolean isEnabled = true;
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 
     @Override
     @Nullable
@@ -78,12 +87,12 @@ public class Button extends ViewElement implements TextLabel<String> {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Button button = (Button) o;
-        return getMaxLines() == button.getMaxLines() && Objects.equals(getText(), button.getText()) && getTruncationType() == button.getTruncationType() && getTextAlignment() == button.getTextAlignment() && getStyle() == button.getStyle();
+        return getMaxLines() == button.getMaxLines() && isEnabled() == button.isEnabled() && Objects.equals(getText(), button.getText()) && getTruncationType() == button.getTruncationType() && getTextAlignment() == button.getTextAlignment() && getStyle() == button.getStyle();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getText(), getMaxLines(), getTruncationType(), getTextAlignment(), getStyle());
+        return Objects.hash(super.hashCode(), getText(), getMaxLines(), getTruncationType(), getTextAlignment(), getStyle(), isEnabled());
     }
 
     public enum ButtonStyle {

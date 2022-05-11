@@ -1,9 +1,12 @@
 buildscript {
+    ext.kotlin_version = "1.6.10"
+    ext.coroutines_version = "1.6.0"
+
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

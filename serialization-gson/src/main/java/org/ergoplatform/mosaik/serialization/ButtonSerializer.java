@@ -25,6 +25,7 @@ public class ButtonSerializer implements JsonSerializer<Button>, JsonDeserialize
     public static final String KEY_TRUNCATION_TYPE = "truncationType";
     public static final String KEY_TEXT_ALIGNMENT = "textAlignment";
     public static final String KEY_STYLE = "style";
+    public static final String KEY_ENABLED = "enabled";
 
     @Override
     public JsonElement serialize(Button src, Type typeOfSrc, JsonSerializationContext context) {
@@ -38,6 +39,9 @@ public class ButtonSerializer implements JsonSerializer<Button>, JsonDeserialize
         }
         if (src.getTruncationType() != TruncationType.END) {
             jsonObject.add(KEY_TRUNCATION_TYPE, context.serialize(src.getTruncationType()));
+        }
+        if (!src.isEnabled()) {
+            jsonObject.add(KEY_ENABLED, context.serialize(src.isEnabled()));
         }
         if (src.getTextAlignment() != HAlignment.CENTER) {
             jsonObject.add(KEY_TEXT_ALIGNMENT, context.serialize(src.getTextAlignment()));
@@ -58,6 +62,9 @@ public class ButtonSerializer implements JsonSerializer<Button>, JsonDeserialize
 
         if (jsonObject.has(KEY_TEXT)) {
             button.setText(jsonObject.get(KEY_TEXT).getAsString());
+        }
+        if (jsonObject.has(KEY_ENABLED)) {
+            button.setEnabled(jsonObject.get(KEY_ENABLED).getAsBoolean());
         }
         if (jsonObject.has(KEY_MAX_LINES)) {
             button.setMaxLines(jsonObject.get(KEY_MAX_LINES).getAsInt());

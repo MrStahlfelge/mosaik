@@ -1,21 +1,18 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.ui.ViewElement
-import org.ergoplatform.mosaik.model.ui.ViewGroup
-import org.ergoplatform.mosaik.model.ui.input.InputElement
-import java.lang.IllegalArgumentException
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
- * the complete tree of [ViewElement]'s.
+ * the complete tree of [ViewElement]'s and is context.
  */
-class ViewTree(val guid: String) {
-    var content: TreeElement? = null
-        private set
+class ViewTree(val guid: String, val actionRunner: ActionRunner) {
+    private var content: TreeElement? = null
     var cacheLifeTime: Long = 0
         private set
+    private val _stateFlow = MutableStateFlow<TreeElement?>(null)
+    val contentState: StateFlow<TreeElement?> get() = _stateFlow
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
@@ -43,12 +40,12 @@ class ViewTree(val guid: String) {
         }
 
         if (replacedElement == null && content == null) {
-            content = TreeElement(view, null)
+            content = TreeElement(view, null, this)
             // add all element ids and values to map
             addIdsAndValues(content!!)
         } else {
             val parent = replacedElement!!.parent
-            val newTreeElement = TreeElement(view, parent)
+            val newTreeElement = TreeElement(view, parent, this)
             removeIdsAndValues(replacedElement)
 
             if (parent != null)
@@ -58,6 +55,7 @@ class ViewTree(val guid: String) {
 
             addIdsAndValues(newTreeElement)
         }
+        _stateFlow.value = content
     }
 
     private fun addIdsAndValues(element: TreeElement) {
@@ -91,60 +89,13 @@ class ViewTree(val guid: String) {
     fun visitAllElements(visitor: (TreeElement) -> Unit) {
         content?.visitAllElements(visitor)
     }
-}
 
-/**
- * holds a [ViewElement] and wraps it with convenience accessors
- */
-class TreeElement(
-    val element: ViewElement,
-    val parent: TreeElement?
-) {
-    private val _children = ArrayList<TreeElement>()
-
-    init {
-        if (element is ViewGroup) {
-            _children.addAll(element.children.map { TreeElement(it, this) })
+    /**
+     * called when user clicked or tapped an element
+     */
+    fun onItemClicked(element: TreeElement) {
+        element.element.onClickAction?.let {
+            actionRunner.runAction(it, this)
         }
-    }
-
-    val hasId get() = element.id != null
-
-    val id get() = element.id
-
-    val hasValue get() = hasId && element is InputElement<*>
-
-    val value get() = if (hasValue) (element as InputElement<*>).value else null
-
-    val children: List<TreeElement> get() = _children
-
-    override fun equals(other: Any?): Boolean {
-        return if (other is TreeElement) {
-            element == other.element
-        } else false
-    }
-
-    override fun hashCode(): Int {
-        return element.hashCode()
-    }
-
-    fun visitAllElements(visitor: (TreeElement) -> Unit) {
-        val queue = LinkedList<TreeElement>()
-        queue.add(this)
-
-        while (queue.isNotEmpty()) {
-            val first = queue.removeFirst()
-            visitor(first)
-            first._children.forEach { queue.add(it) }
-        }
-    }
-
-    fun replaceChildElement(replacedElement: TreeElement, newTreeElement: TreeElement) {
-        val indexOfChild = _children.indexOf(replacedElement)
-        if (indexOfChild < 0) {
-            throw IllegalArgumentException("Could not find child to replace")
-        }
-        _children[indexOfChild] = newTreeElement
-        (element as ViewGroup).replaceChild(replacedElement.element, newTreeElement.element)
     }
 }

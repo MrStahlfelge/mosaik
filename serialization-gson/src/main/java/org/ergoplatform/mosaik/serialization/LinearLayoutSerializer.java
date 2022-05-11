@@ -21,7 +21,7 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
     public static final String KEY_WEIGHT = "weight";
     public static final String KEY_ALIGNMENT = "align";
     public static final String KEY_CHILDREN = "children";
-    public static final int DEFAULT_WEIGHT = 1;
+    public static final int DEFAULT_WEIGHT = 0;
 
     @Override
     public JsonElement serialize(LinearLayout<?> src, Type typeOfSrc, JsonSerializationContext context) {

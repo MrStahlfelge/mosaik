@@ -44,7 +44,7 @@ class ViewTreeTest : TestCase() {
         boxAA.addChild(boxAAA)
         boxRoot.addChild(boxB)
 
-        val viewTree = ViewTree("guid")
+        val viewTree = ViewTree("guid", ActionRunner())
         viewTree.setRootView(boxRoot, 0)
         return viewTree
     }

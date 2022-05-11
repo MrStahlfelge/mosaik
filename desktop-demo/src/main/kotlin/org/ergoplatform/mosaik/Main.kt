@@ -1,11 +1,13 @@
 package org.ergoplatform.mosaik
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.TextField
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,6 +25,10 @@ fun main() {
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
         val renderer = ViewTreeRenderer()
+        val viewTree = ViewTree(
+            UUID.randomUUID().toString(),
+            ActionRunner()
+        )
 
         Window(
             onCloseRequest = ::exitApplication,
@@ -30,30 +36,28 @@ fun main() {
             title = "Mosaik Demo"
         ) {
             val textState = remember { mutableStateOf(TextFieldValue(json)) }
-            val viewTree = try {
-                ViewTree(
-                    UUID.randomUUID().toString()
-                ).apply {
-                    setRootView(
-                        MosaikSerializer().viewElementFromJson(textState.value.text),
-                        0L
-                    )
-                }
+            val success = try {
+                viewTree.setRootView(
+                    MosaikSerializer().viewElementFromJson(textState.value.text),
+                    0L
+                )
+                true
             } catch (t: Throwable) {
                 println(t.message)
                 t.printStackTrace()
-                null
+                false
             }
+            val content by viewTree.contentState.collectAsState()
 
             MaterialTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Row {
-                        if (viewTree != null) {
-                            renderer.renderTreeElement(viewTree.content!!, Modifier.weight(2.0f))
-                        } else {
-                            Box(Modifier.weight(2.0f))
+                        Column(Modifier.weight(2.0f)) {
+                            if (success) {
+                                renderer.renderTreeElement(content!!, Modifier.fillMaxWidth().weight(1.0f, false))
+                            }
                         }
                         TextField(textState.value, onValueChange = {
                             textState.value = it

@@ -38,7 +38,7 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
 
     @Override
     public void addChild(@Nonnull ViewElement element) {
-        addChild(element, defaultChildAlignment(), 1);
+        addChild(element, defaultChildAlignment(), 0);
     }
 
     public abstract CSA defaultChildAlignment();
