@@ -1,15 +1,11 @@
 package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.TextField
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
@@ -17,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.util.*
 
@@ -34,6 +31,8 @@ fun main() {
         )
         updateViewTreeFromJson(viewTree, json)
 
+        var lastChangeFromUser = false
+
         Window(
             onCloseRequest = ::exitApplication,
             state = windowState,
@@ -41,6 +40,17 @@ fun main() {
         ) {
             val textState = remember { mutableStateOf(TextFieldValue(json)) }
             val error = remember { mutableStateOf(false) }
+            val scope = rememberCoroutineScope()
+            scope.launch {
+                viewTree.contentState.collect {
+                    if (!lastChangeFromUser) {
+                        textState.value =
+                            textState.value.copy(MosaikSerializer().toJsonBeautified(it.second!!.element))
+                        error.value = false
+                    }
+                    lastChangeFromUser = false
+                }
+            }
 
             MaterialTheme {
                 Surface(
@@ -54,15 +64,17 @@ fun main() {
                             textState.value,
                             onValueChange = {
                                 val textChanged = textState.value.text != it.text
-                                val json = it.text
+                                val newJson = it.text
                                 textState.value = it
                                 if (textChanged) {
-                                    error.value = !updateViewTreeFromJson(viewTree, json)
+                                    lastChangeFromUser = true
+                                    error.value = !updateViewTreeFromJson(viewTree, newJson)
                                 }
 
                             },
                             Modifier.weight(1.0f)
                                 .background(if (error.value) Color.Red else Color.Unspecified)
+                                .fillMaxHeight()
                         )
                     }
                 }

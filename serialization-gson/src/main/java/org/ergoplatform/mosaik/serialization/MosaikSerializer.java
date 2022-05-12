@@ -20,11 +20,16 @@ public class MosaikSerializer {
     static final String TYPE_ELEMENT_NAME = "type";
 
     public String toJson(ViewElement element) {
-        Gson gson = getGson();
+        Gson gson = getGson(false);
         return gson.toJson(element);
     }
 
-    private Gson getGson() {
+    public String toJsonBeautified(ViewElement element) {
+        Gson gson = getGson(true);
+        return gson.toJson(element);
+    }
+
+    private Gson getGson(boolean prettyPrint) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ViewElement.class, new ViewElementSerializer());
         gsonBuilder.registerTypeAdapter(Box.class, new BoxSerializer());
@@ -40,11 +45,16 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());
         gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
+
+        if (prettyPrint) {
+            gsonBuilder.setPrettyPrinting();
+        }
+
         return gsonBuilder.create();
     }
 
     public ViewElement viewElementFromJson(String json) {
-        Gson gson = getGson();
+        Gson gson = getGson(false);
         return gson.fromJson(json, ViewElement.class);
     }
 }
