@@ -66,7 +66,15 @@
     },
     {
       "type": "Box",
-      "children": []
+      "padding": "DEFAULT",
+      "children": [
+        {
+          "id": "inputText",
+          "type": "TextInputField",
+          "value": "initial text",
+          "placeholder": "An input text field"
+        }
+      ]
     }
   ]
 }

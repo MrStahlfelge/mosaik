@@ -29,7 +29,20 @@ class TreeElement(
 
     val hasValue get() = hasId && element is InputElement<*>
 
-    val value get() = if (hasValue) (element as InputElement<*>).value else null
+    val currentValue
+        get() = if (hasValue) {
+            viewTree.getCurrentValue(this)
+        } else null
+
+    /**
+     * returns the initial value as set by the viewtree
+     */
+    val initialValue: Any? get() = if (hasValue) (element as InputElement<*>).value else null
+
+    /**
+     * see [ViewTree.contentVersion]
+     */
+    val contentVersion get() = viewTree.contentVersion
 
     val children: List<TreeElement> get() = _children
 
@@ -67,5 +80,9 @@ class TreeElement(
 
     fun clicked() {
         viewTree.onItemClicked(this)
+    }
+
+    fun valueChanged(newValue: Any?) {
+        viewTree.onItemValueChanged(this, newValue)
     }
 }

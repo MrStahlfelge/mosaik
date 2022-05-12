@@ -1,14 +1,10 @@
 package org.ergoplatform.mosaik
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -17,12 +13,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.ergoplatform.mosaik.MosaikStyleConfig.defaultLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.primaryButtonTextColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.primaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonColor
@@ -31,6 +29,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
+import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.Button
 import org.ergoplatform.mosaik.model.ui.text.Label
@@ -40,8 +39,10 @@ import org.ergoplatform.mosaik.model.ui.text.TruncationType
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
     val modification by viewTree.contentState.collectAsState()
-    modification.second?.let { viewTreeRoot ->
-        MosaikTreeElement(viewTreeRoot, modifier)
+    modification.second?.let { viewTreeTarget ->
+        Crossfade(targetState = viewTreeTarget) { viewTreeRoot ->
+            MosaikTreeElement(viewTreeRoot, modifier)
+        }
     }
 }
 
@@ -79,8 +80,61 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Button -> {
             renderButton(treeElement, newModifier)
         }
+        is TextInputField -> {
+            renderTextInputField(treeElement, newModifier)
+        }
         else -> {
             throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
+        }
+    }
+}
+
+@Composable
+fun renderTextInputField(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as TextInputField
+
+    // TODO IconType endIconType, Action onEndIconClicked;
+
+    // keep everything the user entered, as long as the [ViewTree] is not changed
+    val textFieldState =
+        remember(treeElement.contentVersion) {
+            mutableStateOf(
+                TextFieldValue(
+                    treeElement.currentValue as String? ?: ""
+                )
+            )
+        }
+
+    Column(modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            textFieldState.value,
+            onValueChange = {
+                textFieldState.value = it
+                treeElement.valueChanged(it.text.ifEmpty { null })
+
+                // TODO onValueChangedAction
+                //  should not be called on every change, but only value change and after some time
+            },
+            Modifier.fillMaxWidth(),
+            enabled = element.isEnabled,
+            isError = !element.errorMessage.isNullOrBlank(),
+            maxLines = 1,
+            label = { element.placeHolder?.let { Text(it) } },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = defaultLabelColor,
+                disabledTextColor = secondaryLabelColor,
+                cursorColor = defaultLabelColor,
+                errorCursorColor = primaryLabelColor,
+                focusedBorderColor = defaultLabelColor,
+                unfocusedBorderColor = secondaryLabelColor,
+                errorBorderColor = primaryLabelColor,
+                disabledLabelColor = secondaryLabelColor,
+                focusedLabelColor = defaultLabelColor,
+                unfocusedLabelColor = secondaryLabelColor,
+            )
+        )
+        if (!element.errorMessage.isNullOrBlank()) {
+            Text(element.errorMessage!!, Modifier.fillMaxWidth(), color = primaryLabelColor)
         }
     }
 }
@@ -308,7 +362,7 @@ var labelStyle: (LabelStyle) -> TextStyle = { labelStyle ->
 var foregroundColor: (ForegroundColor) -> Color = { color ->
     when (color) {
         ForegroundColor.PRIMARY -> primaryLabelColor
-        ForegroundColor.DEFAULT -> Color.Unspecified
+        ForegroundColor.DEFAULT -> defaultLabelColor
         ForegroundColor.SECONDARY -> secondaryLabelColor
     }
 }

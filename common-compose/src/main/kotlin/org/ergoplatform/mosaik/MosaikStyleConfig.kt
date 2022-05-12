@@ -9,6 +9,7 @@ object MosaikStyleConfig {
 
     var primaryLabelColor = Color(0xffff3b30)
     var secondaryLabelColor = Color(0xffBBBBBB)
+    var defaultLabelColor = Color.Black
     var primaryButtonTextColor = Color.White
     var secondaryButtonTextColor = Color.White
     var secondaryButtonColor = Color.Black

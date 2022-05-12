@@ -15,6 +15,11 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
     private val _modificationFlow = MutableStateFlow<Pair<Int, TreeElement?>>(Pair(0, null))
     val contentState: StateFlow<Pair<Int, TreeElement?>> get() = _modificationFlow
 
+    /**
+     * contentVersion is incremented every time the ViewTree is changed
+     */
+    val contentVersion get() = contentState.value.first
+
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
 
@@ -71,7 +76,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
                 }
                 idMap[newId] = treeElement
                 if (treeElement.hasValue)
-                    valueMap[newId] = treeElement.value
+                    valueMap[newId] = getCurrentValue(treeElement) ?: treeElement.initialValue
             }
         }
     }
@@ -102,4 +107,13 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
             actionRunner.runAction(it, this)
         }
     }
+
+    fun onItemValueChanged(treeElement: TreeElement, newValue: Any?) {
+        if (treeElement.hasId) {
+            valueMap[treeElement.id!!] = newValue
+        }
+    }
+
+    fun getCurrentValue(treeElement: TreeElement): Any? =
+        valueMap[treeElement.id]
 }
