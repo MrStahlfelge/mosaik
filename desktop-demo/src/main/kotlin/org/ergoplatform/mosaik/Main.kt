@@ -25,6 +25,8 @@ fun main() {
     application {
         val windowState = rememberWindowState()
 
+        MosaikLogger.logger = MosaikLogger.DefaultLogger
+
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
         val viewTree = ViewTree(
             UUID.randomUUID().toString(),
@@ -79,7 +81,6 @@ private fun updateViewTreeFromJson(
     )
     true
 } catch (t: Throwable) {
-    println(t.message)
-    t.printStackTrace()
+    MosaikLogger.logError("Error deserializing viewtree", t)
     false
 }

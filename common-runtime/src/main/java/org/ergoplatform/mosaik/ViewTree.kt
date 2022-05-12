@@ -37,7 +37,10 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
         val replacedElement = if (replaceId == null) content else findElementById(replaceId)
 
         if (replacedElement == null && replaceId != null) {
-            throw IllegalArgumentException("Current view does not contain element with id $replaceId")
+            throw ElementNotFoundException(
+                "Current view does not contain element with id $replaceId",
+                replaceId
+            )
         }
 
         if (replacedElement == null && content == null) {
