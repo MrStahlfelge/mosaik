@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -26,6 +23,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.ergoplatform.mosaik.MosaikStyleConfig.primaryButtonTextColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.primaryLabelColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonTextColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
+import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.Button
@@ -150,7 +154,15 @@ private fun renderLabel(
             style = labelStyle(element.style),
             color = foregroundColor(element.textColor)
         )
-    else // TODO truncationType Start https://stackoverflow.com/a/69084973/7487013
+    else {
+        // TODO truncationType Start https://stackoverflow.com/a/69084973/7487013
+        remember(element.truncationType) {
+            if (element.truncationType == TruncationType.START)
+                MosaikLogger.logWarning("TruncationType START not supported by this implementation")
+            else if (element.truncationType == TruncationType.MIDDLE)
+                MosaikLogger.logWarning("TruncationType MIDDLE only supported with maxLines 1 by this implementation")
+        }
+
         Text(
             element.text ?: "",
             newModifier,
@@ -164,6 +176,7 @@ private fun renderLabel(
             style = labelStyle(element.style),
             color = foregroundColor(element.textColor)
         )
+    }
 }
 
 @Composable
@@ -292,17 +305,7 @@ var labelStyle: (LabelStyle) -> TextStyle = { labelStyle ->
     }
 }
 
-// TODO Dark mode
-var primaryLabelColor = Color(0xffff3b30)
-var secondaryLabelColor = Color(0xffBBBBBB)
-var primaryButtonTextColor = Color.White
-var secondaryButtonTextColor = Color.White
-var secondaryButtonColor = Color.Black
-var textButtonTextColor = primaryLabelColor
-var textButtonColorDisabled = secondaryLabelColor
-
 var foregroundColor: (ForegroundColor) -> Color = { color ->
-    // TODO Dark mode
     when (color) {
         ForegroundColor.PRIMARY -> primaryLabelColor
         ForegroundColor.DEFAULT -> Color.Unspecified

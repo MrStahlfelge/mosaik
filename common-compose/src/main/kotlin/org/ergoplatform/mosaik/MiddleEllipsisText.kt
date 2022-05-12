@@ -73,7 +73,7 @@ fun MiddleEllipsisText(
             ?: // shouldn't happen - onTextLayout is called before subcompose finishes
             return@SubcomposeLayout layout(0, 0) {}
         val placeable = subcompose("visible") {
-            val finalText = remember(text, textLayoutResult) {
+            val finalText = remember(text, textLayoutResult, constraints.maxWidth) {
                 if (text.isEmpty() || textLayoutResult.getBoundingBox(text.indices.last).right <= constraints.maxWidth) {
                     // text not including ellipsis fits on the first line.
                     return@remember text
