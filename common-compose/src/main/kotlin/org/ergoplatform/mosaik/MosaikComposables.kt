@@ -4,6 +4,8 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +13,7 @@ import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -98,41 +101,51 @@ fun renderTextInputField(treeElement: TreeElement, modifier: Modifier) {
     // keep everything the user entered, as long as the [ViewTree] is not changed
     val textFieldState =
         remember(treeElement.contentVersion) {
+            val currentValue = treeElement.currentValue as String? ?: ""
             mutableStateOf(
                 TextFieldValue(
-                    treeElement.currentValue as String? ?: ""
+                    currentValue,
+                    selection = TextRange(0, currentValue.length)
                 )
             )
         }
 
     Column(modifier.fillMaxWidth()) {
-        OutlinedTextField(
-            textFieldState.value,
-            onValueChange = {
-                textFieldState.value = it
-                treeElement.valueChanged(it.text.ifEmpty { null })
-
-                // TODO onValueChangedAction
-                //  should not be called on every change, but only value change and after some time
-            },
-            Modifier.fillMaxWidth(),
-            enabled = element.isEnabled,
-            isError = !element.errorMessage.isNullOrBlank(),
-            maxLines = 1,
-            label = { element.placeHolder?.let { Text(it) } },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = defaultLabelColor,
-                disabledTextColor = secondaryLabelColor,
-                cursorColor = defaultLabelColor,
-                errorCursorColor = primaryLabelColor,
-                focusedBorderColor = defaultLabelColor,
-                unfocusedBorderColor = secondaryLabelColor,
-                errorBorderColor = primaryLabelColor,
-                disabledLabelColor = secondaryLabelColor,
-                focusedLabelColor = defaultLabelColor,
-                unfocusedLabelColor = secondaryLabelColor,
-            )
+        val customTextSelectionColors = TextSelectionColors(
+            handleColor = defaultLabelColor,
+            backgroundColor = primaryLabelColor.copy(alpha = 0.4f)
         )
+
+        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+            OutlinedTextField(
+                textFieldState.value,
+                onValueChange = {
+                    textFieldState.value = it
+                    treeElement.valueChanged(it.text.ifEmpty { null })
+
+                    // TODO onValueChangedAction
+                    //  should not be called on every change, but only value change and after some time
+                },
+                Modifier.fillMaxWidth(),
+                enabled = element.isEnabled,
+                isError = !element.errorMessage.isNullOrBlank(),
+                maxLines = 1,
+                label = { element.placeHolder?.let { Text(it) } },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = defaultLabelColor,
+                    disabledTextColor = secondaryLabelColor,
+                    cursorColor = defaultLabelColor,
+                    errorCursorColor = primaryLabelColor,
+                    focusedBorderColor = defaultLabelColor,
+                    unfocusedBorderColor = secondaryLabelColor,
+                    errorBorderColor = primaryLabelColor,
+                    disabledLabelColor = secondaryLabelColor,
+                    focusedLabelColor = defaultLabelColor,
+                    unfocusedLabelColor = secondaryLabelColor,
+
+                    )
+            )
+        }
         if (!element.errorMessage.isNullOrBlank()) {
             Text(element.errorMessage!!, Modifier.fillMaxWidth(), color = primaryLabelColor)
         }
