@@ -12,16 +12,26 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
         private set
     var cacheLifeTime: Long = 0
         private set
-    private val _modificationFlow = MutableStateFlow<Pair<Int, TreeElement?>>(Pair(0, null))
+
+    private val idMap = HashMap<String, TreeElement>()
+    private val valueMap = HashMap<String, Any?>()
+
+    /**
+     * flow that emits when viewtree is changed
+     */
     val contentState: StateFlow<Pair<Int, TreeElement?>> get() = _modificationFlow
+    private val _modificationFlow = MutableStateFlow<Pair<Int, TreeElement?>>(Pair(0, null))
 
     /**
      * contentVersion is incremented every time the ViewTree is changed
      */
     val contentVersion get() = contentState.value.first
 
-    private val idMap = HashMap<String, TreeElement>()
-    private val valueMap = HashMap<String, Any?>()
+    /**
+     * flow that emits when values map is changed
+     */
+    val valueState: StateFlow<Pair<Int, Map<String, Any?>>> get() = _valueFlow
+    private val _valueFlow = MutableStateFlow<Pair<Int, Map<String, Any?>>>(Pair(0, valueMap))
 
     /**
      * replaces the view completely
@@ -64,10 +74,15 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
 
             addIdsAndValues(newTreeElement)
         }
+        notifyViewTreeChanged()
+    }
+
+    private fun notifyViewTreeChanged() {
         _modificationFlow.value = Pair(_modificationFlow.value.first + 1, content)
     }
 
     private fun addIdsAndValues(element: TreeElement) {
+        var valuesChanged = false
         element.visitAllElements { treeElement ->
             if (treeElement.hasId) {
                 val newId = treeElement.id!!
@@ -75,19 +90,32 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
                     throw IllegalArgumentException("There is already an element with id $newId part of current view.")
                 }
                 idMap[newId] = treeElement
-                if (treeElement.hasValue)
+                if (treeElement.hasValue) {
                     valueMap[newId] = getCurrentValue(treeElement) ?: treeElement.initialValue
+                    valuesChanged = true
+                }
             }
+        }
+        if (valuesChanged) {
+            notifyValuesChanged()
         }
     }
 
     private fun removeIdsAndValues(element: TreeElement) {
+        val size = valueMap.size
         element.visitAllElements { treeElement ->
             if (treeElement.hasId) {
                 idMap.remove(treeElement.id!!)
                 valueMap.remove(treeElement.id!!)
             }
         }
+        if (valueMap.size != size) {
+            notifyValuesChanged()
+        }
+    }
+
+    private fun notifyValuesChanged() {
+        _valueFlow.value = Pair(_valueFlow.value.first + 1, currentValues)
     }
 
     /**
@@ -110,10 +138,15 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
 
     fun onItemValueChanged(treeElement: TreeElement, newValue: Any?) {
         if (treeElement.hasId) {
-            valueMap[treeElement.id!!] = newValue
+            if (valueMap[treeElement.id!!] != newValue) {
+                valueMap[treeElement.id!!] = newValue
+                notifyValuesChanged()
+            }
         }
     }
 
     fun getCurrentValue(treeElement: TreeElement): Any? =
         valueMap[treeElement.id]
+
+    val currentValues: Map<String, Any?> get() = valueMap
 }

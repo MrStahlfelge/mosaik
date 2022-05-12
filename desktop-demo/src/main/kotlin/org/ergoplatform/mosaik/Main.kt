@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -60,27 +62,52 @@ fun main() {
                         Column(Modifier.weight(2.0f).padding(20.dp)) {
                             MosaikViewTree(viewTree, Modifier.fillMaxWidth())
                         }
-                        TextField(
-                            textState.value,
-                            onValueChange = {
-                                val textChanged = textState.value.text != it.text
-                                val newJson = it.text
-                                textState.value = it
-                                if (textChanged) {
-                                    lastChangeFromUser = true
-                                    error.value = !updateViewTreeFromJson(viewTree, newJson)
-                                }
 
-                            },
-                            Modifier.weight(1.0f)
-                                .background(if (error.value) Color.Red else Color.Unspecified)
-                                .fillMaxHeight()
-                        )
+                        Column(Modifier.weight(1.0f).fillMaxSize()) {
+                            MosaikStateInfo(
+                                viewTree,
+                                textState,
+                                error,
+                                setLastChangeFromUser = { lastChangeFromUser = true }
+                            )
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun MosaikStateInfo(
+    viewTree: ViewTree,
+    textState: MutableState<TextFieldValue>,
+    error: MutableState<Boolean>,
+    setLastChangeFromUser: (() -> Unit)
+) {
+    Text("Current values:", fontWeight = FontWeight.Bold)
+    val map = viewTree.valueState.collectAsState()
+    map.value.second.forEach { (key, value) ->
+        Text(key + ": " + value.toString())
+    }
+    Box(Modifier.height(20.dp))
+    Text("Current view tree (${viewTree.contentState.value.first}):", fontWeight = FontWeight.Bold)
+    TextField(
+        textState.value,
+        onValueChange = {
+            val textChanged = textState.value.text != it.text
+            val newJson = it.text
+            textState.value = it
+            if (textChanged) {
+                setLastChangeFromUser()
+                error.value = !updateViewTreeFromJson(viewTree, newJson)
+            }
+
+        },
+        Modifier
+            .background(if (error.value) Color.Red else Color.Unspecified)
+            .fillMaxHeight()
+    )
 }
 
 private fun updateViewTreeFromJson(
