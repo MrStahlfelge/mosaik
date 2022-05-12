@@ -1,6 +1,5 @@
 package org.ergoplatform.mosaik
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -42,10 +41,9 @@ import org.ergoplatform.mosaik.model.ui.text.TruncationType
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
     val modification by viewTree.contentState.collectAsState()
-    modification.second?.let { viewTreeTarget ->
-        Crossfade(targetState = viewTreeTarget) { viewTreeRoot ->
-            MosaikTreeElement(viewTreeRoot, modifier)
-        }
+    modification.second?.let { viewTreeRoot ->
+        // Crossfade animation here caused some elements to not update
+        MosaikTreeElement(viewTreeRoot, modifier)
     }
 }
 
