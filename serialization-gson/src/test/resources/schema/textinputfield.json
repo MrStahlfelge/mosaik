@@ -22,7 +22,7 @@
       "description": "Visibility of this object. Optional, defaults to true",
       "type": "boolean"
     },
-    "errorMessage": {
+    "error": {
       "description": "Shows an error message on the text field if not null",
       "type": "string"
     },

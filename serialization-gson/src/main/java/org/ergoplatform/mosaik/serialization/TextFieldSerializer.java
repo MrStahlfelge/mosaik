@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
 
 public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSerializer<T>, JsonDeserializer<T> {
 
-    public static final String KEY_ERROR_MESSAGE = "errorMessage";
+    public static final String KEY_ERROR_MESSAGE = "error";
     public static final String KEY_VALUE = "value";
     public static final String KEY_PLACEHOLDER = "placeholder";
     public static final String KEY_ENABLED = "enabled";
