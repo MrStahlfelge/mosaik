@@ -67,22 +67,22 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
 
     when (element) {
         is Box -> {
-            renderBox(newModifier, treeElement)
+            MosaikBox(newModifier, treeElement)
         }
         is Label -> {
-            renderLabel(treeElement, newModifier)
+            MosaikLabel(treeElement, newModifier)
         }
         is Column -> {
-            renderColumn(newModifier, treeElement)
+            MosaikColumn(newModifier, treeElement)
         }
         is Row -> {
-            renderRow(newModifier, treeElement)
+            MosaikRow(newModifier, treeElement)
         }
         is Button -> {
-            renderButton(treeElement, newModifier)
+            MosaikButton(treeElement, newModifier)
         }
         is TextInputField -> {
-            renderTextInputField(treeElement, newModifier)
+            MosaikTextInputField(treeElement, newModifier)
         }
         else -> {
             throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
@@ -91,7 +91,7 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun renderTextInputField(treeElement: TreeElement, modifier: Modifier) {
+fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as TextInputField
 
     // TODO IconType endIconType, Action onEndIconClicked;
@@ -150,7 +150,7 @@ fun renderTextInputField(treeElement: TreeElement, modifier: Modifier) {
 }
 
 @Composable
-private fun renderButton(
+private fun MosaikButton(
     treeElement: TreeElement,
     newModifier: Modifier
 ) {
@@ -200,7 +200,7 @@ private fun renderButton(
 }
 
 @Composable
-private fun renderLabel(
+private fun MosaikLabel(
     treeElement: TreeElement,
     newModifier: Modifier
 ) {
@@ -244,7 +244,7 @@ private fun renderLabel(
 }
 
 @Composable
-private fun renderBox(
+private fun MosaikBox(
     modifier: Modifier,
     treeElement: TreeElement
 ) {
@@ -276,7 +276,7 @@ private fun renderBox(
 }
 
 @Composable
-private fun renderRow(
+private fun MosaikRow(
     modifier: Modifier,
     treeElement: TreeElement,
 ) {
@@ -298,7 +298,7 @@ private fun renderRow(
 }
 
 @Composable
-private fun renderColumn(
+private fun MosaikColumn(
     modifier: Modifier,
     treeElement: TreeElement,
 ) {

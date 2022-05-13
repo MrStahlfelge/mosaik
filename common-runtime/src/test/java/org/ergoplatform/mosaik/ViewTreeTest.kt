@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import junit.framework.TestCase
+import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 class ViewTreeTest : TestCase() {
@@ -44,7 +45,7 @@ class ViewTreeTest : TestCase() {
         boxAA.addChild(boxAAA)
         boxRoot.addChild(boxB)
 
-        val viewTree = ViewTree("guid", ActionRunner())
+        val viewTree = ViewTree("guid", ActionRunner(coroutineScope = { GlobalScope }))
         viewTree.setRootView(boxRoot, 0)
         return viewTree
     }
