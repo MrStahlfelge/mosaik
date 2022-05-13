@@ -155,6 +155,12 @@ private fun MosaikButton(
     newModifier: Modifier
 ) {
     val element = treeElement.element as Button
+
+    remember(element.truncationType) {
+        if (element.truncationType != TruncationType.START)
+            MosaikLogger.logWarning("TruncationType ignored for button, not supported by this implementation")
+    }
+
     if (element.style == Button.ButtonStyle.TEXT) {
         // TODO Use TextButton
         Text(
@@ -165,6 +171,7 @@ private fun MosaikButton(
                 HAlignment.START -> TextAlign.Start
                 HAlignment.CENTER -> TextAlign.Center
                 HAlignment.END -> TextAlign.End
+                HAlignment.JUSTIFY -> TextAlign.Justify
             }),
             color = if (element.isEnabled) textButtonTextColor else textButtonColorDisabled,
             overflow = TextOverflow.Ellipsis,
@@ -193,6 +200,7 @@ private fun MosaikButton(
                     HAlignment.START -> TextAlign.Start
                     HAlignment.CENTER -> TextAlign.Center
                     HAlignment.END -> TextAlign.End
+                    HAlignment.JUSTIFY -> TextAlign.Justify
                 }),
                 overflow = TextOverflow.Ellipsis,
             )
@@ -215,6 +223,7 @@ private fun MosaikLabel(
                 HAlignment.START -> TextAlign.Start
                 HAlignment.CENTER -> TextAlign.Center
                 HAlignment.END -> TextAlign.End
+                HAlignment.JUSTIFY -> TextAlign.Justify
             }),
             style = labelStyle(element.style),
             color = foregroundColor(element.textColor)
@@ -236,6 +245,7 @@ private fun MosaikLabel(
                 HAlignment.START -> TextAlign.Start
                 HAlignment.CENTER -> TextAlign.Center
                 HAlignment.END -> TextAlign.End
+                HAlignment.JUSTIFY -> TextAlign.Justify
             }),
             overflow = TextOverflow.Ellipsis,
             style = labelStyle(element.style),
@@ -254,20 +264,29 @@ private fun MosaikBox(
     Box(modifier) {
         treeElement.children.forEach { childElement ->
             key(childElement.idOrHash) {
+
+                val childHAlignment = element.getChildHAlignment(childElement.element)
+
                 MosaikTreeElement(
                     childElement,
-                    Modifier.align(
-                        BiasAlignment(
-                            when (element.getChildHAlignment(childElement.element)) {
-                                HAlignment.START -> -1.0f
-                                HAlignment.CENTER -> 0.0f
-                                HAlignment.END -> 1.0f
-                            },
-                            when (element.getChildVAlignment(childElement.element)) {
-                                VAlignment.TOP -> -1.0f
-                                VAlignment.CENTER -> 0.0f
-                                VAlignment.BOTTOM -> 1.0f
-                            },
+                    when (childHAlignment) {
+                        HAlignment.JUSTIFY -> Modifier.fillMaxWidth()
+                        else -> Modifier
+                    }.then(
+                        Modifier.align(
+                            BiasAlignment(
+                                when (childHAlignment) {
+                                    HAlignment.START -> -1.0f
+                                    HAlignment.CENTER -> 0.0f
+                                    HAlignment.END -> 1.0f
+                                    HAlignment.JUSTIFY -> 0.0f
+                                },
+                                when (element.getChildVAlignment(childElement.element)) {
+                                    VAlignment.TOP -> -1.0f
+                                    VAlignment.CENTER -> 0.0f
+                                    VAlignment.BOTTOM -> 1.0f
+                                },
+                            )
                         )
                     )
                 )
@@ -289,8 +308,13 @@ private fun MosaikRow(
                 val weight = element.getChildWeight(childElement.element)
                 MosaikTreeElement(
                     childElement,
-                    Modifier.align(element.getChildAlignment(childElement.element).toCompose())
-                        .then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+                    Modifier.align(
+                        when (element.getChildAlignment(childElement.element)) {
+                            VAlignment.TOP -> Alignment.Top
+                            VAlignment.CENTER -> Alignment.CenterVertically
+                            VAlignment.BOTTOM -> Alignment.Bottom
+                        }
+                    ).then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
 
                 )
             }
@@ -309,29 +333,21 @@ private fun MosaikColumn(
         treeElement.children.forEach { childElement ->
             key(childElement.idOrHash) {
                 val weight = element.getChildWeight(childElement.element)
+                val hAlignment = element.getChildAlignment(childElement.element)
+
                 MosaikTreeElement(
                     childElement,
-                    Modifier.align(element.getChildAlignment(childElement.element).toCompose())
-                        .then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+                    when (hAlignment) {
+                        HAlignment.START -> Modifier.align(Alignment.Start)
+                        HAlignment.CENTER -> Modifier.align(Alignment.CenterHorizontally)
+                        HAlignment.END -> Modifier.align(Alignment.End)
+                        HAlignment.JUSTIFY -> Modifier.fillMaxWidth()
+                    }.then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
                 )
             }
         }
     }
 }
-
-private fun HAlignment.toCompose(): Alignment.Horizontal =
-    when (this) {
-        HAlignment.START -> Alignment.Start
-        HAlignment.CENTER -> Alignment.CenterHorizontally
-        HAlignment.END -> Alignment.End
-    }
-
-private fun VAlignment.toCompose(): Alignment.Vertical =
-    when (this) {
-        VAlignment.TOP -> Alignment.Top
-        VAlignment.CENTER -> Alignment.CenterVertically
-        VAlignment.BOTTOM -> Alignment.Bottom
-    }
 
 private fun Padding.toCompose(): Dp =
     when (this) {
