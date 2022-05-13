@@ -156,6 +156,7 @@ private fun MosaikButton(
 ) {
     val element = treeElement.element as Button
     if (element.style == Button.ButtonStyle.TEXT) {
+        // TODO Use TextButton
         Text(
             element.text ?: "",
             modifier = newModifier.padding(Padding.HALF_DEFAULT.toCompose()),

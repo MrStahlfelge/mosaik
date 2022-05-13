@@ -11,12 +11,18 @@
       "type": "Button",
       "text": "Clicking this button will run a ChangeSiteAction",
       "onClick": {
-        "type": "ChangeSiteAction",
-        "element": {
-          "id": "clickButton",
-          "type": "Button",
-          "enabled": false,
-          "text": "ChangeSiteAction replaced the button"
+        "type": "DialogAction",
+        "message": "Do you really want to proceed?",
+        "positiveButtonText": "Yes",
+        "negativeButtonText": "No",
+        "onPositiveButtonClicked": {
+          "type": "ChangeSiteAction",
+          "element": {
+            "id": "clickButton",
+            "type": "Button",
+            "enabled": false,
+            "text": "ChangeSiteAction replaced the button"
+          }
         }
       }
     },

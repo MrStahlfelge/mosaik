@@ -45,7 +45,12 @@ class ViewTreeTest : TestCase() {
         boxAA.addChild(boxAAA)
         boxRoot.addChild(boxB)
 
-        val viewTree = ViewTree("guid", ActionRunner(coroutineScope = { GlobalScope }))
+        val viewTree = ViewTree(
+            "guid",
+            ActionRunner(
+                coroutineScope = { GlobalScope },
+                dialogHandler = { })
+        )
         viewTree.setRootView(boxRoot, 0)
         return viewTree
     }

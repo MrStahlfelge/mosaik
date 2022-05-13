@@ -2,10 +2,7 @@ package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,14 +25,19 @@ fun main() {
         MosaikLogger.logger = MosaikLogger.DefaultLogger
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
+
+        val dialogHandler = MosaikComposeDialogHandler()
         val viewTree = ViewTree(
             UUID.randomUUID().toString(),
-            ActionRunner(coroutineScope = {
-                // for our demo GlobalScope is good to use
-                // for a wallet application, the scope should be bound to the lifecycle of the view
-                // showing the view tree
-                GlobalScope
-            })
+            ActionRunner(
+                coroutineScope = {
+                    // for our demo GlobalScope is good to use
+                    // for a wallet application, the scope should be bound to the lifecycle of the view
+                    // showing the view tree
+                    GlobalScope
+                },
+                dialogHandler = dialogHandler.actionRunnerHandler
+            )
         )
         updateViewTreeFromJson(viewTree, json)
 
@@ -67,6 +69,7 @@ fun main() {
                     Row {
                         Column(Modifier.weight(2.0f).padding(20.dp)) {
                             MosaikViewTree(viewTree, Modifier.fillMaxWidth())
+                            MosaikComposeDialog(dialogHandler)
                         }
 
                         Column(Modifier.weight(1.0f).fillMaxSize()) {
