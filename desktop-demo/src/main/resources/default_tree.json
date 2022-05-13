@@ -14,7 +14,7 @@
         "type": "DialogAction",
         "message": "Do you really want to proceed?",
         "positiveButtonText": "Yes",
-        "negativeButtonText": "No",
+        "negativeButtonText": "Copy",
         "onPositiveButtonClicked": {
           "type": "ChangeSiteAction",
           "element": {
@@ -23,6 +23,10 @@
             "enabled": false,
             "text": "ChangeSiteAction replaced the button"
           }
+        },
+        "onNegativeButtonClicked": {
+          "type": "CopyClipboardAction",
+          "text": "Copied by Mosaik demo"
         }
       }
     },
@@ -81,6 +85,16 @@
           "placeholder": "An input text field"
         }
       ]
+    },
+    {
+      "type": "Label",
+      "text": "Open on GitHub",
+      "style": "BODY1LINK",
+      "textColor": "PRIMARY",
+      "onClick": {
+        "type": "BrowserAction",
+        "url": "https://github.com/MrStahlfelge/mosaik"
+      }
     }
   ]
 }

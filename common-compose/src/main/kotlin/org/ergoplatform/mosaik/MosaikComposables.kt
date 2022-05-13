@@ -157,7 +157,7 @@ private fun MosaikButton(
     val element = treeElement.element as Button
 
     remember(element.truncationType) {
-        if (element.truncationType != TruncationType.START)
+        if (element.truncationType != TruncationType.END)
             MosaikLogger.logWarning("TruncationType ignored for button, not supported by this implementation")
     }
 

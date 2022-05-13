@@ -49,7 +49,10 @@ class ViewTreeTest : TestCase() {
             "guid",
             ActionRunner(
                 coroutineScope = { GlobalScope },
-                dialogHandler = { })
+                showDialog = { },
+                pasteToClipboard = {},
+                openBrowser = { true },
+            )
         )
         viewTree.setRootView(boxRoot, 0)
         return viewTree

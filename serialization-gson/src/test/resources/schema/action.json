@@ -11,6 +11,12 @@
       "$ref": "dialogaction.json"
     },
     {
+      "$ref": "browseraction.json"
+    },
+    {
+      "$ref": "copyclipboardaction.json"
+    },
+    {
       "$ref": "changesiteaction.json"
     }
   ]

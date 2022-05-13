@@ -2,9 +2,7 @@ package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Runnable
-import org.ergoplatform.mosaik.model.actions.Action
-import org.ergoplatform.mosaik.model.actions.ChangeSiteAction
-import org.ergoplatform.mosaik.model.actions.DialogAction
+import org.ergoplatform.mosaik.model.actions.*
 
 open class ActionRunner(
     val coroutineScope: () -> CoroutineScope,
@@ -12,7 +10,9 @@ open class ActionRunner(
      * Handler to show and manage modal dialogs. These dialogs are managed outside Mosaik's
      * [ViewTree] so that implementations can use platform's modal dialogs
      */
-    val dialogHandler: (MosaikDialog) -> Unit
+    val showDialog: (MosaikDialog) -> Unit,
+    val pasteToClipboard: (text: String) -> Unit,
+    val openBrowser: (url: String) -> Boolean,
 ) {
     open fun runAction(action: Action, viewTree: ViewTree) {
         try {
@@ -23,6 +23,12 @@ open class ActionRunner(
                 is DialogAction -> {
                     runDialogAction(action, viewTree)
                 }
+                is CopyClipboardAction -> {
+                    runCopyClipboardAction(action, viewTree)
+                }
+                is BrowserAction -> {
+                    runBrowserAction(action, viewTree)
+                }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
         } catch (t: Throwable) {
@@ -30,8 +36,26 @@ open class ActionRunner(
         }
     }
 
-    private fun runDialogAction(action: DialogAction, viewTree: ViewTree) {
-        dialogHandler(
+    private fun runCopyClipboardAction(action: CopyClipboardAction, viewTree: ViewTree) {
+        pasteToClipboard(action.text)
+    }
+
+    open fun runBrowserAction(action: BrowserAction, viewTree: ViewTree) {
+        val success = openBrowser(action.url)
+        if (!success) {
+            showDialog(
+                MosaikDialog(
+                    action.url, "OK",
+                    null,
+                    null,
+                    null
+                )
+            )
+        }
+    }
+
+    open fun runDialogAction(action: DialogAction, viewTree: ViewTree) {
+        showDialog(
             MosaikDialog(
                 action.message,
                 action.positiveButtonText ?: "OK",
@@ -42,7 +66,7 @@ open class ActionRunner(
         )
     }
 
-    private fun runChangeSiteAction(action: ChangeSiteAction, viewTree: ViewTree) {
+    open fun runChangeSiteAction(action: ChangeSiteAction, viewTree: ViewTree) {
         try {
             viewTree.setContentView(action.element.id, action.element)
         } catch (nf: ElementNotFoundException) {

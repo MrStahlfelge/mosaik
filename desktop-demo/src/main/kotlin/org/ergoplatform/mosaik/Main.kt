@@ -15,7 +15,12 @@ import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
+import java.awt.Desktop
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.net.URI
 import java.util.*
+
 
 fun main() {
 
@@ -36,7 +41,31 @@ fun main() {
                     // showing the view tree
                     GlobalScope
                 },
-                dialogHandler = dialogHandler.actionRunnerHandler
+                showDialog = dialogHandler.showDialog,
+                pasteToClipboard = { text ->
+                    val selection = StringSelection(text)
+                    val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+                    clipboard.setContents(selection, selection)
+                },
+                openBrowser = { url ->
+                    val osName by lazy(LazyThreadSafetyMode.NONE) { System.getProperty("os.name").lowercase(Locale.getDefault()) }
+                    val desktop = Desktop.getDesktop()
+                    when {
+                        Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE) -> {
+                            desktop.browse(URI(url))
+                            true
+                        }
+                        "mac" in osName -> {
+                            Runtime.getRuntime().exec("open $url")
+                            true
+                        }
+                        "nix" in osName || "nux" in osName -> {
+                            Runtime.getRuntime().exec("xdg-open $url")
+                            true
+                        }
+                        else -> false
+                    }
+                }
             )
         )
         updateViewTreeFromJson(viewTree, json)

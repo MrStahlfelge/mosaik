@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -7,6 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * Copies text into the system clipboard
  */
+@Since(0)
 public class CopyClipboardAction implements Action {
     private String text;
 
