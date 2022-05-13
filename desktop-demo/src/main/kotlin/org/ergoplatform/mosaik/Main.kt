@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.util.*
@@ -29,7 +30,12 @@ fun main() {
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
         val viewTree = ViewTree(
             UUID.randomUUID().toString(),
-            ActionRunner()
+            ActionRunner(coroutineScope = {
+                // for our demo GlobalScope is good to use
+                // for a wallet application, the scope should be bound to the lifecycle of the view
+                // showing the view tree
+                GlobalScope
+            })
         )
         updateViewTreeFromJson(viewTree, json)
 

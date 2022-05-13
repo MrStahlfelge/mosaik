@@ -118,11 +118,10 @@ fun renderTextInputField(treeElement: TreeElement, modifier: Modifier) {
             OutlinedTextField(
                 textFieldState.value,
                 onValueChange = {
+                    if (textFieldState.value.text != it.text) {
+                        treeElement.valueChanged(it.text.ifEmpty { null })
+                    }
                     textFieldState.value = it
-                    treeElement.valueChanged(it.text.ifEmpty { null })
-
-                    // TODO onValueChangedAction
-                    //  should not be called on every change, but only value change and after some time
                 },
                 Modifier.fillMaxWidth(),
                 enabled = element.isEnabled,
@@ -253,7 +252,7 @@ private fun renderBox(
 
     Box(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.id ?: childElement.hashCode().toString()) {
+            key(childElement.idOrHash) {
                 MosaikTreeElement(
                     childElement,
                     Modifier.align(
@@ -285,7 +284,7 @@ private fun renderRow(
 
     Row(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.id ?: childElement.hashCode()) {
+            key(childElement.idOrHash) {
                 val weight = element.getChildWeight(childElement.element)
                 MosaikTreeElement(
                     childElement,
@@ -307,7 +306,7 @@ private fun renderColumn(
 
     Column(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.id ?: childElement.hashCode().toString()) {
+            key(childElement.idOrHash) {
                 val weight = element.getChildWeight(childElement.element)
                 MosaikTreeElement(
                     childElement,

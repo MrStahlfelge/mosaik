@@ -1,8 +1,11 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.model.ui.ViewElement
+import org.ergoplatform.mosaik.model.ui.input.InputElement
 
 /**
  * the complete tree of [ViewElement]'s and is context.
@@ -15,6 +18,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
+    private val jobMap = HashMap<String, Job>()
 
     /**
      * flow that emits when viewtree is changed
@@ -104,6 +108,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
     private fun removeIdsAndValues(element: TreeElement) {
         val size = valueMap.size
         element.visitAllElements { treeElement ->
+            cancelRunningJobFor(element)
             if (treeElement.hasId) {
                 idMap.remove(treeElement.id!!)
                 valueMap.remove(treeElement.id!!)
@@ -111,6 +116,30 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
         }
         if (valueMap.size != size) {
             notifyValuesChanged()
+        }
+    }
+
+    fun cancelRunningJobFor(element: TreeElement) {
+        synchronized(jobMap) {
+            val idOrHash = element.idOrHash
+            val job = jobMap[idOrHash]
+            job?.let {
+                if (!job.isCompleted) job.cancel()
+                jobMap.remove(idOrHash)
+            }
+        }
+    }
+
+    /**
+     * Registers a new Job for the element. A former running job will be cancelled
+     */
+    fun registerJobFor(element: TreeElement, job: suspend () -> Unit) {
+        synchronized(jobMap) {
+            cancelRunningJobFor(element)
+            val newJob = actionRunner.coroutineScope().launch {
+                job()
+            }
+            jobMap[element.idOrHash] = newJob
         }
     }
 
@@ -138,9 +167,14 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
 
     fun onItemValueChanged(treeElement: TreeElement, newValue: Any?) {
         if (treeElement.hasId) {
-            if (valueMap[treeElement.id!!] != newValue) {
-                valueMap[treeElement.id!!] = newValue
+            val id = treeElement.id!!
+            if (valueMap[id] != newValue) {
+                valueMap[id] = newValue
                 notifyValuesChanged()
+                MosaikLogger.logInfo("Value $id changed to $newValue")
+                (treeElement.element as? InputElement<*>)?.onValueChangedAction?.let { action ->
+                    actionRunner.runAction(action, this)
+                }
             }
         }
     }

@@ -1,9 +1,10 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.CoroutineScope
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.actions.ChangeSiteAction
 
-open class ActionRunner {
+open class ActionRunner(val coroutineScope: () -> CoroutineScope) {
     open fun runAction(action: Action, viewTree: ViewTree) {
         try {
             when (action) {
