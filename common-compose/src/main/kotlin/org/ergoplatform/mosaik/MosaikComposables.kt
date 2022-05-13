@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -30,7 +32,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonTextColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
-import org.ergoplatform.mosaik.model.ui.ForegroundColor
+import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.Button
@@ -57,13 +59,13 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
     } else {
         modifier
     }.alpha(if (element.isVisible) 1.0f else 0.0f)
-        .then(if (treeElement.respondsToClick)
-            Modifier.combinedClickable(
-                onClick = treeElement::clicked,
-                onLongClick = {
-                    // TODO
-                }
-            ) else Modifier)
+        .then(
+            if (treeElement.respondsToClick)
+                Modifier.combinedClickable(
+                    onClick = treeElement::clicked,
+                    onLongClick = treeElement::longPressed,
+                ) else Modifier
+        )
 
     when (element) {
         is Box -> {
@@ -84,6 +86,15 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is TextInputField -> {
             MosaikTextInputField(treeElement, newModifier)
         }
+        is LoadingIndicator -> {
+            MosaikLoadingIndicator(treeElement, newModifier)
+        }
+        is LazyLoadBox -> {
+            TODO()
+        }
+        is Icon -> {
+            MosaikIcon(treeElement, newModifier)
+        }
         else -> {
             throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
         }
@@ -91,10 +102,59 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun MosaikIcon(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as Icon
+
+    val imageVector = element.iconType.getImageVector()
+
+    Icon(
+        imageVector, null, modifier.size(
+            when (element.iconSize) {
+                Icon.Size.SMALL -> 24.dp
+                Icon.Size.MEDIUM -> 48.dp
+                Icon.Size.LARGE -> 96.dp
+            }
+        ), tint = foregroundColor(element.tintColor)
+    )
+}
+
+private fun IconType.getImageVector() =
+    when (this) {
+        IconType.INFO -> Icons.Default.Info
+        IconType.WARN -> Icons.Default.Warning
+        IconType.ERROR -> Icons.Default.Error
+        IconType.CONFIG -> Icons.Default.Settings
+        IconType.ADD -> Icons.Default.Add
+        IconType.WALLET -> Icons.Default.AccountBalanceWallet
+        IconType.SEND -> Icons.Default.Send
+        IconType.RECEIVE -> Icons.Default.CallReceived
+        IconType.MORE -> Icons.Default.MoreVert
+        IconType.OPENLIST -> Icons.Default.ArrowDropDown
+        IconType.CHEVRON_UP -> Icons.Default.ExpandLess
+        IconType.CHEVRON_DOWN -> Icons.Default.ExpandMore
+        IconType.QR_CODE -> Icons.Default.QrCode
+        IconType.QR_SCAN -> Icons.Default.QrCodeScanner
+        IconType.COPY -> Icons.Default.ContentCopy
+    }
+
+@Composable
+fun MosaikLoadingIndicator(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as LoadingIndicator
+
+    CircularProgressIndicator(
+        modifier.size(
+            when (element.size) {
+                LoadingIndicator.Size.SMALL -> 24.dp
+                LoadingIndicator.Size.MEDIUM -> 48.dp
+            }
+        ),
+        color = primaryLabelColor,
+    )
+}
+
+@Composable
 fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as TextInputField
-
-    // TODO IconType endIconType, Action onEndIconClicked;
 
     // keep everything the user entered, as long as the [ViewTree] is not changed
     val textFieldState =
@@ -127,7 +187,22 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                 enabled = element.isEnabled,
                 isError = !element.errorMessage.isNullOrBlank(),
                 maxLines = 1,
+                singleLine = true,
                 label = { element.placeHolder?.let { Text(it) } },
+                trailingIcon = {
+                    element.endIcon?.getImageVector()?.let { iv ->
+                        val icon = @Composable { Icon(iv, null) }
+
+                        if (element.onEndIconClicked != null)
+                            IconButton(onClick = {
+                                treeElement.runAction(element.onEndIconClicked)
+                            }) {
+                                icon()
+                            }
+                        else
+                            icon()
+                    }
+                },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     textColor = defaultLabelColor,
                     disabledTextColor = secondaryLabelColor,

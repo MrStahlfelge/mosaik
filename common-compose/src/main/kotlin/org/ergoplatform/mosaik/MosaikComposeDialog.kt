@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
     val dialogState = dialog.flow.collectAsState()
-    // TODO use correct colors
+    // TODO use correct colors, min width
     dialogState.value?.let { mosaikDialog ->
         AlertDialog(
             onDismissRequest = { dialog.dismiss() },

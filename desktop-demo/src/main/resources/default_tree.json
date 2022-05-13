@@ -34,6 +34,12 @@
       "type": "Row",
       "children": [
         {
+          "type": "Icon",
+          "icon": "WALLET",
+          "tintColor": "SECONDARY",
+          "size": "MEDIUM"
+        },
+        {
           "type": "Box",
           "padding": "DEFAULT",
           "weight": 2,
@@ -41,7 +47,7 @@
             {
               "type": "Label",
               "text": "This label is surrounded by a padding and\ntakes 2 times the space than the label on the right",
-              "textAlignment": "CENTER",
+              "textAlignment": "START",
               "style": "BODY1"
             }
           ]
@@ -82,9 +88,19 @@
           "id": "inputText",
           "type": "TextInputField",
           "value": "initial text",
-          "placeholder": "An input text field"
+          "placeholder": "An input text field",
+          "endIcon": "INFO",
+          "onEndIconClicked": {
+            "type": "DialogAction",
+            "message": "Show some more information to the user",
+            "positiveButtonText": "OK"
+          }
         }
       ]
+    },
+    {
+      "type": "LoadingIndicator",
+      "size": "MEDIUM"
     },
     {
       "type": "Label",

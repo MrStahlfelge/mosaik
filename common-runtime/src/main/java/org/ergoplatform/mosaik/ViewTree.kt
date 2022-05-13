@@ -165,6 +165,15 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
         }
     }
 
+    /**
+     * called when user long pressed an element
+     */
+    fun onItemLongClicked(element: TreeElement) {
+        element.element.onLongPressAction?.let {
+            actionRunner.runAction(it, this)
+        }
+    }
+
     fun onItemValueChanged(treeElement: TreeElement, newValue: Any?) {
         if (treeElement.hasId) {
             val id = treeElement.id!!

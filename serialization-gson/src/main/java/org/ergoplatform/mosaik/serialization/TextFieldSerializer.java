@@ -90,7 +90,7 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
             textInputField.setEndIcon(context.<IconType>deserialize(jsonObject.get(KEY_END_ICON), IconType.class));
         }
         if (jsonObject.has(KEY_ON_END_ICON_CLICKED)) {
-            textInputField.setOnClickAction(context.<Action>deserialize(jsonObject.get(KEY_ON_END_ICON_CLICKED), Action.class));
+            textInputField.setOnEndIconClicked(context.<Action>deserialize(jsonObject.get(KEY_ON_END_ICON_CLICKED), Action.class));
         }
         if (jsonObject.has(KEY_ON_VALUE_CHANGED)) {
             textInputField.setOnValueChangedAction(context.<Action>deserialize(jsonObject.get(KEY_ON_VALUE_CHANGED), Action.class));

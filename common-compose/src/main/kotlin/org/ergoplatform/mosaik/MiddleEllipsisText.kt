@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.TextUnit
 
 /**
  * Workaround for Compose Text fields not having truncation type middle
- * FIXME does not relayout on resize - no problem on mobile and we hope JetBrains
- * gives an implementation later
  * https://stackoverflow.com/a/69084973/7487013
  */
 @Composable

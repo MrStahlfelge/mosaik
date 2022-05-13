@@ -13,6 +13,7 @@ public enum IconType {
     OPENLIST,
     CHEVRON_UP,
     CHEVRON_DOWN,
+    COPY,
     QR_CODE,
     QR_SCAN
 }
