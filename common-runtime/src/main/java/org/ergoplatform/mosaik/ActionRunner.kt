@@ -21,7 +21,11 @@ open class ActionRunner {
         try {
             viewTree.setContentView(action.element.id, action.element)
         } catch (nf: ElementNotFoundException) {
-            MosaikLogger.logWarning("Error running ${action.javaClass.simpleName}", nf)
+            MosaikLogger.logInfo(
+                "${action.javaClass.simpleName}: element ${nf.elementId} not found, replacing complete view tree",
+                nf
+            )
+            viewTree.setContentView(null, action.element)
         }
     }
 }
