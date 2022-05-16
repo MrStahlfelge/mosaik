@@ -1,5 +1,8 @@
 package org.ergoplatform.mosaik.model.actions;
 
-public interface Action {
+import javax.annotation.Nonnull;
 
+public interface Action {
+    @Nonnull String getId();
+    void setId(@Nonnull String id);
 }

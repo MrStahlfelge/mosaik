@@ -20,18 +20,6 @@ public class TokenLabel extends ViewElement {
     private int decimals;
     private long amount;
 
-    @Nullable
-    @Override
-    public Action getOnClickAction() {
-        Action onClickAction = super.getOnClickAction();
-
-        if (onClickAction == null && tokenId != null) {
-            return new TokenInformationAction(tokenId);
-        } else  {
-            return onClickAction;
-        }
-    }
-
     @Nonnull
     public String getTokenId() {
         if (tokenId == null) {

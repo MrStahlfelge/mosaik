@@ -1,7 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
 import org.ergoplatform.mosaik.model.Since;
-import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ViewContent;
 
 import java.util.Objects;
 
@@ -16,20 +16,37 @@ import javax.annotation.Nonnull;
  */
 @Since(0)
 public class ChangeSiteAction implements Action {
-    private ViewElement element;
+    private ViewContent newContent;
+    private String id;
 
     @Nonnull
-    public ViewElement getElement() {
-        if (element == null) {
+    @Override
+    public String getId() {
+        if (id == null) {
+            throw new IllegalStateException("Action id must not be null");
+        }
+
+        return id;
+    }
+
+    public void setId(@Nonnull String id) {
+        Objects.requireNonNull(id);
+        this.id = id;
+    }
+
+
+    @Nonnull
+    public ViewContent getNewContent() {
+        if (newContent == null) {
             throw new IllegalStateException("No view element set for " + this.getClass().getSimpleName());
         }
 
-        return element;
+        return newContent;
     }
 
-    public void setElement(@Nonnull ViewElement element) {
-        Objects.requireNonNull(element);
-        this.element = element;
+    public void setNewContent(@Nonnull ViewContent newContent) {
+        Objects.requireNonNull(newContent);
+        this.newContent = newContent;
     }
 
     @Override
@@ -37,11 +54,11 @@ public class ChangeSiteAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChangeSiteAction that = (ChangeSiteAction) o;
-        return Objects.equals(getElement(), that.getElement());
+        return Objects.equals(getNewContent(), that.getNewContent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getElement());
+        return Objects.hash(getNewContent());
     }
 }

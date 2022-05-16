@@ -12,11 +12,11 @@
     },
     "onLongPress": {
       "description": "Action to be started when long press is performed",
-      "$ref": "action.json"
+      "type": "string"
     },
     "onClick": {
       "description": "Action to be started when click or tap is performed",
-      "$ref": "action.json"
+      "type": "string"
     },
     "visible": {
       "description": "Visibility of this object. Optional, defaults to true",

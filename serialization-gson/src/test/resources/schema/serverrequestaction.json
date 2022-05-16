@@ -6,6 +6,9 @@
     "type": {
       "const": "ServerRequestAction"
     },
+    "id": {
+      "type": "string"
+    },
     "postDataValues": {
       "type": "boolean"
     },
@@ -15,6 +18,7 @@
   },
   "required": [
     "type",
+    "id",
     "url"
   ]
 }

@@ -9,12 +9,16 @@
     "url": {
       "type": "string"
     },
+    "id": {
+      "type": "string"
+    },
     "onFinished": {
-      "$ref": "action.json"
+      "type": "string"
     }
   },
   "required": [
     "type",
+    "id",
     "url"
   ]
 }

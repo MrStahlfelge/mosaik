@@ -26,13 +26,13 @@ public class LoadingIndicator extends ViewElement {
     }
 
     @Override
-    public void setOnClickAction(@Nullable Action action) {
+    public void setOnClickAction(@Nullable String action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
                 this.getClass().getSimpleName());
     }
 
     @Override
-    public void setOnLongPressAction(@Nullable Action action) {
+    public void setOnLongPressAction(@Nullable String action) {
         throw new IllegalArgumentException("OnOnLongPressAction can't be set for" +
                 this.getClass().getSimpleName());
     }

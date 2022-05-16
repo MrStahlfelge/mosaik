@@ -15,8 +15,24 @@ public class DialogAction implements Action {
     String message;
     @Nullable String positiveButtonText;
     @Nullable String negativeButtonText;
-    @Nullable Action onPositiveButtonClicked;
-    @Nullable Action onNegativeButtonClicked;
+    @Nullable String onPositiveButtonClicked;
+    @Nullable String onNegativeButtonClicked;
+    private String id;
+
+    @Nonnull
+    @Override
+    public String getId() {
+        if (id == null) {
+            throw new IllegalStateException("Action id must not be null");
+        }
+
+        return id;
+    }
+
+    public void setId(@Nonnull String id) {
+        Objects.requireNonNull(id);
+        this.id = id;
+    }
 
     @Nonnull
     public String getMessage() {
@@ -51,20 +67,20 @@ public class DialogAction implements Action {
     }
 
     @Nullable
-    public Action getOnPositiveButtonClicked() {
+    public String getOnPositiveButtonClicked() {
         return onPositiveButtonClicked;
     }
 
-    public void setOnPositiveButtonClicked(@Nullable Action onPositiveButtonClicked) {
+    public void setOnPositiveButtonClicked(@Nullable String onPositiveButtonClicked) {
         this.onPositiveButtonClicked = onPositiveButtonClicked;
     }
 
     @Nullable
-    public Action getOnNegativeButtonClicked() {
+    public String getOnNegativeButtonClicked() {
         return onNegativeButtonClicked;
     }
 
-    public void setOnNegativeButtonClicked(@Nullable Action onNegativeButtonClicked) {
+    public void setOnNegativeButtonClicked(@Nullable String onNegativeButtonClicked) {
         this.onNegativeButtonClicked = onNegativeButtonClicked;
     }
 

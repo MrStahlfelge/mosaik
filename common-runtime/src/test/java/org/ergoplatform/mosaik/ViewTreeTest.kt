@@ -2,6 +2,7 @@ package org.ergoplatform.mosaik
 
 import junit.framework.TestCase
 import kotlinx.coroutines.GlobalScope
+import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 class ViewTreeTest : TestCase() {
@@ -9,7 +10,7 @@ class ViewTreeTest : TestCase() {
     fun testReplaceElement() {
         val viewTree = buildViewTree()
         val oldIdsList = getIdsList(viewTree)
-        viewTree.setContentView("AA", Box().apply { id = "aa" })
+        viewTree.setContentView("AA", ViewContent(Box().apply { id = "aa" }))
         val idList = getIdsList(viewTree)
 
         assertEquals(oldIdsList.size - 1, idList.size)
@@ -46,7 +47,6 @@ class ViewTreeTest : TestCase() {
         boxRoot.addChild(boxB)
 
         val viewTree = ViewTree(
-            "guid",
             ActionRunner(
                 coroutineScope = { GlobalScope },
                 showDialog = { },
@@ -54,7 +54,7 @@ class ViewTreeTest : TestCase() {
                 openBrowser = { true },
             )
         )
-        viewTree.setRootView(boxRoot, 0)
+        viewTree.setRootView(ViewContent(boxRoot), 0)
         return viewTree
     }
 }

@@ -56,10 +56,10 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             jsonObject.add(KEY_ID, new JsonPrimitive(src.getId()));
         }
         if (src.getOnLongPressAction() != null) {
-            jsonObject.add(KEY_LONG_PRESS, context.serialize(src.getOnLongPressAction(), Action.class));
+            jsonObject.add(KEY_LONG_PRESS, new JsonPrimitive(src.getOnLongPressAction()));
         }
         if (src.getOnClickAction() != null) {
-            jsonObject.add(KEY_CLICK, context.serialize(src.getOnClickAction(), Action.class));
+            jsonObject.add(KEY_CLICK, new JsonPrimitive(src.getOnClickAction()));
         }
 
         return jsonObject;
@@ -157,10 +157,10 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             element.setId(json.get(KEY_ID).getAsString());
         }
         if (json.has(KEY_CLICK)) {
-            element.setOnClickAction(context.<Action>deserialize(json.get(KEY_CLICK), Action.class));
+            element.setOnClickAction(json.get(KEY_CLICK).getAsString());
         }
         if (json.has(KEY_LONG_PRESS)) {
-            element.setOnLongPressAction(context.<Action>deserialize(json.get(KEY_CLICK), Action.class));
+            element.setOnLongPressAction(json.get(KEY_CLICK).getAsString());
         }
     }
 }

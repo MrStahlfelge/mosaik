@@ -9,6 +9,22 @@ import javax.annotation.Nonnull;
  */
 public class TokenInformationAction implements Action {
     private String tokenId;
+    private String id;
+
+    @Nonnull
+    @Override
+    public String getId() {
+        if (id == null) {
+            throw new IllegalStateException("Action id must not be null");
+        }
+
+        return id;
+    }
+
+    public void setId(@Nonnull String id) {
+        Objects.requireNonNull(id);
+        this.id = id;
+    }
 
     public TokenInformationAction(String tokenId) {
         this.tokenId = tokenId;

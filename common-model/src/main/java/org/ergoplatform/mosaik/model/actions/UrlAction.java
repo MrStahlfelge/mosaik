@@ -6,6 +6,22 @@ import javax.annotation.Nonnull;
 
 public abstract class UrlAction implements Action {
     private String url;
+    private String id;
+
+    @Nonnull
+    @Override
+    public String getId() {
+        if (id == null) {
+            throw new IllegalStateException("Action id must not be null");
+        }
+
+        return id;
+    }
+
+    public void setId(@Nonnull String id) {
+        Objects.requireNonNull(id);
+        this.id = id;
+    }
 
     @Nonnull
     public String getUrl() {

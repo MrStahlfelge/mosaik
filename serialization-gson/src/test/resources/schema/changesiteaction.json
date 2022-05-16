@@ -6,11 +6,16 @@
     "type": {
       "const": "ChangeSiteAction"
     },
-    "changeTo": {
-      "$ref": "viewelement.json"
+    "id": {
+      "type": "string"
+    },
+    "newContent": {
+      "$ref": "viewcontent.json"
     },
     "required": [
-      "type", "changeTo"
+      "type",
+      "id",
+      "newContent"
     ]
   }
 }

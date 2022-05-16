@@ -13,12 +13,12 @@ public interface BaseAttributes {
     String getId();
 
     @Nullable
-    Action getOnLongPressAction();
+    String getOnLongPressAction();
 
-    void setOnLongPressAction(@Nullable Action action);
+    void setOnLongPressAction(@Nullable String action);
 
     @Nullable
-    Action getOnClickAction();
+    String getOnClickAction();
 
-    void setOnClickAction(@Nullable Action action);
+    void setOnClickAction(@Nullable String action);
 }

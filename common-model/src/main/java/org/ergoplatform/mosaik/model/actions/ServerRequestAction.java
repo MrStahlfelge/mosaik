@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
  */
 @Since(0)
 public class ServerRequestAction extends UrlAction {
-    private boolean postDataValues;
+    private boolean postDataValues = true;
 
     public boolean isPostDataValues() {
         return postDataValues;

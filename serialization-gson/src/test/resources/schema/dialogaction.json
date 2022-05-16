@@ -6,6 +6,9 @@
     "type": {
       "const": "DialogAction"
     },
+    "id": {
+      "type": "string"
+    },
     "message": {
       "type": "string"
     },
@@ -16,14 +19,15 @@
       "type": "string"
     },
     "onPositiveButtonClicked": {
-      "$ref": "action.json"
+      "type": "string"
     },
     "onNegativeButtonClicked": {
-      "$ref": "action.json"
+      "type": "string"
     }
   },
   "required": [
     "type",
+    "id",
     "message"
   ]
 }

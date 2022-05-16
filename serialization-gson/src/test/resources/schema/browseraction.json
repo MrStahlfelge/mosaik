@@ -6,12 +6,16 @@
     "type": {
       "const": "BrowserAction"
     },
+    "id": {
+      "type": "string"
+    },
     "url": {
       "type": "string"
     }
   },
   "required": [
     "type",
+    "id",
     "url"
   ]
 }

@@ -11,9 +11,9 @@ public interface InputElement<T> {
     void setValue(@Nullable T value);
 
     @Nullable
-    Action getOnValueChangedAction();
+    String getOnValueChangedAction();
 
-    void setOnValueChangedAction(@Nullable Action action);
+    void setOnValueChangedAction(@Nullable String action);
 
     boolean isEnabled();
 

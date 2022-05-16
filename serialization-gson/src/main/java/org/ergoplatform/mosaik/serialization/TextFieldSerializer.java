@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -53,10 +54,10 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
             jsonObject.add(KEY_END_ICON, context.serialize(src.getEndIcon()));
         }
         if (src.getOnEndIconClicked() != null) {
-            jsonObject.add(KEY_ON_END_ICON_CLICKED, context.serialize(src.getOnEndIconClicked(), Action.class));
+            jsonObject.add(KEY_ON_END_ICON_CLICKED, new JsonPrimitive(src.getOnEndIconClicked()));
         }
         if (src.getOnValueChangedAction() != null) {
-            jsonObject.add(KEY_ON_VALUE_CHANGED, context.serialize(src.getOnValueChangedAction(), Action.class));
+            jsonObject.add(KEY_ON_VALUE_CHANGED, new JsonPrimitive(src.getOnValueChangedAction()));
         }
 
         return jsonObject;
@@ -90,10 +91,10 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
             textInputField.setEndIcon(context.<IconType>deserialize(jsonObject.get(KEY_END_ICON), IconType.class));
         }
         if (jsonObject.has(KEY_ON_END_ICON_CLICKED)) {
-            textInputField.setOnEndIconClicked(context.<Action>deserialize(jsonObject.get(KEY_ON_END_ICON_CLICKED), Action.class));
+            textInputField.setOnEndIconClicked(jsonObject.get(KEY_ON_END_ICON_CLICKED).getAsString());
         }
         if (jsonObject.has(KEY_ON_VALUE_CHANGED)) {
-            textInputField.setOnValueChangedAction(context.<Action>deserialize(jsonObject.get(KEY_ON_VALUE_CHANGED), Action.class));
+            textInputField.setOnValueChangedAction(jsonObject.get(KEY_ON_VALUE_CHANGED).getAsString());
         }
 
         return textInputField;

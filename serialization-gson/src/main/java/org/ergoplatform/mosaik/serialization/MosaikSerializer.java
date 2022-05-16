@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik.serialization;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
@@ -19,14 +20,14 @@ import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 public class MosaikSerializer {
     static final String TYPE_ELEMENT_NAME = "type";
 
-    public String toJson(ViewElement element) {
+    public String toJson(ViewContent content) {
         Gson gson = getGson(false);
-        return gson.toJson(element);
+        return gson.toJson(content);
     }
 
-    public String toJsonBeautified(ViewElement element) {
+    public String toJsonBeautified(ViewContent content) {
         Gson gson = getGson(true);
-        return gson.toJson(element);
+        return gson.toJson(content);
     }
 
     private Gson getGson(boolean prettyPrint) {
@@ -53,8 +54,8 @@ public class MosaikSerializer {
         return gsonBuilder.create();
     }
 
-    public ViewElement viewElementFromJson(String json) {
+    public ViewContent viewElementFromJson(String json) {
         Gson gson = getGson(false);
-        return gson.fromJson(json, ViewElement.class);
+        return gson.fromJson(json, ViewContent.class);
     }
 }

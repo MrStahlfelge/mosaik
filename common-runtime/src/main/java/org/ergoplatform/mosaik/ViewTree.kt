@@ -4,13 +4,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 
 /**
  * the complete tree of [ViewElement]'s and is context.
  */
-class ViewTree(val guid: String, val actionRunner: ActionRunner) {
+class ViewTree(val actionRunner: ActionRunner) {
     var content: TreeElement? = null
         private set
     var cacheLifeTime: Long = 0
@@ -19,12 +21,15 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
     private val jobMap = HashMap<String, Job>()
+    private val actionMap = HashMap<String, Action>()
 
     /**
      * flow that emits when viewtree is changed
      */
     val contentState: StateFlow<Pair<Int, TreeElement?>> get() = _modificationFlow
     private val _modificationFlow = MutableStateFlow<Pair<Int, TreeElement?>>(Pair(0, null))
+
+    val actions get() = actionMap.values.toList()
 
     /**
      * contentVersion is incremented every time the ViewTree is changed
@@ -40,7 +45,8 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
     /**
      * replaces the view completely
      */
-    fun setRootView(view: ViewElement, cacheLifeTime: Long) {
+    fun setRootView(view: ViewContent, cacheLifeTime: Long) {
+        actionMap.clear()
         setContentView(null, view)
         this.cacheLifeTime = cacheLifeTime
     }
@@ -52,7 +58,8 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
     /**
      * replaces part of the view with the given id. If id is null, the complete view is replaced
      */
-    fun setContentView(replaceId: String?, view: ViewElement) {
+    fun setContentView(replaceId: String?, newContent: ViewContent) {
+        val view = newContent.view
         val replacedElement = if (replaceId == null) content else findElementById(replaceId)
 
         if (replacedElement == null && replaceId != null) {
@@ -61,6 +68,8 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
                 replaceId
             )
         }
+
+        newContent.actions.forEach { action -> actionMap[action.id] = action }
 
         if (replacedElement == null && content == null) {
             content = TreeElement(view, null, this)
@@ -156,11 +165,19 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
         content?.visitAllElements(visitor)
     }
 
+    fun getAction(id: String?): Action? =
+        id?.let {
+            val action = actionMap[id]
+            if (action == null)
+                MosaikLogger.logError("Action with id $id referenced, but not available")
+            action
+        }
+
     /**
      * called when user clicked or tapped an element
      */
     fun onItemClicked(element: TreeElement) {
-        element.element.onClickAction?.let {
+        getAction(element.element.onClickAction)?.let {
             actionRunner.runAction(it, this)
         }
     }
@@ -169,7 +186,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
      * called when user long pressed an element
      */
     fun onItemLongClicked(element: TreeElement) {
-        element.element.onLongPressAction?.let {
+        getAction(element.element.onLongPressAction)?.let {
             actionRunner.runAction(it, this)
         }
     }
@@ -181,7 +198,7 @@ class ViewTree(val guid: String, val actionRunner: ActionRunner) {
                 valueMap[id] = newValue
                 notifyValuesChanged()
                 MosaikLogger.logInfo("Value $id changed to $newValue")
-                (treeElement.element as? InputElement<*>)?.onValueChangedAction?.let { action ->
+                getAction((treeElement.element as? InputElement<*>)?.onValueChangedAction)?.let { action ->
                     actionRunner.runAction(action, this)
                 }
             }

@@ -9,6 +9,7 @@ import net.jimblackler.jsonschemafriend.ValidationException;
 import net.jimblackler.jsonschemafriend.Validator;
 
 import org.ergoplatform.mosaik.model.Since;
+import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.ChangeSiteAction;
 import org.ergoplatform.mosaik.model.actions.CopyClipboardAction;
@@ -49,13 +50,13 @@ public class MosaikSerializerTest extends TestCase {
                     } else if (action instanceof DialogAction) {
                         ((DialogAction) action).setMessage("message");
                     } else if (action instanceof ChangeSiteAction) {
-                        ((ChangeSiteAction) action).setElement(new Box());
+                        ((ChangeSiteAction) action).setNewContent(new ViewContent(new Box()));
                     } else if (action instanceof NavigateAction) {
                         ((NavigateAction) action).setElement(new Box());
                     } else if (action instanceof CopyClipboardAction) {
                         ((CopyClipboardAction) action).setText("text");
                     }
-
+                    action.setId("action_" + actions.size());
                     actions.add(action);
                 } catch (InstantiationException | IllegalAccessException ignored) {
                     // abstract classes etc
@@ -66,6 +67,7 @@ public class MosaikSerializerTest extends TestCase {
 
         // Add all available view elements to a Column
         Column column = new Column();
+        int actionIdx = 0;
 
         for (Class<? extends ViewElement> viewElementClass : findAllViewElements(ViewElement.class.getPackage().getName())) {
             Since annotation = viewElementClass.getAnnotation(Since.class);
@@ -83,10 +85,10 @@ public class MosaikSerializerTest extends TestCase {
                     }
 
                     // add actions from queue
-                    if (!actions.isEmpty()) {
+                    if (actionIdx < actions.size()) {
                         try {
-                            element.setOnClickAction(actions.getFirst());
-                            actions.removeFirst();
+                            element.setOnClickAction("action_" + actionIdx);
+                            actionIdx++;
                         } catch (IllegalArgumentException e) {
                             // some elements don't let set actions
                         }
@@ -101,17 +103,21 @@ public class MosaikSerializerTest extends TestCase {
 
         column.addChild(new Box(), HAlignment.END, 2);
 
-        String json = new MosaikSerializer().toJson(column);
+        ViewContent content = new ViewContent(column);
+        content.setActions(actions);
+
+        String json = new MosaikSerializer().toJson(content);
         System.out.println(json);
 
         SchemaStore schemaStore = new SchemaStore(); // Initialize a SchemaStore.
         // Load the schema.
-        Schema schema = schemaStore.loadSchema(MosaikSerializerTest.class.getResource("/schema/viewelement.json"));
+        Schema schema = schemaStore.loadSchema(MosaikSerializerTest.class.getResource("/schema/viewcontent.json"));
         Validator validator = new Validator(); // Create a validator.
         validator.validateJson(schema, json);
 
-        ViewElement element = new MosaikSerializer().viewElementFromJson(json);
-        Assert.assertEquals(column, element);
+        ViewContent content2 = new MosaikSerializer().viewElementFromJson(json);
+        Assert.assertEquals(column, content2.getView());
+        Assert.assertTrue(actions.size() == content2.getActions().size() && actions.containsAll(content2.getActions()) && content2.getActions().containsAll(actions));
     }
 
     public Set<Class<? extends ViewElement>> findAllViewElements(String packageName) {

@@ -15,7 +15,7 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Nullable
     private IconType endIconType;
     @Nullable
-    private Action onEndIconClicked;
+    private String onEndIconClicked;
     @Nullable
     private String errorMessage;
     @Nullable
@@ -23,7 +23,7 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Nullable
     private T value;
     @Nullable
-    private Action onValueChangedAction;
+    private String onValueChangedAction;
     private boolean enabled = true;
 
     @Nullable
@@ -36,11 +36,11 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     }
 
     @Nullable
-    public Action getOnEndIconClicked() {
+    public String getOnEndIconClicked() {
         return onEndIconClicked;
     }
 
-    public void setOnEndIconClicked(@Nullable Action onEndIconClicked) {
+    public void setOnEndIconClicked(@Nullable String onEndIconClicked) {
         this.onEndIconClicked = onEndIconClicked;
     }
 
@@ -66,12 +66,12 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
 
     @Override
     @Nullable
-    public Action getOnValueChangedAction() {
+    public String getOnValueChangedAction() {
         return onValueChangedAction;
     }
 
     @Override
-    public void setOnValueChangedAction(@Nullable Action onValueChangedAction) {
+    public void setOnValueChangedAction(@Nullable String onValueChangedAction) {
         this.onValueChangedAction = onValueChangedAction;
     }
 

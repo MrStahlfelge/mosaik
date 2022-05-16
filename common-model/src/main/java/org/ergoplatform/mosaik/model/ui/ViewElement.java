@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 public abstract class ViewElement implements BaseAttributes {
     private boolean isVisible = true;
     private String elementId;
-    private Action onLongPressAction;
-    private Action onClickAction;
+    private String onLongPressAction;
+    private String onClickAction;
 
     @Override
     public boolean isVisible() {
@@ -34,23 +34,23 @@ public abstract class ViewElement implements BaseAttributes {
 
     @Nullable
     @Override
-    public Action getOnLongPressAction() {
+    public String getOnLongPressAction() {
         return onLongPressAction;
     }
 
     @Override
-    public void setOnLongPressAction(@Nullable Action action) {
+    public void setOnLongPressAction(@Nullable String action) {
         this.onLongPressAction = action;
     }
 
     @Nullable
     @Override
-    public Action getOnClickAction() {
+    public String getOnClickAction() {
         return onClickAction;
     }
 
     @Override
-    public void setOnClickAction(@Nullable Action action) {
+    public void setOnClickAction(@Nullable String action) {
         onClickAction = action;
     }
 

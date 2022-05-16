@@ -17,7 +17,7 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
     @Nullable
     private List<String> addresses;
     @Nullable
-    private Action onValueChangedAction;
+    private String onValueChangedAction;
     private boolean enabled;
 
     @Nullable
@@ -33,12 +33,12 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
 
     @Nullable
     @Override
-    public Action getOnValueChangedAction() {
+    public String getOnValueChangedAction() {
         return onValueChangedAction;
     }
 
     @Override
-    public void setOnValueChangedAction(@Nullable Action action) {
+    public void setOnValueChangedAction(@Nullable String action) {
         onValueChangedAction = action;
     }
 
@@ -53,7 +53,7 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
     }
 
     @Override
-    public void setOnClickAction(@Nullable Action action) {
+    public void setOnClickAction(@Nullable String action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
                 this.getClass().getSimpleName());
     }

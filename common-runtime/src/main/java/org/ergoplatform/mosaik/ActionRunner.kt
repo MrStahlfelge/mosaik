@@ -60,21 +60,21 @@ open class ActionRunner(
                 action.message,
                 action.positiveButtonText ?: "OK",
                 action.negativeButtonText,
-                action.onPositiveButtonClicked?.let { { runAction(it, viewTree) } },
-                action.onNegativeButtonClicked?.let { { runAction(it, viewTree) } }
+                viewTree.getAction(action.onPositiveButtonClicked)?.let { { runAction(it, viewTree) } },
+                viewTree.getAction(action.onNegativeButtonClicked)?.let { { runAction(it, viewTree) } }
             )
         )
     }
 
     open fun runChangeSiteAction(action: ChangeSiteAction, viewTree: ViewTree) {
         try {
-            viewTree.setContentView(action.element.id, action.element)
+            viewTree.setContentView(action.newContent.view.id, action.newContent)
         } catch (nf: ElementNotFoundException) {
             MosaikLogger.logInfo(
                 "${action.javaClass.simpleName}: element ${nf.elementId} not found, replacing complete view tree",
                 nf
             )
-            viewTree.setContentView(null, action.element)
+            viewTree.setContentView(null, action.newContent)
         }
     }
 }

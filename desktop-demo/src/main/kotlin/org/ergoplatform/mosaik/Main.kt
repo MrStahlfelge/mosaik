@@ -14,6 +14,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -33,7 +34,6 @@ fun main() {
 
         val dialogHandler = MosaikComposeDialogHandler()
         val viewTree = ViewTree(
-            UUID.randomUUID().toString(),
             ActionRunner(
                 coroutineScope = {
                     // for our demo GlobalScope is good to use
@@ -48,7 +48,9 @@ fun main() {
                     clipboard.setContents(selection, selection)
                 },
                 openBrowser = { url ->
-                    val osName by lazy(LazyThreadSafetyMode.NONE) { System.getProperty("os.name").lowercase(Locale.getDefault()) }
+                    val osName by lazy(LazyThreadSafetyMode.NONE) {
+                        System.getProperty("os.name").lowercase(Locale.getDefault())
+                    }
                     val desktop = Desktop.getDesktop()
                     when {
                         Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE) -> {
@@ -83,8 +85,12 @@ fun main() {
             scope.launch {
                 viewTree.contentState.collect {
                     if (!lastChangeFromUser) {
-                        textState.value =
-                            textState.value.copy(MosaikSerializer().toJsonBeautified(it.second!!.element))
+                        textState.value = textState.value.copy(
+                            MosaikSerializer()
+                                .toJsonBeautified(
+                                    ViewContent(viewTree.actions, it.second!!.element)
+                                )
+                        )
                         error.value = false
                     }
                     lastChangeFromUser = false

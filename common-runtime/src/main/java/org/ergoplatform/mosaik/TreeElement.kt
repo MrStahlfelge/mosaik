@@ -91,8 +91,8 @@ class TreeElement(
         viewTree.onItemLongClicked(this)
     }
 
-    fun runAction(action: Action?) {
-        action?.let { viewTree.actionRunner.runAction(action, viewTree) }
+    fun runAction(action: String?) {
+        viewTree.getAction(action)?.let { viewTree.actionRunner.runAction(it, viewTree) }
     }
 
     fun valueChanged(newValue: Any?) {

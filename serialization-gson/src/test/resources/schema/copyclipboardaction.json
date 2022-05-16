@@ -6,12 +6,16 @@
     "type": {
       "const": "CopyClipboardAction"
     },
+    "id": {
+      "type": "string"
+    },
     "text": {
       "type": "string"
     }
   },
   "required": [
     "type",
+    "id",
     "text"
   ]
 }
