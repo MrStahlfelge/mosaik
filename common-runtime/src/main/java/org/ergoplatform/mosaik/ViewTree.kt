@@ -12,7 +12,7 @@ import org.ergoplatform.mosaik.model.ui.input.InputElement
 /**
  * the complete tree of [ViewElement]'s and is context.
  */
-class ViewTree(val actionRunner: ActionRunner) {
+class ViewTree(val mosaikRuntime: MosaikRuntime) {
     var content: TreeElement? = null
         private set
     var cacheLifeTime: Long = 0
@@ -145,7 +145,7 @@ class ViewTree(val actionRunner: ActionRunner) {
     fun registerJobFor(element: TreeElement, job: suspend () -> Unit) {
         synchronized(jobMap) {
             cancelRunningJobFor(element)
-            val newJob = actionRunner.coroutineScope().launch {
+            val newJob = mosaikRuntime.coroutineScope().launch {
                 job()
             }
             jobMap[element.idOrHash] = newJob
@@ -178,7 +178,7 @@ class ViewTree(val actionRunner: ActionRunner) {
      */
     fun onItemClicked(element: TreeElement) {
         getAction(element.element.onClickAction)?.let {
-            actionRunner.runAction(it, this)
+            mosaikRuntime.runAction(it, this)
         }
     }
 
@@ -187,7 +187,7 @@ class ViewTree(val actionRunner: ActionRunner) {
      */
     fun onItemLongClicked(element: TreeElement) {
         getAction(element.element.onLongPressAction)?.let {
-            actionRunner.runAction(it, this)
+            mosaikRuntime.runAction(it, this)
         }
     }
 
@@ -199,7 +199,7 @@ class ViewTree(val actionRunner: ActionRunner) {
                 notifyValuesChanged()
                 MosaikLogger.logInfo("Value $id changed to $newValue")
                 getAction((treeElement.element as? InputElement<*>)?.onValueChangedAction)?.let { action ->
-                    actionRunner.runAction(action, this)
+                    mosaikRuntime.runAction(action, this)
                 }
             }
         }

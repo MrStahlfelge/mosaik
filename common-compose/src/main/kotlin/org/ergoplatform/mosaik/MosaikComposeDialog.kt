@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 /**
  * MosaikComposeDialog is an optional component when message dialogs should be handled by
- * Compose. [MosaikComposeDialogHandler] used here is to be used for [ActionRunner.showDialog].
+ * Compose. [MosaikComposeDialogHandler] used here is to be used for [MosaikRuntime.showDialog].
  *
  * Alternatively, you can use your platform's native dialog system to show the message dialog.
  */
@@ -53,8 +53,8 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
 }
 
 /**
- * Links [ActionRunner] with [MosaikComposeDialog]. Use [MosaikComposeDialogHandler.showDialog]
- * for [ActionRunner] and pass this object to [MosaikComposeDialog].
+ * Links [MosaikRuntime] with [MosaikComposeDialog]. Use [MosaikComposeDialogHandler.showDialog]
+ * for [MosaikRuntime] and pass this object to [MosaikComposeDialog].
  */
 class MosaikComposeDialogHandler {
     private val _stateFlow = MutableStateFlow<MosaikDialog?>(null)

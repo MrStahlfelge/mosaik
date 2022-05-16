@@ -47,7 +47,7 @@ class ViewTreeTest : TestCase() {
         boxRoot.addChild(boxB)
 
         val viewTree = ViewTree(
-            ActionRunner(
+            MosaikRuntime(
                 coroutineScope = { GlobalScope },
                 showDialog = { },
                 pasteToClipboard = {},

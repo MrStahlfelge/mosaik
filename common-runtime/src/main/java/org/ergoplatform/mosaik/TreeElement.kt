@@ -1,7 +1,6 @@
 package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.delay
-import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.input.InputElement
@@ -92,7 +91,7 @@ class TreeElement(
     }
 
     fun runAction(action: String?) {
-        viewTree.getAction(action)?.let { viewTree.actionRunner.runAction(it, viewTree) }
+        viewTree.getAction(action)?.let { viewTree.mosaikRuntime.runAction(it, viewTree) }
     }
 
     fun valueChanged(newValue: Any?) {

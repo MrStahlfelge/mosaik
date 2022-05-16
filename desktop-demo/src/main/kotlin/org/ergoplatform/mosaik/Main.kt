@@ -34,7 +34,7 @@ fun main() {
 
         val dialogHandler = MosaikComposeDialogHandler()
         val viewTree = ViewTree(
-            ActionRunner(
+            MosaikRuntime(
                 coroutineScope = {
                     // for our demo GlobalScope is good to use
                     // for a wallet application, the scope should be bound to the lifecycle of the view

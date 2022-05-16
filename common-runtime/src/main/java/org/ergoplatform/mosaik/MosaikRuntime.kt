@@ -2,9 +2,10 @@ package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Runnable
+import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.actions.*
 
-open class ActionRunner(
+open class MosaikRuntime(
     val coroutineScope: () -> CoroutineScope,
     /**
      * Handler to show and manage modal dialogs. These dialogs are managed outside Mosaik's
@@ -76,6 +77,10 @@ open class ActionRunner(
             )
             viewTree.setContentView(null, action.newContent)
         }
+    }
+
+    open fun loadMosaikApp(url: String, context: MosaikContext) {
+        // TODO return viewtree (empty), introduce uiLocked state
     }
 }
 
