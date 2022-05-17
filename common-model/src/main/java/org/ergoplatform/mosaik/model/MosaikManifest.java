@@ -35,12 +35,12 @@ public class MosaikManifest {
     public final int targetMosaikVersion;
 
     /**
-     * declares the platform this app is intended to be executed on. If an app targeting a platform
+     * declares the canvas size this app is intended to be drawn on. If an app targeting a platform
      * is run on a platform with more screen size , it will be shown within a centered box of around
      * the screen size of its target platform.
      */
     @Nullable
-    public final MosaikContext.Platform targetPlatform;
+    public final Canvas targetCanvas;
 
     /**
      * Mosaik version this app needs at mininum. Older Mosaik versions should not run this app.
@@ -64,9 +64,9 @@ public class MosaikManifest {
 
     public MosaikManifest(@Nonnull String appName, @Nullable String iconUrl,
                           int appVersion, int targetMosaikVersion,
-                          @Nullable MosaikContext.Platform targetPlatform, int minMosaikVersion,
+                          @Nullable Canvas targetCanvas, int minMosaikVersion,
                           int cacheLifetime, @Nullable String errorReportUrl) {
-        this.targetPlatform = targetPlatform;
+        this.targetCanvas = targetCanvas;
         Objects.requireNonNull(appName);
 
         this.appName = appName;
@@ -76,5 +76,20 @@ public class MosaikManifest {
         this.targetMosaikVersion = targetMosaikVersion;
         this.minMosaikVersion = minMosaikVersion;
         this.errorReportUrl = errorReportUrl;
+    }
+
+    public enum Canvas {
+        /**
+         * Portrait canvas comparable to a mobile phone or a browser side bar
+         */
+        PORTRAIT_SMALL,
+        /**
+         * Portrait canvas comparable to a tablet in portrait mode
+         */
+        PORTRAIT_MEDIUM,
+        /**
+         * Full screen canvas in landscape mode
+         */
+        LANDSCAPE
     }
 }
