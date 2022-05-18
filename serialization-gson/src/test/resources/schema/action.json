@@ -5,7 +5,7 @@
       "$ref": "ergopayaction.json"
     },
     {
-      "$ref": "serverrequestaction.json"
+      "$ref": "backendrequestaction.json"
     },
     {
       "$ref": "dialogaction.json"

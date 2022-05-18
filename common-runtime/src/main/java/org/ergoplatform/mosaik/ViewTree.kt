@@ -175,7 +175,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      */
     fun onItemClicked(element: TreeElement) {
         getAction(element.element.onClickAction)?.let {
-            mosaikRuntime.runAction(it, this)
+            mosaikRuntime.runAction(it)
         }
     }
 
@@ -184,7 +184,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      */
     fun onItemLongClicked(element: TreeElement) {
         getAction(element.element.onLongPressAction)?.let {
-            mosaikRuntime.runAction(it, this)
+            mosaikRuntime.runAction(it)
         }
     }
 
@@ -196,7 +196,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 notifyValuesChanged()
                 MosaikLogger.logInfo("Value $id changed to $newValue")
                 getAction((treeElement.element as? InputElement<*>)?.onValueChangedAction)?.let { action ->
-                    mosaikRuntime.runAction(action, this)
+                    mosaikRuntime.runAction(action)
                 }
             }
         }

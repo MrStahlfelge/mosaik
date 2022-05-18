@@ -18,7 +18,7 @@ import org.ergoplatform.mosaik.model.actions.ErgoAuthAction;
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction;
 import org.ergoplatform.mosaik.model.actions.NavigateAction;
 import org.ergoplatform.mosaik.model.actions.QrCodeAction;
-import org.ergoplatform.mosaik.model.actions.ServerRequestAction;
+import org.ergoplatform.mosaik.model.actions.BackendRequestAction;
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction;
 
 import java.lang.reflect.Type;
@@ -63,8 +63,8 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
             case "CopyClipboardAction":
                 clazz = CopyClipboardAction.class;
                 break;
-            case "ServerRequestAction":
-                clazz = ServerRequestAction.class;
+            case "BackendRequestAction":
+                clazz = BackendRequestAction.class;
                 break;
             case "BrowserAction":
                 clazz = BrowserAction.class;

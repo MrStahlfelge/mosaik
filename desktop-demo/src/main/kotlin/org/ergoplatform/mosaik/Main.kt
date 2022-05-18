@@ -69,7 +69,7 @@ fun main() {
             override fun fetchAction(
                 url: String,
                 context: MosaikContext,
-                values: Map<String, Any>
+                values: Map<String, Any?>
             ): Pair<Int, Action> {
                 TODO("Not yet implemented")
             }
@@ -133,7 +133,11 @@ fun main() {
                         textState.value = textState.value.copy(
                             MosaikSerializer()
                                 .toJsonBeautified(
-                                    ViewContent(viewTree.actions, it.second?.element ?: org.ergoplatform.mosaik.model.ui.layout.Box())
+                                    ViewContent(
+                                        viewTree.actions,
+                                        it.second?.element
+                                            ?: org.ergoplatform.mosaik.model.ui.layout.Box()
+                                    )
                                 )
                         )
                         error.value = false

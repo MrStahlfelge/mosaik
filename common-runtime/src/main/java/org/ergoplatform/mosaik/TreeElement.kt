@@ -91,7 +91,7 @@ class TreeElement(
     }
 
     fun runAction(action: String?) {
-        viewTree.getAction(action)?.let { viewTree.mosaikRuntime.runAction(it, viewTree) }
+        viewTree.getAction(action)?.let { viewTree.mosaikRuntime.runAction(it) }
     }
 
     fun valueChanged(newValue: Any?) {

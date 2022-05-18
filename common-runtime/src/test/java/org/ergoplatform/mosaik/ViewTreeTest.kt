@@ -75,7 +75,7 @@ class ViewTreeTest : TestCase() {
                     override fun fetchAction(
                         url: String,
                         context: MosaikContext,
-                        values: Map<String, Any>
+                        values: Map<String, Any?>
                     ): Pair<Int, Action> {
                         TODO("Not yet implemented")
                     }

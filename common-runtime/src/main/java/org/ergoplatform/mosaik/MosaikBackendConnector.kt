@@ -17,5 +17,5 @@ interface MosaikBackendConnector {
     /**
      * loads an action from Mosaik app. Blocking, call on a background thread
      */
-    fun fetchAction(url: String, context: MosaikContext, values: Map<String, Any>): Pair<Int, Action>
+    fun fetchAction(url: String, context: MosaikContext, values: Map<String, Any?>): Pair<Int, Action>
 }

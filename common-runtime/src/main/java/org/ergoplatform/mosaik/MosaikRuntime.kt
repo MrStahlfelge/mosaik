@@ -1,11 +1,8 @@
 package org.ergoplatform.mosaik
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.actions.*
@@ -19,6 +16,20 @@ open class MosaikRuntime(
      * [ViewTree] so that implementations can use platform's modal dialogs
      */
     val showDialog: (MosaikDialog) -> Unit,
+    /**
+     * Show error to user. Can be called on background thread
+     */
+    val showError: (String) -> Unit = { errorMsg ->
+        showDialog(
+            MosaikDialog(
+                errorMsg,
+                "OK",
+                null,
+                null,
+                null
+            )
+        )
+    },
     val pasteToClipboard: (text: String) -> Unit,
     val openBrowser: (url: String) -> Boolean,
 ) {
@@ -29,20 +40,23 @@ open class MosaikRuntime(
     var appManifest: MosaikManifest? = null
         private set
 
-    open fun runAction(action: Action, viewTree: ViewTree) {
+    open fun runAction(action: Action) {
         try {
             when (action) {
                 is ChangeSiteAction -> {
-                    runChangeSiteAction(action, viewTree)
+                    runChangeSiteAction(action)
                 }
                 is DialogAction -> {
-                    runDialogAction(action, viewTree)
+                    runDialogAction(action)
                 }
                 is CopyClipboardAction -> {
-                    runCopyClipboardAction(action, viewTree)
+                    runCopyClipboardAction(action)
                 }
                 is BrowserAction -> {
-                    runBrowserAction(action, viewTree)
+                    runBrowserAction(action)
+                }
+                is BackendRequestAction -> {
+                    runBackendRequest(action)
                 }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
@@ -51,11 +65,36 @@ open class MosaikRuntime(
         }
     }
 
-    private fun runCopyClipboardAction(action: CopyClipboardAction, viewTree: ViewTree) {
+    open fun runBackendRequest(action: BackendRequestAction) {
+        _uiLocked.value = true
+        coroutineScope().launch(Dispatchers.IO) {
+            try {
+                val newActionContainer =
+                    backendConnector.fetchAction(action.url, mosaikContext, viewTree.currentValues)
+                val appVersion = newActionContainer.first
+                val newAction = newActionContainer.second
+
+                if (appVersion != appManifest!!.appVersion) {
+                    // TODO reload app
+                } else
+                    withContext(Dispatchers.Main) {
+                        runAction(newAction)
+                    }
+
+            } catch (t: Throwable) {
+                MosaikLogger.logError("Error loading Mosaik app", t)
+                showError("Error loading Mosaik app: ${t.javaClass.simpleName} ${t.message}")
+            }
+
+            _uiLocked.value = false
+        }
+    }
+
+    private fun runCopyClipboardAction(action: CopyClipboardAction) {
         pasteToClipboard(action.text)
     }
 
-    open fun runBrowserAction(action: BrowserAction, viewTree: ViewTree) {
+    open fun runBrowserAction(action: BrowserAction) {
         val success = openBrowser(action.url)
         if (!success) {
             showDialog(
@@ -69,21 +108,21 @@ open class MosaikRuntime(
         }
     }
 
-    open fun runDialogAction(action: DialogAction, viewTree: ViewTree) {
+    open fun runDialogAction(action: DialogAction) {
         showDialog(
             MosaikDialog(
                 action.message,
                 action.positiveButtonText ?: "OK",
                 action.negativeButtonText,
                 viewTree.getAction(action.onPositiveButtonClicked)
-                    ?.let { { runAction(it, viewTree) } },
+                    ?.let { { runAction(it) } },
                 viewTree.getAction(action.onNegativeButtonClicked)
-                    ?.let { { runAction(it, viewTree) } }
+                    ?.let { { runAction(it) } }
             )
         )
     }
 
-    open fun runChangeSiteAction(action: ChangeSiteAction, viewTree: ViewTree) {
+    open fun runChangeSiteAction(action: ChangeSiteAction) {
         try {
             viewTree.setContentView(action.newContent.view.id, action.newContent)
         } catch (nf: ElementNotFoundException) {
@@ -106,7 +145,7 @@ open class MosaikRuntime(
                 viewTree.setRootView(viewContent)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error loading Mosaik app", t)
-                // TODO report to user
+                showError("Error loading Mosaik app: ${t.javaClass.simpleName} ${t.message}")
             }
 
             _uiLocked.value = false

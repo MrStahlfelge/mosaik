@@ -4,8 +4,6 @@ import org.ergoplatform.mosaik.model.Since;
 
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-
 /**
  * Makes a Request to URL. If postDataValues is true, it is a POST request and the body contains all
  * data values of the current view.
@@ -17,7 +15,7 @@ import javax.annotation.Nonnull;
  * Response can result in any other action.
  */
 @Since(0)
-public class ServerRequestAction extends UrlAction {
+public class BackendRequestAction extends UrlAction {
     private boolean postDataValues = true;
 
     public boolean isPostDataValues() {
@@ -33,7 +31,7 @@ public class ServerRequestAction extends UrlAction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ServerRequestAction that = (ServerRequestAction) o;
+        BackendRequestAction that = (BackendRequestAction) o;
         return isPostDataValues() == that.isPostDataValues();
     }
 
