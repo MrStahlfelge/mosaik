@@ -2,13 +2,17 @@ package org.ergoplatform.mosaik
 
 import junit.framework.TestCase
 import kotlinx.coroutines.GlobalScope
+import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.layout.Box
+import java.util.*
 
 class ViewTreeTest : TestCase() {
 
     fun testReplaceElement() {
-        val viewTree = buildViewTree()
+        val viewTree = buildRuntime().viewTree
         val oldIdsList = getIdsList(viewTree)
         viewTree.setContentView("AA", ViewContent(Box().apply { id = "aa" }))
         val idList = getIdsList(viewTree)
@@ -20,7 +24,7 @@ class ViewTreeTest : TestCase() {
     }
 
     fun testVisitAllElements() {
-        val viewTree = buildViewTree()
+        val viewTree = buildRuntime().viewTree
 
         val idList = getIdsList(viewTree)
 
@@ -34,7 +38,7 @@ class ViewTreeTest : TestCase() {
         return idList
     }
 
-    private fun buildViewTree(): ViewTree {
+    private fun buildRuntime(): MosaikRuntime {
         val boxRoot = Box()
         val boxA = Box().apply { id = "A" }
         val boxAA = Box().apply { id = "AA" }
@@ -46,15 +50,55 @@ class ViewTreeTest : TestCase() {
         boxAA.addChild(boxAAA)
         boxRoot.addChild(boxB)
 
-        val viewTree = ViewTree(
+        val runtime =
             MosaikRuntime(
                 coroutineScope = { GlobalScope },
+                backendConnector = object : MosaikBackendConnector {
+                    override fun loadMosaikApp(
+                        url: String,
+                        context: MosaikContext
+                    ): Pair<MosaikManifest, ViewContent> {
+                        return Pair(
+                            MosaikManifest(
+                                "appname",
+                                null,
+                                0,
+                                0,
+                                null,
+                                0,
+                                0,
+                                null
+                            ), ViewContent(boxRoot)
+                        )
+                    }
+
+                    override fun fetchAction(
+                        url: String,
+                        context: MosaikContext,
+                        values: Map<String, Any>
+                    ): Pair<Int, Action> {
+                        TODO("Not yet implemented")
+                    }
+
+                },
                 showDialog = { },
                 pasteToClipboard = {},
                 openBrowser = { true },
+                mosaikContext = MosaikContext(
+                    0,
+                    UUID.randomUUID().toString(),
+                    "",
+                    "Testexecutor",
+                    "0",
+                    MosaikContext.Platform.DESKTOP
+                )
             )
-        )
-        viewTree.setRootView(ViewContent(boxRoot), 0)
-        return viewTree
+
+        runtime.loadMosaikApp("")
+
+        // wait for the coroutine
+        Thread.sleep(100)
+
+        return runtime
     }
 }

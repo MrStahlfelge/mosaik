@@ -1,12 +1,19 @@
 package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.actions.*
 
 open class MosaikRuntime(
     val coroutineScope: () -> CoroutineScope,
+    val mosaikContext: MosaikContext,
+    val backendConnector: MosaikBackendConnector,
     /**
      * Handler to show and manage modal dialogs. These dialogs are managed outside Mosaik's
      * [ViewTree] so that implementations can use platform's modal dialogs
@@ -15,6 +22,13 @@ open class MosaikRuntime(
     val pasteToClipboard: (text: String) -> Unit,
     val openBrowser: (url: String) -> Boolean,
 ) {
+    private val _uiLocked = MutableStateFlow(false)
+    val uiLockedState: StateFlow<Boolean> get() = _uiLocked
+
+    val viewTree = ViewTree(this)
+    var appManifest: MosaikManifest? = null
+        private set
+
     open fun runAction(action: Action, viewTree: ViewTree) {
         try {
             when (action) {
@@ -61,8 +75,10 @@ open class MosaikRuntime(
                 action.message,
                 action.positiveButtonText ?: "OK",
                 action.negativeButtonText,
-                viewTree.getAction(action.onPositiveButtonClicked)?.let { { runAction(it, viewTree) } },
-                viewTree.getAction(action.onNegativeButtonClicked)?.let { { runAction(it, viewTree) } }
+                viewTree.getAction(action.onPositiveButtonClicked)
+                    ?.let { { runAction(it, viewTree) } },
+                viewTree.getAction(action.onNegativeButtonClicked)
+                    ?.let { { runAction(it, viewTree) } }
             )
         )
     }
@@ -79,8 +95,22 @@ open class MosaikRuntime(
         }
     }
 
-    open fun loadMosaikApp(url: String, context: MosaikContext) {
-        // TODO return viewtree (empty), introduce uiLocked state
+    open fun loadMosaikApp(url: String) {
+        _uiLocked.value = true
+        coroutineScope().launch(Dispatchers.IO) {
+            try {
+                val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext)
+                appManifest = mosaikApp.first
+                val viewContent = mosaikApp.second
+
+                viewTree.setRootView(viewContent)
+            } catch (t: Throwable) {
+                MosaikLogger.logError("Error loading Mosaik app", t)
+                // TODO report to user
+            }
+
+            _uiLocked.value = false
+        }
     }
 }
 

@@ -15,8 +15,6 @@ import org.ergoplatform.mosaik.model.ui.input.InputElement
 class ViewTree(val mosaikRuntime: MosaikRuntime) {
     var content: TreeElement? = null
         private set
-    var cacheLifeTime: Long = 0
-        private set
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, Any?>()
@@ -45,10 +43,9 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     /**
      * replaces the view completely
      */
-    fun setRootView(view: ViewContent, cacheLifeTime: Long) {
+    fun setRootView(view: ViewContent) {
         actionMap.clear()
         setContentView(null, view)
-        this.cacheLifeTime = cacheLifeTime
     }
 
     fun findElementById(id: String): TreeElement? {

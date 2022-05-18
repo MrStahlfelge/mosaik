@@ -14,7 +14,10 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -33,7 +36,47 @@ fun main() {
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
 
         val dialogHandler = MosaikComposeDialogHandler()
-        val viewTree = ViewTree(
+
+        val mosaikContext = MosaikContext(
+            0,
+            UUID.randomUUID().toString(),
+            "",
+            "demoapp",
+            "0",
+            MosaikContext.Platform.DESKTOP
+        )
+
+        val backendConnector = object : MosaikBackendConnector {
+            override fun loadMosaikApp(
+                url: String,
+                context: MosaikContext
+            ): Pair<MosaikManifest, ViewContent> {
+                return Pair(
+                    MosaikManifest(
+                        "appname",
+                        null,
+                        0,
+                        0,
+                        null,
+                        0,
+                        0,
+                        null
+                    ),
+                    ViewContent()
+                )
+            }
+
+            override fun fetchAction(
+                url: String,
+                context: MosaikContext,
+                values: Map<String, Any>
+            ): Pair<Int, Action> {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+        val runtime =
             MosaikRuntime(
                 coroutineScope = {
                     // for our demo GlobalScope is good to use
@@ -41,6 +84,8 @@ fun main() {
                     // showing the view tree
                     GlobalScope
                 },
+                backendConnector = backendConnector,
+                mosaikContext = mosaikContext,
                 showDialog = dialogHandler.showDialog,
                 pasteToClipboard = { text ->
                     val selection = StringSelection(text)
@@ -69,7 +114,7 @@ fun main() {
                     }
                 }
             )
-        )
+        val viewTree = runtime.viewTree
         updateViewTreeFromJson(viewTree, json)
 
         var lastChangeFromUser = false
@@ -88,7 +133,7 @@ fun main() {
                         textState.value = textState.value.copy(
                             MosaikSerializer()
                                 .toJsonBeautified(
-                                    ViewContent(viewTree.actions, it.second!!.element)
+                                    ViewContent(viewTree.actions, it.second?.element ?: org.ergoplatform.mosaik.model.ui.layout.Box())
                                 )
                         )
                         error.value = false
@@ -159,8 +204,7 @@ private fun updateViewTreeFromJson(
     json: String
 ) = try {
     viewTree.setRootView(
-        MosaikSerializer().viewElementFromJson(json),
-        0L
+        MosaikSerializer().viewElementFromJson(json)
     )
     true
 } catch (t: Throwable) {

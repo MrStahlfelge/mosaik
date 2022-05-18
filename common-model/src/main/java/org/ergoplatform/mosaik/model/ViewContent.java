@@ -39,6 +39,10 @@ public class ViewContent {
 
     @Nonnull
     public ViewElement getView() {
+        if (view == null) {
+            throw new IllegalStateException("ViewContent's view must not be null");
+        }
+
         return view;
     }
 
