@@ -2,9 +2,7 @@ package org.ergoplatform.mosaik
 
 import junit.framework.TestCase
 import kotlinx.coroutines.GlobalScope
-import org.ergoplatform.mosaik.model.MosaikContext
-import org.ergoplatform.mosaik.model.MosaikManifest
-import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.*
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.layout.Box
 import java.util.*
@@ -57,9 +55,9 @@ class ViewTreeTest : TestCase() {
                     override fun loadMosaikApp(
                         url: String,
                         context: MosaikContext
-                    ): Pair<MosaikManifest, ViewContent> {
-                        return Pair(
-                            MosaikManifest(
+                    ): InitialAppInfo {
+                        return InitialAppInfo().apply {
+                            manifest = MosaikManifest(
                                 "appname",
                                 null,
                                 0,
@@ -68,15 +66,16 @@ class ViewTreeTest : TestCase() {
                                 0,
                                 0,
                                 null
-                            ), ViewContent(boxRoot)
-                        )
+                            )
+                            view = boxRoot
+                        }
                     }
 
                     override fun fetchAction(
                         url: String,
                         context: MosaikContext,
                         values: Map<String, Any?>
-                    ): Pair<Int, Action> {
+                    ): FetchActionResponse {
                         TODO("Not yet implemented")
                     }
 

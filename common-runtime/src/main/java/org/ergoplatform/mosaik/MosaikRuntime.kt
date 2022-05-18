@@ -19,10 +19,10 @@ open class MosaikRuntime(
     /**
      * Show error to user. Can be called on background thread
      */
-    val showError: (String) -> Unit = { errorMsg ->
+    val showError: (t: Throwable) -> Unit = { error ->
         showDialog(
             MosaikDialog(
-                errorMsg,
+                "Error running Mosaik app: ${error.javaClass.simpleName} ${error.message}",
                 "OK",
                 null,
                 null,
@@ -69,10 +69,10 @@ open class MosaikRuntime(
         _uiLocked.value = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
-                val newActionContainer =
+                val fetchActionResponse =
                     backendConnector.fetchAction(action.url, mosaikContext, viewTree.currentValues)
-                val appVersion = newActionContainer.first
-                val newAction = newActionContainer.second
+                val appVersion = fetchActionResponse.appVersion
+                val newAction = fetchActionResponse.action
 
                 if (appVersion != appManifest!!.appVersion) {
                     // TODO reload app
@@ -83,7 +83,7 @@ open class MosaikRuntime(
 
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error loading Mosaik app", t)
-                showError("Error loading Mosaik app: ${t.javaClass.simpleName} ${t.message}")
+                errorRaised(t)
             }
 
             _uiLocked.value = false
@@ -139,17 +139,21 @@ open class MosaikRuntime(
         coroutineScope().launch(Dispatchers.IO) {
             try {
                 val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext)
-                appManifest = mosaikApp.first
-                val viewContent = mosaikApp.second
+                appManifest = mosaikApp.manifest
 
-                viewTree.setRootView(viewContent)
+                viewTree.setRootView(mosaikApp)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error loading Mosaik app", t)
-                showError("Error loading Mosaik app: ${t.javaClass.simpleName} ${t.message}")
+                errorRaised(t)
             }
 
             _uiLocked.value = false
         }
+    }
+
+    private fun errorRaised(t: Throwable) {
+        // TODO report error to error report url
+        showError(t)
     }
 }
 

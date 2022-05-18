@@ -14,9 +14,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.ergoplatform.mosaik.model.MosaikContext
-import org.ergoplatform.mosaik.model.MosaikManifest
-import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.*
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
@@ -50,27 +48,27 @@ fun main() {
             override fun loadMosaikApp(
                 url: String,
                 context: MosaikContext
-            ): Pair<MosaikManifest, ViewContent> {
-                return Pair(
-                    MosaikManifest(
-                        "appname",
-                        null,
-                        0,
-                        0,
-                        null,
-                        0,
-                        0,
-                        null
-                    ),
-                    ViewContent()
-                )
+            ): InitialAppInfo {
+                return InitialAppInfo().apply {
+                    manifest =
+                        MosaikManifest(
+                            "appname",
+                            null,
+                            0,
+                            0,
+                            null,
+                            0,
+                            0,
+                            null
+                        )
+                }
             }
 
             override fun fetchAction(
                 url: String,
                 context: MosaikContext,
                 values: Map<String, Any?>
-            ): Pair<Int, Action> {
+            ): FetchActionResponse {
                 TODO("Not yet implemented")
             }
 

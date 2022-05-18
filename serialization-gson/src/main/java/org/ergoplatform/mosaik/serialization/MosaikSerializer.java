@@ -2,7 +2,12 @@ package org.ergoplatform.mosaik.serialization;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
+import org.ergoplatform.mosaik.model.FetchActionResponse;
+import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
@@ -17,12 +22,23 @@ import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MosaikSerializer {
     static final String TYPE_ELEMENT_NAME = "type";
 
     public String toJson(ViewContent content) {
         Gson gson = getGson(false);
         return gson.toJson(content);
+    }
+
+    public Map<String, String> contextMap(MosaikContext context) {
+        HashMap<String, String> retMap = new HashMap<>();
+        for (Map.Entry<String, JsonElement> stringJsonElementEntry : getGson(false).toJsonTree(context).getAsJsonObject().entrySet()) {
+            retMap.put(stringJsonElementEntry.getKey(), stringJsonElementEntry.getValue().getAsString());
+        }
+        return retMap;
     }
 
     public String toJsonBeautified(ViewContent content) {
@@ -57,5 +73,24 @@ public class MosaikSerializer {
     public ViewContent viewElementFromJson(String json) {
         Gson gson = getGson(false);
         return gson.fromJson(json, ViewContent.class);
+    }
+
+    public InitialAppInfo firstRequestResponseFromJson(String json) {
+        return getGson(false).fromJson(json, InitialAppInfo.class);
+    }
+
+    public FetchActionResponse fetchActionResponseFromJson(String json) {
+        return getGson(false).fromJson(json, FetchActionResponse.class);
+    }
+
+    public String valuesMapToJson(Map<String, Object> values) {
+        JsonObject jsonObject = new JsonObject();
+        Gson gson = getGson(false);
+
+        for (Map.Entry<String, Object> value : values.entrySet()) {
+            jsonObject.add(value.getKey(), gson.toJsonTree(value.getValue()));
+        }
+
+        return gson.toJson(jsonObject);
     }
 }

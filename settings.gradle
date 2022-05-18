@@ -11,5 +11,6 @@ rootProject.name = 'ergo-mosaik'
 include('common-model')
 include('serialization-gson')
 include('common-runtime')
+include('clientconnector-okhttp')
 include('common-compose')
 include('desktop-demo')
