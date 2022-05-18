@@ -41,6 +41,10 @@ public class MosaikSerializer {
         return retMap;
     }
 
+    public String toJson(InitialAppInfo appInfo) {
+        return getGson(false).toJson(appInfo);
+    }
+
     public String toJsonBeautified(ViewContent content) {
         Gson gson = getGson(true);
         return gson.toJson(content);

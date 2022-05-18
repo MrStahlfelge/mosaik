@@ -11,6 +11,7 @@ java {
 dependencies {
     implementation(project(":common-compose"))
     implementation(project(":serialization-gson"))
+    implementation(project(":clientconnector-okhttp"))
 
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)

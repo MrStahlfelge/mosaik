@@ -2,7 +2,10 @@ package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,8 +17,8 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.*
-import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -44,34 +47,22 @@ fun main() {
             MosaikContext.Platform.DESKTOP
         )
 
-        val backendConnector = object : MosaikBackendConnector {
+        val backendConnector = object : OkHttpBackendConnector(OkHttpClient.Builder()) {
             override fun loadMosaikApp(
                 url: String,
                 context: MosaikContext
             ): InitialAppInfo {
-                return InitialAppInfo().apply {
-                    manifest =
-                        MosaikManifest(
-                            "appname",
-                            null,
-                            0,
-                            0,
-                            null,
-                            0,
-                            0,
-                            null
-                        )
+                val fallback = { MosaikSerializer().firstRequestResponseFromJson(json) }
+                return if (url.startsWith("http", true)) {
+                    try {
+                        super.loadMosaikApp(url, context)
+                    } catch (t: Throwable) {
+                        fallback()
+                    }
+                } else {
+                    fallback()
                 }
             }
-
-            override fun fetchAction(
-                url: String,
-                context: MosaikContext,
-                values: Map<String, Any?>
-            ): FetchActionResponse {
-                TODO("Not yet implemented")
-            }
-
         }
 
         val runtime =
@@ -112,8 +103,8 @@ fun main() {
                     }
                 }
             )
+        runtime.loadMosaikApp("http://localhost:8080")
         val viewTree = runtime.viewTree
-        updateViewTreeFromJson(viewTree, json)
 
         var lastChangeFromUser = false
 

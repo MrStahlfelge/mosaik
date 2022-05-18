@@ -8,6 +8,8 @@ import net.jimblackler.jsonschemafriend.SchemaStore;
 import net.jimblackler.jsonschemafriend.ValidationException;
 import net.jimblackler.jsonschemafriend.Validator;
 
+import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikManifest;
 import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
@@ -103,8 +105,19 @@ public class MosaikSerializerTest extends TestCase {
 
         column.addChild(new Box(), HAlignment.END, 2);
 
-        ViewContent content = new ViewContent(column);
+        InitialAppInfo content = new InitialAppInfo();
+        content.setView(column);
         content.setActions(actions);
+        content.setManifest(new MosaikManifest(
+                "appname",
+                null,
+                0,
+                0,
+                null,
+                0,
+                0,
+                null
+        ));
 
         String json = new MosaikSerializer().toJson(content);
         System.out.println(json);

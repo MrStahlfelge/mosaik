@@ -31,6 +31,13 @@ Can be used on Android and Desktop.
 
 Depends on common-runtime and Jetbrains Compose. For use in Mosaik executors building up on Compose.
 
+### backend-demo
+Java. Backend demo serving a demo application using Spring Boot as HTTP server framework.
+
+Run it by cloning this repo and call
+
+    gradlew backend-demo:bootRun
+
 ### desktop-demo
 Kotlin. Demo and debug application showcasing how a view tree is shown on screen, displaying 
 current values and view tree serialization. Use this to debug and play with your Mosaik apps.
@@ -38,3 +45,6 @@ current values and view tree serialization. Use this to debug and play with your
 Run it by cloning this repo and call
 
     gradlew desktop-demo:run
+
+If this is launched while a backend is serving its content at localhost:8080, the demo will 
+launch the backend demo. Otherwise it will show a static content from its resource directory.

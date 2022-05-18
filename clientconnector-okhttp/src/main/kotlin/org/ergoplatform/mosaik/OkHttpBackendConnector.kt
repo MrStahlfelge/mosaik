@@ -7,7 +7,7 @@ import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class OkHttpBackendConnector(
+open class OkHttpBackendConnector(
     okClientBuilder: OkHttpClient.Builder,
     timeoutSeconds: Long = 30
 ) : MosaikBackendConnector {

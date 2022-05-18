@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "appName": "Demo App (without backend)",
+    "appName": "Demo App (with backend)",
     "appVersion": 0,
     "targetMosaikVersion": 0,
     "minMosaikVersion": 0,
@@ -64,7 +64,7 @@
     "children": [
       {
         "type": "Label",
-        "text": "This is a headline 2 label",
+        "text": "Served by Spring Boot on %ADDRESS%",
         "style": "HEADLINE2"
       },
       {
