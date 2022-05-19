@@ -110,13 +110,11 @@ public class MosaikSerializerTest extends TestCase {
         content.setActions(actions);
         content.setManifest(new MosaikManifest(
                 "appname",
-                null,
                 0,
                 0,
                 null,
                 0,
-                0,
-                null
+                0
         ));
 
         String json = new MosaikSerializer().toJson(content);

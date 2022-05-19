@@ -12,6 +12,14 @@ public class FetchActionResponse {
     private int appVersion;
     private Action action;
 
+    public FetchActionResponse() {
+    }
+
+    public FetchActionResponse(int appVersion, @Nonnull Action action) {
+        this.appVersion = appVersion;
+        this.action = action;
+    }
+
     public int getAppVersion() {
         return appVersion;
     }

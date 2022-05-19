@@ -1,62 +1,16 @@
 {
   "manifest": {
     "appName": "Demo App (with backend)",
-    "appVersion": 0,
+    "appVersion": %APPVERSION%,
     "targetMosaikVersion": 0,
     "minMosaikVersion": 0,
     "cacheLifetime": 0
   },
   "actions": [
     {
-      "type": "BrowserAction",
-      "id": "openRepo",
-      "url": "https://github.com/MrStahlfelge/mosaik"
-    },
-    {
-      "type": "ChangeSiteAction",
-      "id": "replaceButton",
-      "newContent": {
-        "view": {
-          "id": "clickButton",
-          "type": "Button",
-          "enabled": false,
-          "text": "ChangeSiteAction replaced the button"
-        }
-      }
-    },
-    {
-      "type": "CopyClipboardAction",
-      "id": "copyText",
-      "text": "Copied by Mosaik demo"
-    },
-    {
-      "type": "DialogAction",
-      "id": "showDialog",
-      "message": "Do you really want to proceed?",
-      "positiveButtonText": "Yes",
-      "negativeButtonText": "Copy",
-      "onPositiveButtonClicked": "replaceButton",
-      "onNegativeButtonClicked": "copyText"
-    },
-    {
-      "type": "ChangeSiteAction",
-      "id": "replaceLabel",
-      "newContent": {
-        "view": {
-          "id": "clickLabel",
-          "type": "Label",
-          "text": "Label (alignment end, already clicked)",
-          "align": "END",
-          "style": "BODY1BOLD",
-          "textColor": "PRIMARY"
-        }
-      }
-    },
-    {
-      "type": "DialogAction",
-      "id": "showInfo",
-      "message": "Show some more information to the user",
-      "positiveButtonText": "OK"
+      "type": "BackendRequestAction",
+      "id": "proceedButtonClicked",
+      "url": "%HOSTADDRESS%"
     }
   ],
   "view": {
@@ -64,79 +18,42 @@
     "children": [
       {
         "type": "Label",
-        "text": "Served by Spring Boot on %ADDRESS%",
-        "style": "HEADLINE2"
+        "style": "HEADLINE2",
+        "text": "Demo application with server"
       },
       {
-        "id": "clickButton",
-        "type": "Button",
-        "text": "Clicking this button will run a ChangeSiteAction",
-        "onClick": "showDialog"
+        "type": "Label",
+        "style": "BODY1BOLD",
+        "text": "Served from %HOSTADDRESS%"
       },
       {
-        "type": "Row",
+        "type": "Box",
+        "padding": "TWICE",
         "children": [
           {
-            "type": "Icon",
-            "icon": "WALLET",
-            "tintColor": "SECONDARY",
-            "size": "MEDIUM"
-          },
-          {
-            "type": "Box",
-            "padding": "DEFAULT",
-            "weight": 2,
-            "children": [
-              {
-                "type": "Label",
-                "text": "This label is surrounded by a padding and\ntakes 2 times the space than the label on the right",
-                "textAlignment": "START",
-                "style": "BODY1"
-              }
-            ]
-          },
-          {
             "type": "Label",
-            "text": "Label (alignment top, truncated)",
-            "align": "TOP",
-            "weight": 1,
-            "maxLines": 1,
-            "style": "BODY1"
+            "style": "BODY1",
+            "text": "Launch this demo without running server demo to see some layouting and offline capability demos.\n\nEnter your name below and tap or click the button.",
+            "textAlignment": "CENTER"
           }
         ]
-      },
-      {
-        "id": "clickLabel",
-        "type": "Label",
-        "text": "Label (alignment end, click it)",
-        "align": "END",
-        "style": "BODY1BOLD",
-        "onClick": "replaceLabel"
       },
       {
         "type": "Box",
         "padding": "DEFAULT",
         "children": [
           {
-            "id": "inputText",
             "type": "TextInputField",
-            "value": "initial text",
-            "placeholder": "An input text field",
-            "endIcon": "INFO",
-            "onEndIconClicked": "showInfo"
+            "id": "userName",
+            "value": "",
+            "placeholder": "Your name"
           }
         ]
       },
       {
-        "type": "LoadingIndicator",
-        "size": "MEDIUM"
-      },
-      {
-        "type": "Label",
-        "text": "Open on GitHub",
-        "style": "BODY1LINK",
-        "textColor": "PRIMARY",
-        "onClick": "openRepo"
+        "type": "Button",
+        "onClick": "proceedButtonClicked",
+        "text": "Proceed"
       }
     ]
   }

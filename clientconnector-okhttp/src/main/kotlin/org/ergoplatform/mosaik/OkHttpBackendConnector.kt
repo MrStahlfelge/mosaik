@@ -2,7 +2,6 @@ package org.ergoplatform.mosaik
 
 import okhttp3.*
 import org.ergoplatform.mosaik.model.*
-import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -21,7 +20,7 @@ open class OkHttpBackendConnector(
         url: String,
         context: MosaikContext
     ): InitialAppInfo {
-        val json = fetchHttpGetStringSync(url, Headers.of(serializer.contextMap(context)))
+        val json = fetchHttpGetStringSync(url, Headers.of(serializer.contextHeadersMap(context)))
         return serializer.firstRequestResponseFromJson(json)
     }
 
@@ -33,7 +32,7 @@ open class OkHttpBackendConnector(
         val json = httpPostStringSync(
             url,
             serializer.valuesMapToJson(values),
-            Headers.of(serializer.contextMap(context))
+            Headers.of(serializer.contextHeadersMap(context))
         )
         return serializer.fetchActionResponseFromJson(json)
     }

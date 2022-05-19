@@ -14,7 +14,13 @@ public class MosaikManifest {
      * name to be shown for this Mosaik App
      */
     @Nonnull
-    public String appName;
+    public final String appName;
+
+    /**
+     * Description text for this Mosaik app
+     */
+    @Nullable
+    public String appDescription;
 
     /**
      * icon to be shown for this Mosaik app
@@ -62,20 +68,18 @@ public class MosaikManifest {
     @Nullable
     public String errorReportUrl;
 
-    public MosaikManifest(@Nonnull String appName, @Nullable String iconUrl,
+    public MosaikManifest(@Nonnull String appName,
                           int appVersion, int targetMosaikVersion,
                           @Nullable CanvasDimension targetCanvasDimension, int minMosaikVersion,
-                          int cacheLifetime, @Nullable String errorReportUrl) {
+                          int cacheLifetime) {
         this.targetCanvasDimension = targetCanvasDimension;
         Objects.requireNonNull(appName);
 
         this.appName = appName;
-        this.iconUrl = iconUrl;
         this.appVersion = appVersion;
         this.cacheLifetime = cacheLifetime;
         this.targetMosaikVersion = targetMosaikVersion;
         this.minMosaikVersion = minMosaikVersion;
-        this.errorReportUrl = errorReportUrl;
     }
 
     public enum CanvasDimension {

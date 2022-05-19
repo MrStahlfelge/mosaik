@@ -59,13 +59,11 @@ class ViewTreeTest : TestCase() {
                         return InitialAppInfo().apply {
                             manifest = MosaikManifest(
                                 "appname",
-                                null,
                                 0,
                                 0,
                                 null,
                                 0,
                                 0,
-                                null
                             )
                             view = boxRoot
                         }

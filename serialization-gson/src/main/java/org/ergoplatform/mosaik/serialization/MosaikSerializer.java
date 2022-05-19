@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.serialization;
 
+import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -22,23 +23,56 @@ import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MosaikSerializer {
     static final String TYPE_ELEMENT_NAME = "type";
+    static final String HTTP_HEADER_PREFIX = "Mosaik-";
 
     public String toJson(ViewContent content) {
         Gson gson = getGson(false);
         return gson.toJson(content);
     }
 
-    public Map<String, String> contextMap(MosaikContext context) {
+    /**
+     * @return map of key, value for MosaikContext http header fields
+     */
+    public Map<String, String> contextHeadersMap(MosaikContext context) {
         HashMap<String, String> retMap = new HashMap<>();
         for (Map.Entry<String, JsonElement> stringJsonElementEntry : getGson(false).toJsonTree(context).getAsJsonObject().entrySet()) {
-            retMap.put(stringJsonElementEntry.getKey(), stringJsonElementEntry.getValue().getAsString());
+            retMap.put(HTTP_HEADER_PREFIX + stringJsonElementEntry.getKey(),
+                    stringJsonElementEntry.getValue().getAsString());
         }
         return retMap;
+    }
+
+    public Map<String, ?> getValuesMap(String json) {
+        return getGson(false).fromJson(json, Map.class);
+    }
+
+    public MosaikContext fromContextHeadersMap(Map<String, String> headersMap) {
+        JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<String, String> headerEntry : headersMap.entrySet()) {
+            if (headerEntry.getKey().toLowerCase(Locale.ROOT).startsWith(HTTP_HEADER_PREFIX.toLowerCase())) {
+                jsonObject.addProperty(headerEntry.getKey().substring(HTTP_HEADER_PREFIX.length()).toLowerCase(), headerEntry.getValue());
+            }
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        // http header names are lower case, so we need a field naming strategy here
+        gsonBuilder.setFieldNamingStrategy(new FieldNamingStrategy() {
+            @Override
+            public String translateName(Field f) {
+                return f.getName().toLowerCase();
+            }
+        });
+        return gsonBuilder.create().fromJson(jsonObject, MosaikContext.class);
+    }
+
+    public String toJson(FetchActionResponse actionResponse) {
+        return getGson(false).toJson(actionResponse);
     }
 
     public String toJson(InitialAppInfo appInfo) {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.actions.*
+import java.lang.IllegalStateException
 
 open class MosaikRuntime(
     val coroutineScope: () -> CoroutineScope,
@@ -69,6 +70,7 @@ open class MosaikRuntime(
         _uiLocked.value = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
+                // TODO make sure all values are already updated and no delayed jobs are active
                 val fetchActionResponse =
                     backendConnector.fetchAction(action.url, mosaikContext, viewTree.currentValues)
                 val appVersion = fetchActionResponse.appVersion
@@ -76,6 +78,7 @@ open class MosaikRuntime(
 
                 if (appVersion != appManifest!!.appVersion) {
                     // TODO reload app
+                    throw IllegalStateException("Appversion changed while running app.")
                 } else
                     withContext(Dispatchers.Main) {
                         runAction(newAction)
