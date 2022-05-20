@@ -7,8 +7,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -20,6 +23,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.InitialAppInfo
 import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
@@ -56,16 +60,14 @@ fun main() {
             ): InitialAppInfo {
                 val fallback = { MosaikSerializer().firstRequestResponseFromJson(json) }
                 return if (url.startsWith("http", true)) {
-                    try {
-                        super.loadMosaikApp(url, context)
-                    } catch (t: Throwable) {
-                        fallback()
-                    }
+                    super.loadMosaikApp(url, context)
                 } else {
                     fallback()
                 }
             }
         }
+
+        val manifestState: MutableState<MosaikManifest?> = mutableStateOf(null)
 
         val runtime =
             MosaikRuntime(
@@ -103,9 +105,10 @@ fun main() {
                         }
                         else -> false
                     }
-                }
+                },
+                appLoaded = { manifestState.value = it }
             )
-        runtime.loadMosaikApp("http://localhost:8080")
+        runtime.loadMosaikApp("")
         val viewTree = runtime.viewTree
 
         var lastChangeFromUser = false
@@ -141,24 +144,56 @@ fun main() {
                 Surface(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row {
-                        Column(Modifier.weight(2.0f)) {
-                            MosaikViewTree(viewTree, Modifier.fillMaxWidth())
-                            MosaikComposeDialog(dialogHandler)
-                        }
+                    Column(Modifier.fillMaxWidth()) {
+                        MosaikAppHeader(manifestState, runtime)
 
-                        Column(Modifier.weight(1.0f).fillMaxSize()) {
-                            MosaikStateInfo(
-                                viewTree,
-                                textState,
-                                error,
-                                setLastChangeFromUser = { lastChangeFromUser = true }
-                            )
+                        Row {
+                            Column(Modifier.weight(2.0f)) {
+                                MosaikViewTree(viewTree, Modifier.fillMaxWidth())
+                                MosaikComposeDialog(dialogHandler)
+                            }
+
+                            Column(Modifier.weight(1.0f).fillMaxSize()) {
+                                MosaikStateInfo(
+                                    viewTree,
+                                    textState,
+                                    error,
+                                    setLastChangeFromUser = { lastChangeFromUser = true }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun MosaikAppHeader(
+    manifestState: MutableState<MosaikManifest?>,
+    runtime: MosaikRuntime
+) {
+    Column {
+        val urlTextFieldState = remember(manifestState.value) {
+            mutableStateOf(
+                TextFieldValue(runtime.appManifest?.baseUrl ?: "", selection = TextRange(0, 1000))
+            )
+        }
+        Text(manifestState.value?.appName ?: "(No app)")
+        TextField(
+            urlTextFieldState.value,
+            onValueChange = { value -> urlTextFieldState.value = value },
+            modifier = Modifier.fillMaxWidth().onKeyEvent {
+                if (!runtime.viewTree.uiLocked && it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
+                    runtime.loadMosaikApp(urlTextFieldState.value.text)
+                    true
+                } else false
+            },
+            singleLine = true,
+            placeholder = { Text("Enter http url here and hit Return. Blank loads the built-in app") }
+        )
     }
 }
 

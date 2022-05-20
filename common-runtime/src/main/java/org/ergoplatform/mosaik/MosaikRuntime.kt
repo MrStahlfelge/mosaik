@@ -33,6 +33,7 @@ open class MosaikRuntime(
     },
     val pasteToClipboard: (text: String) -> Unit,
     val openBrowser: (url: String) -> Boolean,
+    val appLoaded: ((MosaikManifest) -> Unit)? = null,
 ) {
 
     val viewTree = ViewTree(this)
@@ -139,6 +140,9 @@ open class MosaikRuntime(
         }
     }
 
+    /**
+     * starts loading a new Mosaik app. Please make sure this is not called twice simultaneously.
+     */
     open fun loadMosaikApp(url: String) {
         viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
@@ -147,7 +151,13 @@ open class MosaikRuntime(
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
+
+                appLoaded?.invoke(mosaikApp.manifest)
             } catch (t: Throwable) {
+                // TODO errors during first app loading (with empty screen) should be handled
+                //  different from errors
+                // while the app is running to not present an empty view
+                // instead, show a built-in error screen with a Retry button
                 MosaikLogger.logError("Error loading Mosaik app", t)
                 errorRaised(t)
             }

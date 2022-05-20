@@ -38,7 +38,7 @@ public class MosaikController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView getInitialApp(@RequestHeader Map<String, String> headers,
-                                      HttpServletRequest request) throws IOException {
+                                      HttpServletRequest request) throws InterruptedException {
         // this deserializes the complete context
         // if you are only interested in certain fields, access header fields directly
         MosaikContext context = mosaikSerializer.fromContextHeadersMap(headers);
@@ -63,6 +63,10 @@ public class MosaikController {
         model.addObject("hostaddress", request.getRequestURL().toString());
         model.addObject("appversion", String.valueOf(APP_VERSION));
         model.addObject("visitors", mosaikService.getVisitors(context.guid));
+
+        // this makes the response slow down and is of course only for the demo to emphasize
+        // that a server request is running as well as a test case if UI behaves correct when locked
+        Thread.sleep(1000);
 
         return model;
 
