@@ -18,7 +18,9 @@ import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.ergoplatform.mosaik.model.*
+import org.ergoplatform.mosaik.model.InitialAppInfo
+import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -140,7 +142,7 @@ fun main() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row {
-                        Column(Modifier.weight(2.0f).padding(20.dp)) {
+                        Column(Modifier.weight(2.0f)) {
                             MosaikViewTree(viewTree, Modifier.fillMaxWidth())
                             MosaikComposeDialog(dialogHandler)
                         }

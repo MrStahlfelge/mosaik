@@ -1,8 +1,6 @@
 package org.ergoplatform.mosaik
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -49,7 +47,10 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
     Box(modifier) {
         modification.second?.let { viewTreeRoot ->
             // Crossfade animation here caused some elements to not update
-            MosaikTreeElement(viewTreeRoot, Modifier.fillMaxWidth().alpha(if (locked) .3f else 1f))
+            MosaikTreeElement(
+                viewTreeRoot, Modifier.fillMaxWidth().alpha(if (locked) .3f else 1f)
+                    .verticalScroll(rememberScrollState()).padding(Padding.DEFAULT.toCompose())
+            )
         }
         if (locked) {
             Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.1f)))
