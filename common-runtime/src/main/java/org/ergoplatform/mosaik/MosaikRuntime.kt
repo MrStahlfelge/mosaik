@@ -87,7 +87,7 @@ open class MosaikRuntime(
                     }
 
             } catch (t: Throwable) {
-                MosaikLogger.logError("Error loading Mosaik app", t)
+                MosaikLogger.logError("Error running Mosaik backend request", t)
                 errorRaised(t)
             }
 

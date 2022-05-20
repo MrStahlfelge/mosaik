@@ -10,6 +10,7 @@ dependencies {
 	implementation project(path: ':common-model')
 	implementation project(path: ':serialization-gson') // TODO Spring Boot loves Jackson, not Gson
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

@@ -1,17 +1,17 @@
 {
   "manifest": {
     "appName": "Demo App (with backend)",
-    "appVersion": %APPVERSION%,
+    "appVersion": ${appversion},
     "targetMosaikVersion": 0,
     "minMosaikVersion": 0,
-    "baseUrl": "%HOSTADDRESS%",
+    "baseUrl": "${hostaddress}",
     "cacheLifetime": 0
   },
   "actions": [
     {
       "type": "BackendRequestAction",
       "id": "proceedButtonClicked",
-      "url": "/"
+      "url": "/proceed"
     }
   ],
   "view": {
@@ -25,7 +25,7 @@
       {
         "type": "Label",
         "style": "BODY1BOLD",
-        "text": "Served from %HOSTADDRESS%"
+        "text": "Served from ${hostaddress}"
       },
       {
         "type": "Box",
