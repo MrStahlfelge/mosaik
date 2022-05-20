@@ -1,12 +1,7 @@
 {
-  "manifest": {
-    "appName": "Demo App (with backend)",
-    "appVersion": ${appversion},
-    "targetMosaikVersion": 0,
-    "minMosaikVersion": 0,
-    "baseUrl": "${hostaddress}",
-    "cacheLifetime": 0
-  },
+  <#import "common.ftl" as common>
+  <#import "visitorentries.ftl" as visitorentries>
+  "manifest": <@common.manifest />,
   "actions": [
     {
       "type": "BackendRequestAction",
@@ -55,7 +50,8 @@
         "type": "Button",
         "onClick": "proceedButtonClicked",
         "text": "Proceed"
-      }
+      },
+      <@visitorentries.visitorlist />
     ]
   }
 }

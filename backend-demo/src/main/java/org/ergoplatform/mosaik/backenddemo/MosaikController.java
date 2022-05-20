@@ -2,8 +2,14 @@ package org.ergoplatform.mosaik.backenddemo;
 
 import org.ergoplatform.mosaik.model.FetchActionResponse;
 import org.ergoplatform.mosaik.model.MosaikContext;
+import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
+import org.ergoplatform.mosaik.model.actions.ChangeSiteAction;
 import org.ergoplatform.mosaik.model.actions.DialogAction;
+import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.Padding;
+import org.ergoplatform.mosaik.model.ui.text.Label;
+import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
 import org.ergoplatform.mosaik.serialization.MosaikSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +33,8 @@ public class MosaikController {
 
     @Autowired
     private MosaikSerializer mosaikSerializer;
+    @Autowired
+    private MosaikService mosaikService;
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView getInitialApp(@RequestHeader Map<String, String> headers,
@@ -34,31 +43,39 @@ public class MosaikController {
         // if you are only interested in certain fields, access header fields directly
         MosaikContext context = mosaikSerializer.fromContextHeadersMap(headers);
 
-        // we have different ways to serve the app to the user, not all mutual exclusive
-        // serve the app from templates and do a simple String replace to change content
+        // we have different ways to serve the app to the user, not all mutual exclusive:
+        // First approach is to serve the app from json templates and do a simple String replace to
+        // change content.
         // if all users get the same content, using cached templates is the right thing to do
-        // here and that's why it is done here
+        // here
+        //
+        // We are using FreeMarker here to do this
+        // https://freemarker.apache.org/docs/dgui_template_overallstructure.html
+        // for the following reasons: Caching etc is built in, and it supports templates with list
+        // structures that might be useful for real-world apps.
+        //
         // the following code is similar to returning a String with @ResponseBody and replacing
         // placeholders like this:
         //return readFile(templates/mainapp.ftl).replace("${hostaddress}", request.getRequestURL().toString()
         // .replace("${appversion}", String.valueOf(APP_VERSION));
-        // However, we are using FreeMarker here
-        // https://freemarker.apache.org/docs/dgui_template_overallstructure.html
-        // for the following reasons: Caching etc is built in, and it supports templates with list
-        // structures that might be useful for real-world apps.
+        // Additionally, "visitors" is a list so check out how visitorentries.ftl work for this.
         ModelAndView model = new ModelAndView("mainapp");
         model.addObject("hostaddress", request.getRequestURL().toString());
         model.addObject("appversion", String.valueOf(APP_VERSION));
+        model.addObject("visitors", mosaikService.getVisitors(context.guid));
 
         return model;
 
         // alternatively, we could have build the tree of ViewElements here and serialized it
-        // this is the right approach when the view tree is highly dynamic
+        // this is the right approach when the view tree is highly dynamic or we want to reuse
+        // code. See getNextAction() method for an example.
 
-        // we can also initialize hold server-side data for the user, based on context.guid
-        // this could be the complete current view tree (only recommended if you don't expect much
-        // user inflow as this will consume memory and you need a session invalidation logic)
-        // or less information like user's connected wallet
+        // As you can see here, we can hold server-side data for the user, based on context.guid
+        // We could hold a complete view tree here if needed and change it in memory, but this is
+        // only recommended if you don't expect much
+        // user inflow as this will consume memory and you need a session invalidation logic.
+        // In most cases, you are good to go in storing very few information like user's connected
+        // wallet address.
 
 
     }
@@ -77,17 +94,49 @@ public class MosaikController {
         Thread.sleep(1000);
 
         String userName = (String) values.get("userName");
+        List<String> visitors = mosaikService.getVisitors(guid);
+
         Action nextAction;
         if (userName == null || userName.length() < 3) {
             DialogAction dialogAction = new DialogAction();
             dialogAction.setId("error-noname");
             dialogAction.setMessage("Please enter your name!");
             nextAction = dialogAction;
-        } else {
+        } else if (visitors.contains(userName)) {
+            // case sensitive for simplicity
             DialogAction dialogAction = new DialogAction();
-            dialogAction.setId("info-name");
-            dialogAction.setMessage(userName + ", what a beautiful name!");
+            dialogAction.setId("error-hasname");
+            dialogAction.setMessage("This visitor is already known.");
             nextAction = dialogAction;
+        } else {
+            visitors.add(userName);
+            ChangeSiteAction changeSiteAction = new ChangeSiteAction();
+            changeSiteAction.setId("refresh-list");
+
+            // This builds programmatically what is already in template visitorentries.ftl
+            // You could use FreeMarker here as well, or you could use the programmatic approach
+            // above. For the sake of demonstration, we mixed the approach here.
+
+            Column column = new Column();
+            column.setPadding(Padding.DEFAULT);
+            // this will make listcolumn to be replaced, the input text field will stay the same
+            // to empty the text field after this addition, it had to be replaced as well
+            column.setId("listColumn");
+
+            Label title = new Label();
+            title.setText("List of last visitors");
+            title.setStyle(LabelStyle.BODY1BOLD);
+
+            column.addChild(title);
+
+            for (String visitor : visitors) {
+                Label entry = new Label();
+                entry.setText(visitor);
+                column.addChild(entry);
+            }
+
+            changeSiteAction.setNewContent(new ViewContent(column));
+            nextAction = changeSiteAction;
         }
 
         FetchActionResponse response = new FetchActionResponse(APP_VERSION, nextAction);
