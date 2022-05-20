@@ -34,14 +34,13 @@ open class MosaikRuntime(
     val pasteToClipboard: (text: String) -> Unit,
     val openBrowser: (url: String) -> Boolean,
 ) {
-    private val _uiLocked = MutableStateFlow(false)
-    val uiLockedState: StateFlow<Boolean> get() = _uiLocked
 
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
 
     open fun runAction(action: Action) {
+        MosaikLogger.logDebug("Running action ${action.id}...")
         try {
             when (action) {
                 is ChangeSiteAction -> {
@@ -67,7 +66,7 @@ open class MosaikRuntime(
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
-        _uiLocked.value = true
+        viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
                 // TODO make sure all values are already updated and no delayed jobs are active
@@ -92,7 +91,7 @@ open class MosaikRuntime(
                 errorRaised(t)
             }
 
-            _uiLocked.value = false
+            viewTree.uiLocked = false
         }
     }
 
@@ -141,7 +140,7 @@ open class MosaikRuntime(
     }
 
     open fun loadMosaikApp(url: String) {
-        _uiLocked.value = true
+        viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
                 val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext)
@@ -153,7 +152,7 @@ open class MosaikRuntime(
                 errorRaised(t)
             }
 
-            _uiLocked.value = false
+            viewTree.uiLocked = false
         }
     }
 

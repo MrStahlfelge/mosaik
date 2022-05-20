@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -43,9 +44,20 @@ import org.ergoplatform.mosaik.model.ui.text.TruncationType
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
     val modification by viewTree.contentState.collectAsState()
-    modification.second?.let { viewTreeRoot ->
-        // Crossfade animation here caused some elements to not update
-        MosaikTreeElement(viewTreeRoot, modifier)
+    val locked by viewTree.uiLockedState.collectAsState()
+
+    Box(modifier) {
+        modification.second?.let { viewTreeRoot ->
+            // Crossfade animation here caused some elements to not update
+            MosaikTreeElement(viewTreeRoot, Modifier.fillMaxWidth().alpha(if (locked) .3f else 1f))
+        }
+        if (locked) {
+            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.1f)))
+            CircularProgressIndicator(
+                Modifier.size(48.dp).align(Alignment.Center),
+                color = primaryLabelColor
+            )
+        }
     }
 }
 
@@ -195,7 +207,7 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
 
                         if (element.onEndIconClicked != null)
                             IconButton(onClick = {
-                                treeElement.runAction(element.onEndIconClicked)
+                                treeElement.runActionFromUserInteraction(element.onEndIconClicked)
                             }) {
                                 icon()
                             }

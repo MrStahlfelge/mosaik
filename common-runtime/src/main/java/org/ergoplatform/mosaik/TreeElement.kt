@@ -90,8 +90,8 @@ class TreeElement(
         viewTree.onItemLongClicked(this)
     }
 
-    fun runAction(action: String?) {
-        viewTree.getAction(action)?.let { viewTree.mosaikRuntime.runAction(it) }
+    fun runActionFromUserInteraction(actionId: String?) {
+        viewTree.runActionFromUserInteraction(actionId)
     }
 
     fun valueChanged(newValue: Any?) {

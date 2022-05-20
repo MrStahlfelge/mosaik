@@ -41,6 +41,17 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     private val _valueFlow = MutableStateFlow<Pair<Int, Map<String, Any?>>>(Pair(0, valueMap))
 
     /**
+     * ui is locked when backend requests are running
+     */
+    val uiLockedState: StateFlow<Boolean> get() = _uiLocked
+    private val _uiLocked = MutableStateFlow(false)
+    var uiLocked: Boolean
+        get() = _uiLocked.value
+        set(value) {
+            _uiLocked.value = value
+        }
+
+    /**
      * replaces the view completely
      */
     fun setRootView(view: ViewContent) {
@@ -174,17 +185,19 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      * called when user clicked or tapped an element
      */
     fun onItemClicked(element: TreeElement) {
-        getAction(element.element.onClickAction)?.let {
-            mosaikRuntime.runAction(it)
-        }
+        runActionFromUserInteraction(element.element.onClickAction)
     }
 
     /**
      * called when user long pressed an element
      */
     fun onItemLongClicked(element: TreeElement) {
-        getAction(element.element.onLongPressAction)?.let {
-            mosaikRuntime.runAction(it)
+        runActionFromUserInteraction(element.element.onLongPressAction)
+    }
+
+    fun runActionFromUserInteraction(actionId: String?) {
+        if (!uiLocked) {
+            getAction(actionId)?.let { mosaikRuntime.runAction(it) }
         }
     }
 
