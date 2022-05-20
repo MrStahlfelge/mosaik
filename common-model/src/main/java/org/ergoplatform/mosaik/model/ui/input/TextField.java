@@ -27,6 +27,7 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     private boolean enabled = true;
 
     // TODO add min/max properties for string length/number values
+    // TODO add default action type (DONE, NEXT, SEARCH) and onDefaultAction (on Enter and IME done)
 
     @Nullable
     public IconType getEndIcon() {

@@ -46,6 +46,11 @@ public class MosaikSerializer {
             retMap.put(HTTP_HEADER_PREFIX + stringJsonElementEntry.getKey(),
                     stringJsonElementEntry.getValue().getAsString());
         }
+        // we also use some extra fields
+        retMap.put("User-Agent", context.walletAppName +
+                "(" + context.walletAppVersion + "/" + context.walletAppPlatform + ")");
+        retMap.put("Accept-Language", context.language);
+
         return retMap;
     }
 
