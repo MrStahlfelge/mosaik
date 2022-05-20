@@ -4,13 +4,14 @@
     "appVersion": %APPVERSION%,
     "targetMosaikVersion": 0,
     "minMosaikVersion": 0,
+    "baseUrl": "%HOSTADDRESS%",
     "cacheLifetime": 0
   },
   "actions": [
     {
       "type": "BackendRequestAction",
       "id": "proceedButtonClicked",
-      "url": "%HOSTADDRESS%"
+      "url": "/"
     }
   ],
   "view": {

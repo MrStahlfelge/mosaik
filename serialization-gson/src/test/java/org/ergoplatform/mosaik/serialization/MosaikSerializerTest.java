@@ -53,8 +53,6 @@ public class MosaikSerializerTest extends TestCase {
                         ((DialogAction) action).setMessage("message");
                     } else if (action instanceof ChangeSiteAction) {
                         ((ChangeSiteAction) action).setNewContent(new ViewContent(new Box()));
-                    } else if (action instanceof NavigateAction) {
-                        ((NavigateAction) action).setElement(new Box());
                     } else if (action instanceof CopyClipboardAction) {
                         ((CopyClipboardAction) action).setText("text");
                     }

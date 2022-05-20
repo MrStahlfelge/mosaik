@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model;
 
+import org.ergoplatform.mosaik.model.actions.BackendRequestAction;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -27,6 +29,13 @@ public class MosaikManifest {
      */
     @Nullable
     public String iconUrl;
+
+    /**
+     * Base url this app runs on. If set, this will be used and updated when the user saves the app
+     * to favorites, and if set {@link BackendRequestAction#getUrl()} might contain relative urls
+     */
+    @Nullable
+    public String baseUrl;
 
     /**
      * defines the current apps version. If the version flag changes while a user runs the app,
