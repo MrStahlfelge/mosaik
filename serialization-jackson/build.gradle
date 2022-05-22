@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 java {
     withSourcesJar()
@@ -28,12 +28,8 @@ publishing {
 }
 
 dependencies {
-    implementation project(path: ':common-model')
-    implementation 'com.google.code.gson:gson:2.8.5'
+    api project(path: ':common-model')
+    api 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 
-    // Use JUnit test framework.
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation project(path: ':serialization-jackson')
-    testImplementation 'org.reflections:reflections:0.9.12'
-    testImplementation 'net.jimblackler.jsonschemafriend:core:0.11.3'
+    // no tests here - test is done in gson implementation
 }

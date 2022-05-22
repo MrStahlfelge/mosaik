@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.backenddemo;
 
+import org.ergoplatform.mosaik.jackson.MosaikSerializer;
 import org.ergoplatform.mosaik.model.FetchActionResponse;
 import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.ViewContent;
@@ -10,7 +11,6 @@ import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.Padding;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
-import org.ergoplatform.mosaik.serialization.MosaikSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +31,6 @@ public class MosaikController {
     public static final int APP_VERSION = 1;
 
     @Autowired
-    private MosaikSerializer mosaikSerializer;
-    @Autowired
     private MosaikService mosaikService;
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,7 +38,7 @@ public class MosaikController {
                                       HttpServletRequest request) throws InterruptedException {
         // this deserializes the complete context
         // if you are only interested in certain fields, access header fields directly
-        MosaikContext context = mosaikSerializer.fromContextHeadersMap(headers);
+        MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
 
         // we have different ways to serve the app to the user, not all mutual exclusive:
         // First approach is to serve the app from json templates and do a simple String replace to
@@ -86,12 +83,9 @@ public class MosaikController {
 
     @PostMapping(value = "/proceed", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getNextAction(
-            @RequestBody String jsonBody,
+    public FetchActionResponse getNextAction(
+            @RequestBody Map<String, ?> values,
             @RequestHeader("mosaik-guid") String guid) throws InterruptedException {
-
-        // for POST requests from BackendRequestActions, we get the values of input fields
-        Map<String, ?> values = mosaikSerializer.getValuesMap(jsonBody);
 
         // this makes the response slow down and is of course only for the demo to emphasize
         // that a server request is running as well as a test case if UI behaves correct when locked
@@ -143,8 +137,6 @@ public class MosaikController {
             nextAction = changeSiteAction;
         }
 
-        FetchActionResponse response = new FetchActionResponse(APP_VERSION, nextAction);
-
-        return mosaikSerializer.toJson(response);
+        return new FetchActionResponse(APP_VERSION, nextAction);
     }
 }

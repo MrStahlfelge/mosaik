@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.serialization;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import junit.framework.TestCase;
 
 import net.jimblackler.jsonschemafriend.GenerationException;
@@ -28,6 +30,7 @@ import org.junit.Assert;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -35,7 +38,7 @@ public class MosaikSerializerTest extends TestCase {
 
     public static int TEST_MOSAIK_VERSION = 0;
 
-    public void testJsonRoundTrip() throws GenerationException, ValidationException {
+    public void testJsonRoundTrip() throws GenerationException, ValidationException, JsonProcessingException {
         // collect available actions
         LinkedList<Action> actions = new LinkedList<>();
         for (Class<? extends Action> actionClass : findAllActions(Action.class.getPackage().getName())) {
@@ -52,7 +55,7 @@ public class MosaikSerializerTest extends TestCase {
                     } else if (action instanceof DialogAction) {
                         ((DialogAction) action).setMessage("message");
                     } else if (action instanceof ChangeSiteAction) {
-                        ((ChangeSiteAction) action).setNewContent(new ViewContent(new Box()));
+                        ((ChangeSiteAction) action).setNewContent(new ViewContent(new ArrayList<>(actions), new Box()));
                     } else if (action instanceof CopyClipboardAction) {
                         ((CopyClipboardAction) action).setText("text");
                     }
@@ -115,18 +118,28 @@ public class MosaikSerializerTest extends TestCase {
                 0
         ));
 
-        String json = new MosaikSerializer().toJson(content);
-        System.out.println(json);
+        String jsonFromGson = new MosaikSerializer().toJson(content);
+        System.out.println(jsonFromGson);
+        // now with jackson
+        String jsonFromJackson = serializeWithJackson(content);
+        System.out.println(jsonFromJackson);
 
         SchemaStore schemaStore = new SchemaStore(); // Initialize a SchemaStore.
         // Load the schema.
         Schema schema = schemaStore.loadSchema(MosaikSerializerTest.class.getResource("/schema/viewcontent.json"));
         Validator validator = new Validator(); // Create a validator.
-        validator.validateJson(schema, json);
+        validator.validateJson(schema, jsonFromGson);
+        validator.validateJson(schema, jsonFromJackson);
 
-        ViewContent content2 = new MosaikSerializer().viewElementFromJson(json);
+        ViewContent content2 = new MosaikSerializer().viewElementFromJson(jsonFromGson);
+        ViewContent content3 = new MosaikSerializer().viewElementFromJson(jsonFromJackson);
         Assert.assertEquals(column, content2.getView());
+        Assert.assertEquals(column, content3.getView());
         Assert.assertTrue(actions.size() == content2.getActions().size() && actions.containsAll(content2.getActions()) && content2.getActions().containsAll(actions));
+    }
+
+    private String serializeWithJackson(InitialAppInfo content) throws JsonProcessingException {
+        return org.ergoplatform.mosaik.jackson.MosaikSerializer.getMosaikMapper().writeValueAsString(content);
     }
 
     public Set<Class<? extends ViewElement>> findAllViewElements(String packageName) {

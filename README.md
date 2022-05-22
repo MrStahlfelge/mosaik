@@ -10,9 +10,15 @@ Java. Base models Mosaik library works on.
 No dependencies. For use in Mosaik executors and dApps.
 
 ### serialization-gson
-Java. Json schema definition and reference implementation of serialization of common model classes.
+Java. Json schema definition and reference implementation of serialization and deserialization of 
+common-model classes.
 
 Depends on common-model, Gson. For use in Mosaik executors and dApps.
+
+### serialization-jackson
+Java. Json serialization of common-model classes.
+
+Depends on common-model, jackson. For use in Mosaik dApps, mostly intended to be used with Spring.
 
 ### common-runtime
 Kotlin. Platform-agnostic reference implementation of Mosaik client runtime

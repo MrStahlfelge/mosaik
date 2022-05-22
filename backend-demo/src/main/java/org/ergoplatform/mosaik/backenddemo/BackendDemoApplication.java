@@ -1,20 +1,24 @@
 package org.ergoplatform.mosaik.backenddemo;
 
-import org.ergoplatform.mosaik.serialization.MosaikSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.ergoplatform.mosaik.jackson.MosaikSerializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 @SpringBootApplication
 public class BackendDemoApplication {
-	private MosaikSerializer mosaikSerializer = new MosaikSerializer();
+    public static void main(String[] args) {
+        SpringApplication.run(BackendDemoApplication.class, args);
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(BackendDemoApplication.class, args);
-	}
-
-	@Bean
-	public MosaikSerializer getMosaikSerializer() {
-		return mosaikSerializer;
-	}
+    @Bean
+    @Primary
+    public ObjectMapper objectMapper() {
+        // enables controller methods annotated with @ResponseBody to directly return
+        // Mosaik Actions and elements that will get serialized by Spring automatically
+        return MosaikSerializer.getMosaikMapper();
+    }
 }

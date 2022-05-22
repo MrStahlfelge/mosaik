@@ -8,7 +8,7 @@ sourceCompatibility = '11'
 
 dependencies {
 	implementation project(path: ':common-model')
-	implementation project(path: ':serialization-gson') // TODO Spring Boot loves Jackson, not Gson
+	implementation project(path: ':serialization-jackson')
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 
