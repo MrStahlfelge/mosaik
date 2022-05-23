@@ -15,7 +15,7 @@
       {
         "type": "Label",
         "style": "HEADLINE2",
-        "text": "Demo application with server"
+        "text": "List input demo application"
       },
       {
         "type": "Label",
@@ -29,7 +29,7 @@
           {
             "type": "Label",
             "style": "BODY1",
-            "text": "Launch this demo without running server demo to see some layouting and offline capability demos.\n\nEnter your name below and tap or click the button.",
+            "text": "This demo shows how the Mosaik client (running in wallet application or 'Mosaik executor') can interact with a Mosaik backend.\nData entered here will be transferred to the backend which will respond with a UI refresh for the client.",
             "textAlignment": "CENTER"
           }
         ]

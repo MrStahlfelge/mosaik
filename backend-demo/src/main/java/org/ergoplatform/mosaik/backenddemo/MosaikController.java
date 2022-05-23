@@ -38,7 +38,13 @@ public class MosaikController {
                                       HttpServletRequest request) throws InterruptedException {
         // this deserializes the complete context
         // if you are only interested in certain fields, access header fields directly
-        MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
+        MosaikContext context;
+        try {
+             context = MosaikSerializer.fromContextHeadersMap(headers);
+        } catch (Throwable t) {
+            // error getting context -> probably we have a request from a browser
+            return new ModelAndView("nobrowser.html");
+        }
 
         // we have different ways to serve the app to the user, not all mutual exclusive:
         // First approach is to serve the app from json templates and do a simple String replace to
