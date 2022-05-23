@@ -33,7 +33,14 @@ public class MosaikController {
     @Autowired
     private MosaikService mosaikService;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/")
+    public ModelAndView mainPage() {
+        // we always serve nobrowser error page for the main url. If the request came from a
+        // Mosaik executor, it will pick up the <link rel="mosaik" ...> entry
+        return new ModelAndView("nobrowser.html");
+    }
+
+    @GetMapping(value = "/visitors/")
     public ModelAndView getInitialApp(@RequestHeader Map<String, String> headers,
                                       HttpServletRequest request) throws InterruptedException {
         // this deserializes the complete context
@@ -87,7 +94,7 @@ public class MosaikController {
 
     }
 
-    @PostMapping(value = "/proceed", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "visitors/add", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public FetchActionResponse getNextAction(
             @RequestBody Map<String, ?> values,

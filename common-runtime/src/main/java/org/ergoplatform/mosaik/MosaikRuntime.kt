@@ -71,11 +71,8 @@ open class MosaikRuntime(
         coroutineScope().launch(Dispatchers.IO) {
             try {
                 // TODO make sure all values are already updated and no delayed jobs are active
-                val url = if (appManifest?.baseUrl == null || action.url.contains("://")) action.url
-                else appManifest?.baseUrl!!.trimEnd('/') + "/" + action.url.trimStart('/')
-
                 val fetchActionResponse =
-                    backendConnector.fetchAction(url, mosaikContext, viewTree.currentValues)
+                    backendConnector.fetchAction(action.url, appManifest?.baseUrl, mosaikContext, viewTree.currentValues)
                 val appVersion = fetchActionResponse.appVersion
                 val newAction = fetchActionResponse.action
 

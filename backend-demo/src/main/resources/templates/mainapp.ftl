@@ -6,7 +6,7 @@
     {
       "type": "BackendRequestAction",
       "id": "proceedButtonClicked",
-      "url": "/proceed"
+      "url": "/add"
     }
   ],
   "view": {
