@@ -70,6 +70,7 @@ class ViewTreeTest : TestCase() {
 
                     override fun fetchAction(
                         url: String,
+                        baseUrl: String?,
                         context: MosaikContext,
                         values: Map<String, Any?>
                     ): FetchActionResponse {
