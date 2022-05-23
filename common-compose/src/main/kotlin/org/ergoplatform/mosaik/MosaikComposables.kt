@@ -13,6 +13,8 @@ import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -108,8 +110,58 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Icon -> {
             MosaikIcon(treeElement, newModifier)
         }
+        is Image -> {
+            MosaikImage(treeElement, newModifier)
+        }
         else -> {
             throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
+        }
+    }
+}
+
+@Composable
+fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as Image
+    val imageBytes = treeElement.getResourceBytes
+    val modifierWithSize = modifier.size(
+        when (element.size) {
+            Image.Size.SMALL -> 62.dp
+            Image.Size.MEDIUM -> 124.dp
+            Image.Size.LARGE -> 258.dp
+        }
+    )
+
+    // imageBytes null -> still downloading
+    // imageBytes length 0 -> error
+
+    val imageBitmap = remember(imageBytes) {
+        if (imageBytes != null && imageBytes.isNotEmpty()) {
+
+            try {
+                loadImageBitmap(imageBytes.inputStream())
+            } catch (t: Throwable) {
+                MosaikLogger.logError("Could not load bitmap", t)
+                null
+            }
+        } else null
+    }
+
+    if (imageBitmap != null) {
+        Image(imageBitmap, null, modifierWithSize, contentScale = ContentScale.Inside)
+    } else {
+        Box(modifierWithSize, contentAlignment = Alignment.Center) {
+            if (imageBytes == null)
+                CircularProgressIndicator(
+                    Modifier.size(48.dp),
+                    color = secondaryLabelColor,
+                )
+            else
+                Icon(
+                    IconType.ERROR.getImageVector(),
+                    null,
+                    Modifier.size(48.dp),
+                    tint = secondaryLabelColor
+                )
         }
     }
 }

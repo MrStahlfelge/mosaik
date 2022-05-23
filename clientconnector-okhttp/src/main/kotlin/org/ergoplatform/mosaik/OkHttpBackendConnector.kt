@@ -70,10 +70,8 @@ open class OkHttpBackendConnector(
         context: MosaikContext,
         values: Map<String, Any?>
     ): FetchActionResponse {
-        val loadUrl = makeAbsoluteUrl(baseUrl, url)
-
         val json = httpPostStringSync(
-            loadUrl,
+            makeAbsoluteUrl(baseUrl, url),
             serializer.valuesMapToJson(values),
             Headers.of(serializer.contextHeadersMap(context))
         )
@@ -84,6 +82,19 @@ open class OkHttpBackendConnector(
         val loadUrl = if (baseUrl == null || url.contains("://")) url
         else baseUrl.trimEnd('/') + "/" + url.trimStart('/')
         return loadUrl
+    }
+
+    override fun fetchImage(url: String, baseUrl: String?): ByteArray =
+        fetchHttpGetBytes(makeAbsoluteUrl(baseUrl, url))
+
+    private fun fetchHttpGetBytes(url: String): ByteArray {
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        okClient.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            return response.body()!!.bytes()
+        }
     }
 
     private fun fetchHttpGetStringSync(httpUrl: String, headers: Headers): Pair<String?, String> {

@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -8,11 +10,12 @@ import javax.annotation.Nullable;
 /**
  * Shows an image
  */
+@Since(0)
 public class Image extends ViewElement {
     @Nullable
     private String url;
     @Nonnull
-    private Size iconSize = Size.MEDIUM;
+    private Size size = Size.MEDIUM;
 
     @Nonnull
     public String getUrl() {
@@ -29,13 +32,13 @@ public class Image extends ViewElement {
     }
 
     @Nonnull
-    public Size getIconSize() {
-        return iconSize;
+    public Size getSize() {
+        return size;
     }
 
-    public void setIconSize(@Nonnull Size iconSize) {
-        Objects.requireNonNull(iconSize);
-        this.iconSize = iconSize;
+    public void setSize(@Nonnull Size size) {
+        Objects.requireNonNull(size);
+        this.size = size;
     }
 
     @Override
@@ -44,12 +47,12 @@ public class Image extends ViewElement {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Image image = (Image) o;
-        return Objects.equals(getUrl(), image.getUrl()) && getIconSize() == image.getIconSize();
+        return Objects.equals(getUrl(), image.getUrl()) && getSize() == image.getSize();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getUrl(), getIconSize());
+        return Objects.hash(super.hashCode(), getUrl(), getSize());
     }
 
     public enum Size {

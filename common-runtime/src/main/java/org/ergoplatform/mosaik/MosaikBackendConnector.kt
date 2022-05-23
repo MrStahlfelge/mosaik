@@ -18,4 +18,9 @@ interface MosaikBackendConnector {
      * loads an action from Mosaik app. Blocking, call on a background thread
      */
     fun fetchAction(url: String, baseUrl: String?, context: MosaikContext, values: Map<String, Any?>): FetchActionResponse
+
+    /**
+     * loads an Image
+     */
+    fun fetchImage(url: String, baseUrl: String?): ByteArray
 }

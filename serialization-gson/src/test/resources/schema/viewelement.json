@@ -32,6 +32,9 @@
       "$ref": "icon.json"
     },
     {
+      "$ref": "image.json"
+    },
+    {
       "$ref": "box.json"
     }
   ]

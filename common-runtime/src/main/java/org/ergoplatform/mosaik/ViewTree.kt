@@ -1,11 +1,11 @@
 package org.ergoplatform.mosaik
 
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
+import org.ergoplatform.mosaik.model.ui.Image
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 
@@ -20,6 +20,12 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     private val valueMap = HashMap<String, Any?>()
     private val jobMap = HashMap<String, Job>()
     private val actionMap = HashMap<String, Action>()
+    private val resourceMap = HashMap<String, ByteArray>()
+
+    /**
+     * set to true while view tree is altered, to prevent notifying consumers in this state
+     */
+    private var changingViewTree = false
 
     /**
      * flow that emits when viewtree is changed
@@ -79,30 +85,34 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
         newContent.actions.forEach { action -> actionMap[action.id] = action }
 
+        changingViewTree = true
         if (replacedElement == null && content == null) {
             content = TreeElement(view, null, this)
             // add all element ids and values to map
-            addIdsAndValues(content!!)
+            addIdsJobsAndValues(content!!)
         } else {
             val parent = replacedElement!!.parent
             val newTreeElement = TreeElement(view, parent, this)
-            removeIdsAndValues(replacedElement)
+            removeIdsJobsAndValues(replacedElement)
 
             if (parent != null)
                 parent.replaceChildElement(replacedElement, newTreeElement)
             else
                 content = newTreeElement
 
-            addIdsAndValues(newTreeElement)
+            addIdsJobsAndValues(newTreeElement)
         }
+        changingViewTree = false
         notifyViewTreeChanged()
     }
 
     private fun notifyViewTreeChanged() {
-        _modificationFlow.value = Pair(_modificationFlow.value.first + 1, content)
+        if (!changingViewTree) {
+            _modificationFlow.value = Pair(_modificationFlow.value.first + 1, content)
+        }
     }
 
-    private fun addIdsAndValues(element: TreeElement) {
+    private fun addIdsJobsAndValues(element: TreeElement) {
         var valuesChanged = false
         element.visitAllElements { treeElement ->
             if (treeElement.hasId) {
@@ -116,20 +126,37 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                     valuesChanged = true
                 }
             }
+            if (treeElement.element is Image)
+                startImageDownload(treeElement)
         }
         if (valuesChanged) {
             notifyValuesChanged()
         }
     }
 
-    private fun removeIdsAndValues(element: TreeElement) {
+    private fun startImageDownload(treeElement: TreeElement) {
+        registerJobFor(treeElement) {
+            MosaikLogger.logDebug("Start downloading image for ${treeElement.idOrHash}...")
+            withContext(Dispatchers.IO) {
+                val bytes = mosaikRuntime.downloadImage((treeElement.element as Image).url)
+                if (it.isActive) {
+                    MosaikLogger.logDebug("Downloading image for ${treeElement.idOrHash} done.")
+                    resourceMap[treeElement.idOrHash] = bytes
+                    notifyViewTreeChanged()
+                }
+            }
+        }
+    }
+
+    private fun removeIdsJobsAndValues(element: TreeElement) {
         val size = valueMap.size
         element.visitAllElements { treeElement ->
-            cancelRunningJobFor(element)
+            cancelRunningJobFor(treeElement)
             if (treeElement.hasId) {
                 idMap.remove(treeElement.id!!)
                 valueMap.remove(treeElement.id!!)
             }
+            resourceMap.remove(treeElement.idOrHash)
         }
         if (valueMap.size != size) {
             notifyValuesChanged()
@@ -141,7 +168,10 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
             val idOrHash = element.idOrHash
             val job = jobMap[idOrHash]
             job?.let {
-                if (!job.isCompleted) job.cancel()
+                if (!job.isCompleted) {
+                    MosaikLogger.logDebug("Cancelling job for ${element.idOrHash}")
+                    job.cancel()
+                }
                 jobMap.remove(idOrHash)
             }
         }
@@ -150,11 +180,11 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     /**
      * Registers a new Job for the element. A former running job will be cancelled
      */
-    fun registerJobFor(element: TreeElement, job: suspend () -> Unit) {
+    fun registerJobFor(element: TreeElement, job: suspend (CoroutineScope) -> Unit) {
         synchronized(jobMap) {
             cancelRunningJobFor(element)
             val newJob = mosaikRuntime.coroutineScope().launch {
-                job()
+                job(this)
             }
             jobMap[element.idOrHash] = newJob
         }
@@ -217,6 +247,9 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
     fun getCurrentValue(treeElement: TreeElement): Any? =
         valueMap[treeElement.id]
+
+    fun getResourceBytes(treeElement: TreeElement): ByteArray? =
+        resourceMap[treeElement.idOrHash]
 
     val currentValues: Map<String, Any?> get() = valueMap
 }

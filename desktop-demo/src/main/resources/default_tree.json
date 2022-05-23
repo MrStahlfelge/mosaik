@@ -131,6 +131,11 @@
         "size": "MEDIUM"
       },
       {
+        "type": "Image",
+        "size": "LARGE",
+        "url": "https://picsum.photos/300"
+      },
+      {
         "type": "Label",
         "text": "Open on GitHub",
         "style": "BODY1LINK",

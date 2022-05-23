@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.input.InputElement
@@ -37,6 +38,8 @@ class TreeElement(
         get() = if (hasValue) {
             viewTree.getCurrentValue(this)
         } else null
+
+    val getResourceBytes get() = viewTree.getResourceBytes(this)
 
     /**
      * returns the initial value as set by the viewtree
@@ -97,9 +100,11 @@ class TreeElement(
     fun valueChanged(newValue: Any?) {
         if (element is TextField<*>) {
             // delay value change for 300 ms so that not every key stroke fires the event
-            viewTree.registerJobFor(this) {
+            viewTree.registerJobFor(this) { coroutine ->
                 delay(300)
-                viewTree.onItemValueChanged(this, newValue)
+                if (coroutine.isActive) {
+                    viewTree.onItemValueChanged(this, newValue)
+                }
             }
         } else {
             viewTree.onItemValueChanged(this, newValue)

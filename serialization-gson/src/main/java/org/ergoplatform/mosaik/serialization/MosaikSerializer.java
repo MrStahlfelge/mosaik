@@ -12,6 +12,7 @@ import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
+import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
@@ -105,6 +106,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());
         gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
+        gsonBuilder.registerTypeAdapter(Image.class, new ImageSerializer());
 
         if (prettyPrint) {
             gsonBuilder.setPrettyPrinting();

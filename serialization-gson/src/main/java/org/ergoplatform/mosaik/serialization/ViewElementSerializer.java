@@ -9,8 +9,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
+import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.QrCode;
@@ -35,7 +35,6 @@ import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonDeserializer<ViewElement> {
 
@@ -137,6 +136,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "FiatAmountLabel":
                 clazz = FiatAmountLabel.class;
+                break;
+            case "Image":
+                clazz = Image.class;
                 break;
             default:
                 throw new JsonParseException("View Element with name " + elementName + " not known.");

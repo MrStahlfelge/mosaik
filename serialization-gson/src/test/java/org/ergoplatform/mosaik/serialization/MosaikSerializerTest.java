@@ -18,8 +18,8 @@ import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.actions.ChangeSiteAction;
 import org.ergoplatform.mosaik.model.actions.CopyClipboardAction;
 import org.ergoplatform.mosaik.model.actions.DialogAction;
-import org.ergoplatform.mosaik.model.actions.NavigateAction;
 import org.ergoplatform.mosaik.model.actions.UrlAction;
+import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
@@ -85,6 +85,8 @@ public class MosaikSerializerTest extends TestCase {
                         ((LazyLoadBox) element).setRequestUrl("...");
                     } else if (element instanceof TokenLabel) {
                         ((TokenLabel) element).setTokenId("tokenid");
+                    } else if (element instanceof Image) {
+                        ((Image) element).setUrl("url");
                     }
 
                     // add actions from queue

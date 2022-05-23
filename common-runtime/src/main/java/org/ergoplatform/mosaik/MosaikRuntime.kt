@@ -72,7 +72,12 @@ open class MosaikRuntime(
             try {
                 // TODO make sure all values are already updated and no delayed jobs are active
                 val fetchActionResponse =
-                    backendConnector.fetchAction(action.url, appManifest?.baseUrl, mosaikContext, viewTree.currentValues)
+                    backendConnector.fetchAction(
+                        action.url,
+                        appManifest?.baseUrl,
+                        mosaikContext,
+                        viewTree.currentValues
+                    )
                 val appVersion = fetchActionResponse.appVersion
                 val newAction = fetchActionResponse.action
 
@@ -166,6 +171,18 @@ open class MosaikRuntime(
     private fun errorRaised(t: Throwable) {
         // TODO report error to error report url
         showError(t)
+    }
+
+    /**
+     * Downloads an image, blocking. In case of an error an empty byte array is returned
+     */
+    fun downloadImage(url: String): ByteArray {
+        return try {
+            backendConnector.fetchImage(url, appManifest?.baseUrl)
+        } catch (t: Throwable) {
+            MosaikLogger.logWarning("Could not download image $url", t)
+            ByteArray(0)
+        }
     }
 }
 

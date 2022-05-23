@@ -77,6 +77,9 @@ class ViewTreeTest : TestCase() {
                         TODO("Not yet implemented")
                     }
 
+                    override fun fetchImage(url: String, baseUrl: String?): ByteArray {
+                        TODO("Not yet implemented")
+                    }
                 },
                 showDialog = { },
                 pasteToClipboard = {},
