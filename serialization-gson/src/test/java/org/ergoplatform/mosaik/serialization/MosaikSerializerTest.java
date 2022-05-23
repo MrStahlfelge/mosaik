@@ -114,7 +114,6 @@ public class MosaikSerializerTest extends TestCase {
                 0,
                 0,
                 null,
-                0,
                 0
         ));
 

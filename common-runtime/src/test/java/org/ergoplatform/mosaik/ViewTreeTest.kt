@@ -63,7 +63,6 @@ class ViewTreeTest : TestCase() {
                                 0,
                                 null,
                                 0,
-                                0,
                             )
                             view = boxRoot
                         }

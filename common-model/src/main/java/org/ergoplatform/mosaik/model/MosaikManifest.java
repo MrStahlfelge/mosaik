@@ -58,11 +58,6 @@ public class MosaikManifest {
     public final CanvasDimension targetCanvasDimension;
 
     /**
-     * Mosaik version this app needs at mininum. Older Mosaik versions should not run this app.
-     */
-    public final int minMosaikVersion;
-
-    /**
      * Cache life time (in seconds) determines how long a viewtree is valid after it was loaded.
      * Users can leave an application or forget it in background. If the cache lifetime expires,
      * the view tree will be reloaded from the apps base URL.
@@ -79,7 +74,7 @@ public class MosaikManifest {
 
     public MosaikManifest(@Nonnull String appName,
                           int appVersion, int targetMosaikVersion,
-                          @Nullable CanvasDimension targetCanvasDimension, int minMosaikVersion,
+                          @Nullable CanvasDimension targetCanvasDimension,
                           int cacheLifetime) {
         this.targetCanvasDimension = targetCanvasDimension;
         Objects.requireNonNull(appName);
@@ -88,7 +83,6 @@ public class MosaikManifest {
         this.appVersion = appVersion;
         this.cacheLifetime = cacheLifetime;
         this.targetMosaikVersion = targetMosaikVersion;
-        this.minMosaikVersion = minMosaikVersion;
     }
 
     public enum CanvasDimension {

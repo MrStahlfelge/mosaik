@@ -3,7 +3,6 @@
     "appName": "Demo App (without backend)",
     "appVersion": 0,
     "targetMosaikVersion": 0,
-    "minMosaikVersion": 0,
     "cacheLifetime": 0
   },
   "actions": [
