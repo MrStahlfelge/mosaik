@@ -33,6 +33,7 @@ public class MainController {
         // Mosaik executor, it will pick up the <link rel="mosaik" ...> entry
         return new ModelAndView("nobrowser.html");
     }
+
     @GetMapping("/appselect")
     @ResponseBody
     public InitialAppInfo selectorApp(HttpServletRequest request) {
@@ -65,9 +66,15 @@ public class MainController {
         ViewElement lazyBox = addAppButton(appInfo, "Lazy box demo", "lazybox/", serverRequestUrl);
         row1.addChild(lazyBox, VAlignment.CENTER, 1);
 
+        Row row2 = new Row();
+        ViewElement alignmentApp = addAppButton(appInfo, "Alignments demo", "alignments/", serverRequestUrl);
+        row2.addChild(alignmentApp, VAlignment.CENTER, 1);
+        row2.addChild(new Box(), VAlignment.CENTER, 1);
+
         mainContainer.addChild(headline);
         mainContainer.addChild(description);
         mainContainer.addChild(row1);
+        mainContainer.addChild(row2);
 
         appInfo.setView(mainContainer);
 

@@ -84,6 +84,7 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
 
     when (element) {
         is Box -> {
+            // this also deals with LazyLoadBox
             MosaikBox(newModifier, treeElement)
         }
         is Label -> {
@@ -103,9 +104,6 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         }
         is LoadingIndicator -> {
             MosaikLoadingIndicator(treeElement, newModifier)
-        }
-        is LazyLoadBox -> {
-            TODO()
         }
         is Icon -> {
             MosaikIcon(treeElement, newModifier)

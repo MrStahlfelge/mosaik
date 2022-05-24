@@ -3,7 +3,6 @@ package org.ergoplatform.mosaik
 import junit.framework.TestCase
 import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.*
-import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.layout.Box
 import java.util.*
 
@@ -74,7 +73,7 @@ class ViewTreeTest : TestCase() {
                         context: MosaikContext,
                         values: Map<String, Any?>
                     ): FetchActionResponse {
-                        TODO("Not yet implemented")
+                        throw UnsupportedOperationException()
                     }
 
                     override fun fetchLazyContent(
@@ -82,11 +81,11 @@ class ViewTreeTest : TestCase() {
                         baseUrl: String?,
                         context: MosaikContext
                     ): ViewContent {
-                        TODO("Not yet implemented")
+                        throw UnsupportedOperationException()
                     }
 
                     override fun fetchImage(url: String, baseUrl: String?): ByteArray {
-                        TODO("Not yet implemented")
+                        throw UnsupportedOperationException()
                     }
                 },
                 showDialog = { },
