@@ -10,6 +10,7 @@ import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.IconType;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
+import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.Padding;
@@ -44,6 +45,13 @@ public class LazyBoxDemoController {
         Label description = new Label();
         description.setText("This example demonstrates how to use a lazy loadbox to fetch content that may take more time to load without affecting user interaction.");
 
+        Box textBoxPadding = new Box();
+        textBoxPadding.setPadding(Padding.DEFAULT);
+        TextInputField textField = new TextInputField();
+        textField.setId("textinput"); // ID is needed in order to store the user entered values
+        textField.setPlaceholder("You can enter text here without problems while the text at the bottom is loading.");
+        textBoxPadding.addChild(textField);
+
         LazyLoadBox lazyBox = new LazyLoadBox();
         LoadingIndicator indicator = new LoadingIndicator();
         lazyBox.addChild(indicator);
@@ -55,20 +63,21 @@ public class LazyBoxDemoController {
 
         lazyBox.setErrorView(new ViewContent(errorView));
 
-        Box padding = new Box();
-        padding.setPadding(Padding.DEFAULT);
-        padding.addChild(lazyBox);
+        Box loadBoxPadding = new Box();
+        loadBoxPadding.setPadding(Padding.DEFAULT);
+        loadBoxPadding.addChild(lazyBox);
 
         container.addChild(headline);
         container.addChild(description);
-        container.addChild(padding);
+        container.addChild(textBoxPadding);
+        container.addChild(loadBoxPadding);
         appInfo.setView(container);
         return appInfo;
     }
 
     @GetMapping("lazybox/boxcontents")
     public ViewContent boxContents() throws InterruptedException {
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         Label text = new Label();
         text.setText("This text was loaded later");

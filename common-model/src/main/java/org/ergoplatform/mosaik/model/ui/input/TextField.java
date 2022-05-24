@@ -79,12 +79,12 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     }
 
     @Nullable
-    public String getPlaceHolder() {
+    public String getPlaceholder() {
         return placeholder;
     }
 
-    public void setPlaceHolder(@Nullable String placeHolder) {
-        this.placeholder = placeHolder;
+    public void setPlaceholder(@Nullable String placeholder) {
+        this.placeholder = placeholder;
     }
 
     @Override

@@ -48,8 +48,9 @@ class TreeElement(
 
     /**
      * see [ViewTree.contentVersion]
+     * This is not a get() by intention. Content version of the tree when this element was added.
      */
-    val contentVersion get() = viewTree.contentVersion
+    val createdAtContentVersion = viewTree.contentVersion
 
     val children: List<TreeElement> get() = _children
 

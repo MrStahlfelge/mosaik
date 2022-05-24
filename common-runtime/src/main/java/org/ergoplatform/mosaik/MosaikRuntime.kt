@@ -68,7 +68,7 @@ open class MosaikRuntime(
         viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
-                // TODO make sure all values are already updated and no delayed jobs are active
+                viewTree.ensureValuesAreUpdated()
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,

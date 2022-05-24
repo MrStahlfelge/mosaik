@@ -58,11 +58,11 @@ fun main() {
                 url: String,
                 context: MosaikContext
             ): InitialAppInfo {
-                val fallback = { MosaikSerializer().firstRequestResponseFromJson(json) }
-                return if (url.startsWith("http", true)) {
-                    super.loadMosaikApp(url, context)
+                return if (url.isBlank()) {
+                    MosaikSerializer().firstRequestResponseFromJson(json)
                 } else {
-                    fallback()
+                    val urlToUse = if (url.contains("://")) url else "http://$url"
+                    super.loadMosaikApp(urlToUse, context)
                 }
             }
         }

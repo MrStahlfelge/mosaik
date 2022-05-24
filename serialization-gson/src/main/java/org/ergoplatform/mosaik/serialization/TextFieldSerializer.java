@@ -9,11 +9,9 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.IconType;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
-import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
 import java.lang.reflect.Type;
 
@@ -44,8 +42,8 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         if (src.getValue() != null) {
             jsonObject.add(KEY_VALUE, context.serialize(src.getValue()));
         }
-        if (src.getPlaceHolder() != null) {
-            jsonObject.add(KEY_PLACEHOLDER, context.serialize(src.getPlaceHolder()));
+        if (src.getPlaceholder() != null) {
+            jsonObject.add(KEY_PLACEHOLDER, context.serialize(src.getPlaceholder()));
         }
         if (!src.isEnabled()) {
             jsonObject.add(KEY_ENABLED, context.serialize(src.isEnabled()));
@@ -82,7 +80,7 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
             textInputField.setValue(context.<U>deserialize(jsonObject.get(KEY_VALUE), valueClazz));
         }
         if (jsonObject.has(KEY_PLACEHOLDER)) {
-            textInputField.setPlaceHolder(jsonObject.get(KEY_PLACEHOLDER).getAsString());
+            textInputField.setPlaceholder(jsonObject.get(KEY_PLACEHOLDER).getAsString());
         }
         if (jsonObject.has(KEY_ENABLED)) {
             textInputField.setEnabled(jsonObject.get(KEY_ENABLED).getAsBoolean());

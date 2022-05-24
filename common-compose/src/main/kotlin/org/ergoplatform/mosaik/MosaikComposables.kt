@@ -223,7 +223,7 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
 
     // keep everything the user entered, as long as the [ViewTree] is not changed
     val textFieldState =
-        remember(treeElement.contentVersion) {
+        remember(treeElement.createdAtContentVersion) {
             val currentValue = treeElement.currentValue as String? ?: ""
             mutableStateOf(
                 TextFieldValue(
@@ -253,7 +253,7 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                 isError = !element.errorMessage.isNullOrBlank(),
                 maxLines = 1,
                 singleLine = true,
-                label = { element.placeHolder?.let { Text(it) } },
+                label = { element.placeholder?.let { Text(it) } },
                 trailingIcon = {
                     element.endIcon?.getImageVector()?.let { iv ->
                         val icon = @Composable { Icon(iv, null) }

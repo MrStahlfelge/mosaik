@@ -132,6 +132,8 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                     valueMap[newId] = getCurrentValue(treeElement) ?: treeElement.initialValue
                     valuesChanged = true
                 }
+            } else if (treeElement.element is InputElement<*>) {
+                MosaikLogger.logWarning("Input element without id found: ${treeElement.element.javaClass.simpleName}")
             }
             when (treeElement.element) {
                 is Image -> startImageDownload(treeElement)
@@ -277,6 +279,10 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
     fun getResourceBytes(treeElement: TreeElement): ByteArray? =
         resourceMap[treeElement.idOrHash]
+
+    fun ensureValuesAreUpdated() {
+        // TODO make sure all values are already updated and no delayed jobs are active
+    }
 
     val currentValues: Map<String, Any?> get() = valueMap
 }
