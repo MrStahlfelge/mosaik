@@ -53,7 +53,7 @@ Run it by cloning this repo and call
 
 Built in offline app shows some view elements and demonstrates capabilities of Mosaik when no
 backend connection is available. Use the address bar to navigate to an existing Mosaik backend
-(for example, the backend demo below).
+(for example, one of the backend demos below).
 
 ### backend-demo
 Java 11. Backend demo serving a demo application using Spring Boot as HTTP server framework.
@@ -69,3 +69,13 @@ Available demo apps:
 
 * visitor list: demonstrates data interchange between client and backend
 * lazybox: demonstrates data loading without affecting user interaction
+* alignments: demonstrating different horizontal alignment types in a Column
+
+### backend-demo-kotlin
+Kotlin. Backend demo serving a demo application using spring Boot. Demonstrating usage of the 
+Kotlin DSL to serve the Mosaik app.
+
+Run it by cloning this repo and call
+
+    gradlew backend-demo-kotlin:bootRun
+

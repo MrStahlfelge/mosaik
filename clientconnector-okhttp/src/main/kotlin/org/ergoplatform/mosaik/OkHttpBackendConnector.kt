@@ -7,6 +7,7 @@ import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.util.concurrent.TimeUnit
 
 open class OkHttpBackendConnector(
@@ -36,7 +37,11 @@ open class OkHttpBackendConnector(
                 return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), context)
             }
         }
-        return serializer.firstRequestResponseFromJson(json)
+        return try {
+            serializer.firstRequestResponseFromJson(json)
+        } catch (t: Throwable) {
+            throw IllegalArgumentException("$url did not send a valid response.")
+        }
     }
 
     internal fun checkForMosaikRelTag(html: String): String? {
