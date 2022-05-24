@@ -5,18 +5,24 @@ See [current draft](https://docs.google.com/document/d/1Pc4DLChaKyGbMnY4gu92mcBE
 ## Modules
 
 ### common-model
-Java. Base models Mosaik library works on.
+Java 7. Base models Mosaik library works on.
 
 No dependencies. For use in Mosaik executors and dApps.
 
+### common-model-ktx
+Kotlin. Kotlin-friendly extensions for Mosaik common models, for example a Kotlin DSL to
+build App View Contents.
+
+Depends on common-model, Kotlin-std.
+
 ### serialization-gson
-Java. Json schema definition and reference implementation of serialization and deserialization of 
+Java 7. Json schema definition and reference implementation of serialization and deserialization of 
 common-model classes.
 
 Depends on common-model, Gson. For use in Mosaik executors and dApps.
 
 ### serialization-jackson
-Java. Json serialization of common-model classes.
+Java 8. Json serialization of common-model classes.
 
 Depends on common-model, jackson. For use in Mosaik dApps, mostly intended to be used with Spring.
 
@@ -50,7 +56,7 @@ backend connection is available. Use the address bar to navigate to an existing 
 (for example, the backend demo below).
 
 ### backend-demo
-Java. Backend demo serving a demo application using Spring Boot as HTTP server framework.
+Java 11. Backend demo serving a demo application using Spring Boot as HTTP server framework.
 
 Demonstrates to use FreeMarker generating Json or using Mosaik Model classes serialized with 
 Spring's mechanisms.
