@@ -115,7 +115,7 @@ public class MosaikSerializer {
         return gsonBuilder.create();
     }
 
-    public ViewContent viewElementFromJson(String json) {
+    public ViewContent viewContentFromJson(String json) {
         Gson gson = getGson(false);
         return gson.fromJson(json, ViewContent.class);
     }

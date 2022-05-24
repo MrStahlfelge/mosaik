@@ -1,12 +1,14 @@
 package org.ergoplatform.mosaik.model.ui;
 
 import org.ergoplatform.mosaik.model.Since;
+import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.BackendRequestAction;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * LazyLoad shows a loading indicator placeholder and fetches a {@link ViewElement} that replaces
@@ -21,6 +23,7 @@ import javax.annotation.Nonnull;
 @Since(0)
 public class LazyLoadBox extends Box {
     private String requestUrl;
+    private ViewContent errorView;
 
     @Nonnull
     public String getRequestUrl() {
@@ -28,6 +31,15 @@ public class LazyLoadBox extends Box {
             throw new IllegalStateException("No request url set for " + this.getClass().getSimpleName());
         }
         return requestUrl;
+    }
+
+    @Nullable
+    public ViewContent getErrorView() {
+        return errorView;
+    }
+
+    public void setErrorView(ViewContent errorView) {
+        this.errorView = errorView;
     }
 
     public void setRequestUrl(@Nonnull String requestUrl) {
@@ -41,11 +53,11 @@ public class LazyLoadBox extends Box {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         LazyLoadBox that = (LazyLoadBox) o;
-        return Objects.equals(getRequestUrl(), that.getRequestUrl());
+        return getRequestUrl().equals(that.getRequestUrl()) && Objects.equals(getErrorView(), that.getErrorView());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getRequestUrl());
+        return Objects.hash(super.hashCode(), getRequestUrl(), getErrorView());
     }
 }

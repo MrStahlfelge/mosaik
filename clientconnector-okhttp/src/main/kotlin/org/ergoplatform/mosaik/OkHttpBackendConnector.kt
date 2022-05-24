@@ -4,6 +4,7 @@ import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.InitialAppInfo
 import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -76,6 +77,19 @@ open class OkHttpBackendConnector(
             Headers.of(serializer.contextHeadersMap(context))
         )
         return serializer.fetchActionResponseFromJson(json)
+    }
+
+    override fun fetchLazyContent(
+        url: String,
+        baseUrl: String?,
+        context: MosaikContext
+    ): ViewContent {
+        val (_, json) = fetchHttpGetStringSync(
+            makeAbsoluteUrl(baseUrl, url),
+            Headers.of(serializer.contextHeadersMap(context))
+        )
+
+        return serializer.viewContentFromJson(json)
     }
 
     private fun makeAbsoluteUrl(baseUrl: String?, url: String): String {

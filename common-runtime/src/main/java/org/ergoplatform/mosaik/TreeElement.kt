@@ -30,7 +30,7 @@ class TreeElement(
 
     val id get() = element.id
 
-    val idOrHash get() = element.id ?: element.hashCode().toString()
+    val idOrHash by lazy { element.id ?: element.hashCode().toString() }
 
     val hasValue get() = hasId && element is InputElement<*>
 

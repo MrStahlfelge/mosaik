@@ -27,21 +27,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class MosaikController {
-    public static final int APP_VERSION = 1;
+public class VisitorController {
 
     @Autowired
     private MosaikService mosaikService;
 
-    @GetMapping("/")
-    public ModelAndView mainPage() {
-        // we always serve nobrowser error page for the main url. If the request came from a
-        // Mosaik executor, it will pick up the <link rel="mosaik" ...> entry
-        return new ModelAndView("nobrowser.html");
-    }
-
     @GetMapping(value = "/visitors/")
-    public ModelAndView getInitialApp(@RequestHeader Map<String, String> headers,
+    public ModelAndView getVisitorApp(@RequestHeader Map<String, String> headers,
                                       HttpServletRequest request) throws InterruptedException {
         // this deserializes the complete context
         // if you are only interested in certain fields, access header fields directly
@@ -71,7 +63,7 @@ public class MosaikController {
         // Additionally, "visitors" is a list so check out how visitorentries.ftl work for this.
         ModelAndView model = new ModelAndView("mainapp");
         model.addObject("hostaddress", request.getRequestURL().toString());
-        model.addObject("appversion", String.valueOf(APP_VERSION));
+        model.addObject("appversion", String.valueOf(BackendDemoApplication.APP_VERSION));
         model.addObject("visitors", mosaikService.getVisitors(context.guid));
 
         // this makes the response slow down and is of course only for the demo to emphasize
@@ -96,7 +88,7 @@ public class MosaikController {
 
     @PostMapping(value = "visitors/add", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public FetchActionResponse getNextAction(
+    public FetchActionResponse addVisitor(
             @RequestBody Map<String, ?> values,
             @RequestHeader("mosaik-guid") String guid) throws InterruptedException {
 
@@ -150,6 +142,6 @@ public class MosaikController {
             nextAction = changeSiteAction;
         }
 
-        return new FetchActionResponse(APP_VERSION, nextAction);
+        return new FetchActionResponse(BackendDemoApplication.APP_VERSION, nextAction);
     }
 }

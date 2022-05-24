@@ -3,7 +3,7 @@ package org.ergoplatform.mosaik
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.InitialAppInfo
 import org.ergoplatform.mosaik.model.MosaikContext
-import org.ergoplatform.mosaik.model.actions.Action
+import org.ergoplatform.mosaik.model.ViewContent
 
 /**
  * Handles connection from Mosaik executor app its backend, the dApp
@@ -20,7 +20,12 @@ interface MosaikBackendConnector {
     fun fetchAction(url: String, baseUrl: String?, context: MosaikContext, values: Map<String, Any?>): FetchActionResponse
 
     /**
-     * loads an Image
+     * loads contents of a LazyLoadBox. Blocking, call on a background thread
+     */
+    fun fetchLazyContent(url: String, baseUrl: String?, context: MosaikContext): ViewContent
+
+    /**
+     * loads an Image. Blocking, call on a background thread
      */
     fun fetchImage(url: String, baseUrl: String?): ByteArray
 }

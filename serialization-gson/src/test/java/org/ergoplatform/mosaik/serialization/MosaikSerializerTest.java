@@ -83,6 +83,7 @@ public class MosaikSerializerTest extends TestCase {
                     // add needed properties
                     if (element instanceof LazyLoadBox) {
                         ((LazyLoadBox) element).setRequestUrl("...");
+                        ((LazyLoadBox) element).setErrorView(new ViewContent(new Box()));
                     } else if (element instanceof TokenLabel) {
                         ((TokenLabel) element).setTokenId("tokenid");
                     } else if (element instanceof Image) {
@@ -132,8 +133,8 @@ public class MosaikSerializerTest extends TestCase {
         validator.validateJson(schema, jsonFromGson);
         validator.validateJson(schema, jsonFromJackson);
 
-        ViewContent content2 = new MosaikSerializer().viewElementFromJson(jsonFromGson);
-        ViewContent content3 = new MosaikSerializer().viewElementFromJson(jsonFromJackson);
+        ViewContent content2 = new MosaikSerializer().viewContentFromJson(jsonFromGson);
+        ViewContent content3 = new MosaikSerializer().viewContentFromJson(jsonFromJackson);
         Assert.assertEquals(column, content2.getView());
         Assert.assertEquals(column, content3.getView());
         Assert.assertTrue(actions.size() == content2.getActions().size() && actions.containsAll(content2.getActions()) && content2.getActions().containsAll(actions));

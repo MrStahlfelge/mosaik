@@ -31,6 +31,9 @@
     },
     "url": {
       "type": "string"
+    },
+    "errorView": {
+      "$ref": "viewcontent.json"
     }
   },
   "required": [

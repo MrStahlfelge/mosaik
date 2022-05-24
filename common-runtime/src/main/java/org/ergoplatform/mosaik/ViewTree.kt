@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
-import org.ergoplatform.mosaik.model.ui.Image
-import org.ergoplatform.mosaik.model.ui.ViewElement
+import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.InputElement
+import org.ergoplatform.mosaik.model.ui.layout.Box
 
 /**
  * the complete tree of [ViewElement]'s and is context.
@@ -73,7 +73,6 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      * replaces part of the view with the given id. If id is null, the complete view is replaced
      */
     fun setContentView(replaceId: String?, newContent: ViewContent) {
-        val view = newContent.view
         val replacedElement = if (replaceId == null) content else findElementById(replaceId)
 
         if (replacedElement == null && replaceId != null) {
@@ -83,27 +82,35 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
             )
         }
 
-        newContent.actions.forEach { action -> actionMap[action.id] = action }
+        replaceViewElement(replacedElement, newContent)
+    }
 
-        changingViewTree = true
-        if (replacedElement == null && content == null) {
-            content = TreeElement(view, null, this)
-            // add all element ids and values to map
-            addIdsJobsAndValues(content!!)
-        } else {
-            val parent = replacedElement!!.parent
-            val newTreeElement = TreeElement(view, parent, this)
-            removeIdsJobsAndValues(replacedElement)
+    private fun replaceViewElement(replacedElement: TreeElement?, newContent: ViewContent) {
+        synchronized(this) {
+            val view = newContent.view
 
-            if (parent != null)
-                parent.replaceChildElement(replacedElement, newTreeElement)
-            else
-                content = newTreeElement
+            newContent.actions.forEach { action -> actionMap[action.id] = action }
 
-            addIdsJobsAndValues(newTreeElement)
+            changingViewTree = true
+            if (replacedElement == null && content == null) {
+                content = TreeElement(view, null, this)
+                // add all element ids and values to map
+                addIdsJobsAndValues(content!!)
+            } else {
+                val parent = replacedElement!!.parent
+                val newTreeElement = TreeElement(view, parent, this)
+                removeIdsJobsAndValues(replacedElement)
+
+                if (parent != null)
+                    parent.replaceChildElement(replacedElement, newTreeElement)
+                else
+                    content = newTreeElement
+
+                addIdsJobsAndValues(newTreeElement)
+            }
+            changingViewTree = false
+            notifyViewTreeChanged()
         }
-        changingViewTree = false
-        notifyViewTreeChanged()
     }
 
     private fun notifyViewTreeChanged() {
@@ -126,20 +133,40 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                     valuesChanged = true
                 }
             }
-            if (treeElement.element is Image)
-                startImageDownload(treeElement)
+            when (treeElement.element) {
+                is Image -> startImageDownload(treeElement)
+                is LazyLoadBox -> startFetchLazyContent(treeElement)
+            }
         }
         if (valuesChanged) {
             notifyValuesChanged()
         }
     }
 
+    private fun startFetchLazyContent(treeElement: TreeElement) {
+        registerJobFor(treeElement) { scope ->
+            MosaikLogger.logDebug("Start fetching contents for ${treeElement.idOrHash}...")
+            val lazyLoadBox = treeElement.element as LazyLoadBox
+            val newContent = withContext(Dispatchers.IO) {
+                mosaikRuntime.fetchLazyContents(lazyLoadBox.requestUrl)
+            }
+            if (scope.isActive) {
+                if (newContent != null) {
+                    replaceViewElement(treeElement, newContent)
+                } else {
+                    replaceViewElement(treeElement, lazyLoadBox.errorView ?: ViewContent(Box()))
+                }
+            }
+
+        }
+    }
+
     private fun startImageDownload(treeElement: TreeElement) {
-        registerJobFor(treeElement) {
+        registerJobFor(treeElement) { scope ->
             MosaikLogger.logDebug("Start downloading image for ${treeElement.idOrHash}...")
             withContext(Dispatchers.IO) {
                 val bytes = mosaikRuntime.downloadImage((treeElement.element as Image).url)
-                if (it.isActive) {
+                if (scope.isActive) {
                     MosaikLogger.logDebug("Downloading image for ${treeElement.idOrHash} done.")
                     resourceMap[treeElement.idOrHash] = bytes
                     notifyViewTreeChanged()

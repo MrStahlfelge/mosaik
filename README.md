@@ -62,3 +62,4 @@ Run it by cloning this repo and call
 Available demo apps:
 
 * visitor list: demonstrates data interchange between client and backend
+* lazybox: demonstrates data loading without affecting user interaction

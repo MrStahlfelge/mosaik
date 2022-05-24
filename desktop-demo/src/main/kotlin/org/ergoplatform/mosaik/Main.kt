@@ -234,7 +234,7 @@ private fun updateViewTreeFromJson(
     json: String
 ) = try {
     viewTree.setRootView(
-        MosaikSerializer().viewElementFromJson(json)
+        MosaikSerializer().viewContentFromJson(json)
     )
     true
 } catch (t: Throwable) {

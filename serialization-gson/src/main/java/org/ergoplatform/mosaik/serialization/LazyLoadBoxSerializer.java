@@ -8,15 +8,16 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
-import org.ergoplatform.mosaik.model.ui.layout.Padding;
 
 import java.lang.reflect.Type;
 
 public class LazyLoadBoxSerializer implements JsonSerializer<LazyLoadBox>, JsonDeserializer<LazyLoadBox> {
 
     public static final String KEY_URL = "url";
+    public static final String KEY_ERROR_VIEW = "errorView";
 
     @Override
     public JsonElement serialize(LazyLoadBox src, Type typeOfSrc, JsonSerializationContext context) {
@@ -24,6 +25,7 @@ public class LazyLoadBoxSerializer implements JsonSerializer<LazyLoadBox>, JsonD
         BoxSerializer.serializeCommon(src, context, jsonObject);
 
         jsonObject.add(KEY_URL, context.serialize(src.getRequestUrl()));
+        jsonObject.add(KEY_ERROR_VIEW, context.serialize(src.getErrorView()));
 
         return jsonObject;
     }
@@ -37,6 +39,7 @@ public class LazyLoadBoxSerializer implements JsonSerializer<LazyLoadBox>, JsonD
         BoxSerializer.deserializeCommon(context, box, jsonObject);
 
         box.setRequestUrl(jsonObject.get(KEY_URL).getAsString());
+        box.setErrorView(context.<ViewContent>deserialize(jsonObject.getAsJsonObject(KEY_ERROR_VIEW), ViewContent.class));
 
         return box;
     }

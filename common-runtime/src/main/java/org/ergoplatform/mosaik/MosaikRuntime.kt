@@ -1,12 +1,10 @@
 package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
+import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.*
-import java.lang.IllegalStateException
 
 open class MosaikRuntime(
     val coroutineScope: () -> CoroutineScope,
@@ -182,6 +180,18 @@ open class MosaikRuntime(
         } catch (t: Throwable) {
             MosaikLogger.logWarning("Could not download image $url", t)
             ByteArray(0)
+        }
+    }
+
+    /**
+     * Downloads content of LazyLoadBox, blocking. In case of an error null is returned
+     */
+    fun fetchLazyContents(url: String): ViewContent? {
+        return try {
+            backendConnector.fetchLazyContent(url, appManifest?.baseUrl, mosaikContext)
+        } catch (t: Throwable) {
+            MosaikLogger.logError("Could not fetch content $url", t)
+            null
         }
     }
 }

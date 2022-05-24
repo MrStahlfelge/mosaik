@@ -77,6 +77,14 @@ class ViewTreeTest : TestCase() {
                         TODO("Not yet implemented")
                     }
 
+                    override fun fetchLazyContent(
+                        url: String,
+                        baseUrl: String?,
+                        context: MosaikContext
+                    ): ViewContent {
+                        TODO("Not yet implemented")
+                    }
+
                     override fun fetchImage(url: String, baseUrl: String?): ByteArray {
                         TODO("Not yet implemented")
                     }

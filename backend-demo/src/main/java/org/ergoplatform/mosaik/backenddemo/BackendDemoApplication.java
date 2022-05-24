@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Primary;
 
 @SpringBootApplication
 public class BackendDemoApplication {
+    public static final int APP_VERSION = 1;
+
     public static void main(String[] args) {
         SpringApplication.run(BackendDemoApplication.class, args);
     }
