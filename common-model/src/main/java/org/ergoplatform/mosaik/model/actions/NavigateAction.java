@@ -1,10 +1,6 @@
 package org.ergoplatform.mosaik.model.actions;
 
-import org.ergoplatform.mosaik.model.InitialAppInfo;
-
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
+import org.ergoplatform.mosaik.model.Since;
 
 /**
  * Action containing a new URL to switch to another Mosaik app.
@@ -14,6 +10,7 @@ import javax.annotation.Nonnull;
  * Use this to switch to screens that are self-contained and to which users should be able to
  * navigate to directly.
  */
+@Since(0)
 public class NavigateAction extends UrlAction {
 
 }

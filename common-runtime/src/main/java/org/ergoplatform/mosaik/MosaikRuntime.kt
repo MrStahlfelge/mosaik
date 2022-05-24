@@ -57,11 +57,18 @@ open class MosaikRuntime(
                 is BackendRequestAction -> {
                     runBackendRequest(action)
                 }
+                is NavigateAction -> {
+                    runNavigateAction(action)
+                }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
+    }
+
+    open fun runNavigateAction(action: NavigateAction) {
+        loadMosaikApp(action.url)
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
