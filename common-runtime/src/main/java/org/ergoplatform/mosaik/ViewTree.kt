@@ -147,7 +147,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
     private fun startFetchLazyContent(treeElement: TreeElement) {
         registerJobFor(treeElement) { scope ->
-            MosaikLogger.logDebug("Start fetching contents for ${treeElement.idOrHash}...")
+            MosaikLogger.logDebug("Start fetching contents for ${treeElement.idOrUuid}...")
             val lazyLoadBox = treeElement.element as LazyLoadBox
             val newContent = withContext(Dispatchers.IO) {
                 mosaikRuntime.fetchLazyContents(lazyLoadBox.requestUrl)
@@ -165,12 +165,12 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
     private fun startImageDownload(treeElement: TreeElement) {
         registerJobFor(treeElement) { scope ->
-            MosaikLogger.logDebug("Start downloading image for ${treeElement.idOrHash}...")
+            MosaikLogger.logDebug("Start downloading image for ${treeElement.idOrUuid}...")
             withContext(Dispatchers.IO) {
                 val bytes = mosaikRuntime.downloadImage((treeElement.element as Image).url)
                 if (scope.isActive) {
-                    MosaikLogger.logDebug("Downloading image for ${treeElement.idOrHash} done.")
-                    resourceMap[treeElement.idOrHash] = bytes
+                    MosaikLogger.logDebug("Downloading image for ${treeElement.idOrUuid} done.")
+                    resourceMap[treeElement.idOrUuid] = bytes
                     notifyViewTreeChanged()
                 }
             }
@@ -185,7 +185,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 idMap.remove(treeElement.id!!)
                 valueMap.remove(treeElement.id!!)
             }
-            resourceMap.remove(treeElement.idOrHash)
+            resourceMap.remove(treeElement.idOrUuid)
         }
         if (valueMap.size != size) {
             notifyValuesChanged()
@@ -194,11 +194,11 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
 
     fun cancelRunningJobFor(element: TreeElement) {
         synchronized(jobMap) {
-            val idOrHash = element.idOrHash
+            val idOrHash = element.idOrUuid
             val job = jobMap[idOrHash]
             job?.let {
                 if (!job.isCompleted) {
-                    MosaikLogger.logDebug("Cancelling job for ${element.idOrHash}")
+                    MosaikLogger.logDebug("Cancelling job for ${element.idOrUuid}")
                     job.cancel()
                 }
                 jobMap.remove(idOrHash)
@@ -215,7 +215,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
             val newJob = mosaikRuntime.coroutineScope().launch {
                 job(this)
             }
-            jobMap[element.idOrHash] = newJob
+            jobMap[element.idOrUuid] = newJob
         }
     }
 
@@ -278,7 +278,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
         valueMap[treeElement.id]
 
     fun getResourceBytes(treeElement: TreeElement): ByteArray? =
-        resourceMap[treeElement.idOrHash]
+        resourceMap[treeElement.idOrUuid]
 
     fun ensureValuesAreUpdated() {
         // TODO make sure all values are already updated and no delayed jobs are active

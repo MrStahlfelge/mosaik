@@ -401,7 +401,7 @@ private fun MosaikBox(
 
     Box(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.idOrHash) {
+            key(childElement.idOrUuid) {
 
                 val childHAlignment = element.getChildHAlignment(childElement.element)
 
@@ -442,7 +442,7 @@ private fun MosaikRow(
 
     Row(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.idOrHash) {
+            key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)
                 MosaikTreeElement(
                     childElement,
@@ -469,7 +469,7 @@ private fun MosaikColumn(
 
     Column(modifier) {
         treeElement.children.forEach { childElement ->
-            key(childElement.idOrHash) {
+            key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)
                 val hAlignment = element.getChildAlignment(childElement.element)
 
