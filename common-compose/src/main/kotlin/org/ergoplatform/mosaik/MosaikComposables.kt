@@ -83,6 +83,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         )
 
     when (element) {
+        is Card -> {
+            MosaikCard(newModifier, treeElement)
+        }
         is Box -> {
             // this also deals with LazyLoadBox
             MosaikBox(newModifier, treeElement)
@@ -389,6 +392,13 @@ private fun MosaikLabel(
             style = labelStyle(element.style),
             color = foregroundColor(element.textColor)
         )
+    }
+}
+
+@Composable
+fun MosaikCard(modifier: Modifier, treeElement: TreeElement) {
+    Card(modifier, elevation = 4.dp) {
+        MosaikBox(Modifier, treeElement)
     }
 }
 

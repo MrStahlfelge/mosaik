@@ -17,12 +17,17 @@ import org.ergoplatform.mosaik.model.ui.layout.VAlignment;
 
 import java.lang.reflect.Type;
 
-public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box> {
+public class BoxSerializer<T extends Box> implements JsonSerializer<Box>, JsonDeserializer<Box> {
 
     public static final String KEY_PADDING = "padding";
     public static final String KEY_CHILDREN = "children";
     public static final String KEY_H_ALIGN = "hAlign";
     public static final String KEY_V_ALIGN = "vAlign";
+    private final Class<T> boxClass;
+
+    public BoxSerializer(Class<T> boxClass) {
+        this.boxClass = boxClass;
+    }
 
     @Override
     public JsonElement serialize(Box src, Type typeOfSrc, JsonSerializationContext context) {
@@ -54,7 +59,12 @@ public class BoxSerializer implements JsonSerializer<Box>, JsonDeserializer<Box>
 
     @Override
     public Box deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        Box box = new Box();
+        Box box = null;
+        try {
+            box = boxClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new JsonParseException("Could not instantiate class " + typeOfT, e);
+        }
         JsonObject jsonObject = json.getAsJsonObject();
 
         ViewElementSerializer.deserializeCommon(jsonObject, box, context);

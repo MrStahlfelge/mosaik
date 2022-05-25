@@ -15,20 +15,36 @@ fun <G : ViewGroup> G.box(padding: Padding? = null, init: (@MosaikDsl Box).() ->
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.card(
+    outerPadding: Padding? = null,
+    init: (@MosaikDsl Card).() -> Unit = {}
+): Card =
+    viewElement(Card().apply {
+        outerPadding?.let { padding = outerPadding }
+    }, init)
+
+@MosaikDsl
 fun ViewContent.column(init: (@MosaikDsl Column).() -> Unit): Column =
     viewElement(Column(), init)
 
 @MosaikDsl
-fun <G : ViewGroup> G.column(init: (@MosaikDsl Column).() -> Unit): Column =
-    viewElement(Column(), init)
+fun <G : ViewGroup> G.column(
+    padding: Padding? = null,
+    init: (@MosaikDsl Column).() -> Unit
+): Column =
+    viewElement(Column().apply {
+        padding?.let { this.padding = padding }
+    }, init)
 
 @MosaikDsl
 fun ViewContent.row(init: (@MosaikDsl Row).() -> Unit): Row =
     viewElement(Row(), init)
 
 @MosaikDsl
-fun <G : ViewGroup> G.row(init: (@MosaikDsl Row).() -> Unit): Row =
-    viewElement(Row(), init)
+fun <G : ViewGroup> G.row(padding: Padding? = null, init: (@MosaikDsl Row).() -> Unit): Row =
+    viewElement(Row().apply {
+        padding?.let { this.padding = padding }
+    }, init)
 
 @MosaikDsl
 private abstract class LayoutingViewGroup<S : ViewGroup>(val realViewGroup: S) : ViewGroup {

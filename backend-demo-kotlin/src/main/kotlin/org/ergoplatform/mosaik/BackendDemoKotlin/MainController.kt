@@ -82,12 +82,12 @@ class MainController {
     private fun ViewGroup.addAppButton(
         action: Action?,
         text: String,
-    ): ViewElement = box(Padding.DEFAULT) {
+    ): ViewElement = card(Padding.DEFAULT) {
         action?.let {
             onClickAction(action)
         }
 
-        column {
+        column(Padding.HALF_DEFAULT) {
             padding = Padding.DEFAULT
 
             image("https://picsum.photos/400") {

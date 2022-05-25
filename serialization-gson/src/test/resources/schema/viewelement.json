@@ -35,6 +35,9 @@
       "$ref": "image.json"
     },
     {
+      "$ref": "card.json"
+    },
+    {
       "$ref": "box.json"
     }
   ]

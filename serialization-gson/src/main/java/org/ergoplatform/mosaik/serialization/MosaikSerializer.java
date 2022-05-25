@@ -18,6 +18,7 @@ import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
+import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
@@ -93,7 +94,8 @@ public class MosaikSerializer {
     private Gson getGson(boolean prettyPrint) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ViewElement.class, new ViewElementSerializer());
-        gsonBuilder.registerTypeAdapter(Box.class, new BoxSerializer());
+        gsonBuilder.registerTypeAdapter(Box.class, new BoxSerializer<>(Box.class));
+        gsonBuilder.registerTypeAdapter(Card.class, new BoxSerializer<>(Card.class));
         gsonBuilder.registerTypeAdapter(Row.class, new LinearLayoutSerializer());
         gsonBuilder.registerTypeAdapter(Row.class, new RowDeserializer());
         gsonBuilder.registerTypeAdapter(Column.class, new LinearLayoutSerializer());

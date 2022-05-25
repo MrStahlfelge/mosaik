@@ -11,12 +11,14 @@ fun <G : ViewGroup> G.label(
     text: String,
     style: LabelStyle? = null,
     textAlignment: HAlignment? = null,
+    textColor: ForegroundColor? = null,
     init: (@MosaikDsl Label).() -> Unit = {}
 ): Label =
     viewElement(Label().apply {
         this.text = text
         style?.let { this.style = style }
         textAlignment?.let { this.textAlignment = textAlignment }
+        textColor?.let { this.textColor = textColor }
     }, init)
 
 @MosaikDsl
