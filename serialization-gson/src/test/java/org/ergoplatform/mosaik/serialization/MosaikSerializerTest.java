@@ -10,7 +10,7 @@ import net.jimblackler.jsonschemafriend.SchemaStore;
 import net.jimblackler.jsonschemafriend.ValidationException;
 import net.jimblackler.jsonschemafriend.Validator;
 
-import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikApp;
 import org.ergoplatform.mosaik.model.MosaikManifest;
 import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ViewContent;
@@ -109,7 +109,7 @@ public class MosaikSerializerTest extends TestCase {
 
         column.addChild(new Box(), HAlignment.END, 2);
 
-        InitialAppInfo content = new InitialAppInfo();
+        MosaikApp content = new MosaikApp();
         content.setView(column);
         content.setActions(actions);
         content.setManifest(new MosaikManifest(
@@ -140,7 +140,7 @@ public class MosaikSerializerTest extends TestCase {
         Assert.assertTrue(actions.size() == content2.getActions().size() && actions.containsAll(content2.getActions()) && content2.getActions().containsAll(actions));
     }
 
-    private String serializeWithJackson(InitialAppInfo content) throws JsonProcessingException {
+    private String serializeWithJackson(MosaikApp content) throws JsonProcessingException {
         return org.ergoplatform.mosaik.jackson.MosaikSerializer.getMosaikMapper().writeValueAsString(content);
     }
 

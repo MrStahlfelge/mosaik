@@ -2,7 +2,7 @@ package org.ergoplatform.mosaik
 
 import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
-import org.ergoplatform.mosaik.model.InitialAppInfo
+import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
@@ -23,7 +23,7 @@ open class OkHttpBackendConnector(
     override fun loadMosaikApp(
         url: String,
         context: MosaikContext
-    ): InitialAppInfo {
+    ): MosaikApp {
         val (contentType, json) = fetchHttpGetStringSync(
             url,
             Headers.of(serializer.contextHeadersMap(context))

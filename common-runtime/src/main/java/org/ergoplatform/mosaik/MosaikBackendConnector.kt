@@ -1,7 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.FetchActionResponse
-import org.ergoplatform.mosaik.model.InitialAppInfo
+import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ViewContent
 
@@ -12,7 +12,7 @@ interface MosaikBackendConnector {
     /**
      * first load of a Mosaik app. Blocking, call on a background thread
      */
-    fun loadMosaikApp(url: String, context: MosaikContext): InitialAppInfo
+    fun loadMosaikApp(url: String, context: MosaikContext): MosaikApp
 
     /**
      * loads an action from Mosaik app. Blocking, call on a background thread

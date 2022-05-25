@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.ergoplatform.mosaik.model.FetchActionResponse;
-import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikApp;
 import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
@@ -81,7 +81,7 @@ public class MosaikSerializer {
         return getGson(false).toJson(actionResponse);
     }
 
-    public String toJson(InitialAppInfo appInfo) {
+    public String toJson(MosaikApp appInfo) {
         return getGson(false).toJson(appInfo);
     }
 
@@ -120,8 +120,8 @@ public class MosaikSerializer {
         return gson.fromJson(json, ViewContent.class);
     }
 
-    public InitialAppInfo firstRequestResponseFromJson(String json) {
-        return getGson(false).fromJson(json, InitialAppInfo.class);
+    public MosaikApp firstRequestResponseFromJson(String json) {
+        return getGson(false).fromJson(json, MosaikApp.class);
     }
 
     public FetchActionResponse fetchActionResponseFromJson(String json) {

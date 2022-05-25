@@ -1,7 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
-import org.ergoplatform.mosaik.model.InitialAppInfo
+import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.Image
 import org.ergoplatform.mosaik.model.ui.ViewElement
@@ -28,7 +28,7 @@ class MainController {
 
     @GetMapping("/appselect")
     @ResponseBody
-    fun selectorApp(request: HttpServletRequest): InitialAppInfo {
+    fun selectorApp(request: HttpServletRequest): MosaikApp {
         val baseUrl = request.requestURL.toString()
         val serverRequestUrl = baseUrl.substring(0, baseUrl.indexOf("appselect"))
 

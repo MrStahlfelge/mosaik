@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * On first request, the backend will respond with ViewContent completed by a manifest
  */
-public class InitialAppInfo extends ViewContent {
+public class MosaikApp extends ViewContent {
     private MosaikManifest manifest;
 
     @Nonnull

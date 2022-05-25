@@ -1,6 +1,6 @@
 package org.ergoplatform.mosaik.backenddemo;
 
-import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikApp;
 import org.ergoplatform.mosaik.model.MosaikManifest;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
@@ -36,7 +36,7 @@ public class MainController {
 
     @GetMapping("/appselect")
     @ResponseBody
-    public InitialAppInfo selectorApp(HttpServletRequest request) {
+    public MosaikApp selectorApp(HttpServletRequest request) {
         MosaikManifest loadBoxManifest = new MosaikManifest("App Selector", BackendDemoApplication.APP_VERSION, 0, null, 0);
         // when writing your own app on a fixed server, you can use a constant here. Since
         // this demo might run locally on various ports and contacted through localhost or an IP
@@ -45,7 +45,7 @@ public class MainController {
         loadBoxManifest.baseUrl = baseUrl;
         String serverRequestUrl = baseUrl.substring(0, baseUrl.indexOf("appselect"));
 
-        InitialAppInfo appInfo = new InitialAppInfo();
+        MosaikApp appInfo = new MosaikApp();
         appInfo.setManifest(loadBoxManifest);
 
         Column mainContainer = new Column();

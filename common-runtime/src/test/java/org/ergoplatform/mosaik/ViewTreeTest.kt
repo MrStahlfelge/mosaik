@@ -54,8 +54,8 @@ class ViewTreeTest : TestCase() {
                     override fun loadMosaikApp(
                         url: String,
                         context: MosaikContext
-                    ): InitialAppInfo {
-                        return InitialAppInfo().apply {
+                    ): MosaikApp {
+                        return MosaikApp().apply {
                             manifest = MosaikManifest(
                                 "appname",
                                 0,

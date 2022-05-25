@@ -1,6 +1,6 @@
 package org.ergoplatform.mosaik
 
-import org.ergoplatform.mosaik.model.InitialAppInfo
+import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
@@ -22,9 +22,9 @@ fun mosaikApp(
     targetCanvasDimension: MosaikManifest.CanvasDimension? = null,
     cacheLifetime: Int = 0,
     errorReportUrl: String? = null,
-    init: (@MosaikDsl InitialAppInfo).() -> Unit
-): InitialAppInfo {
-    val appInfo = InitialAppInfo()
+    init: (@MosaikDsl MosaikApp).() -> Unit
+): MosaikApp {
+    val appInfo = MosaikApp()
 
     appInfo.manifest = MosaikManifest(
         appName,

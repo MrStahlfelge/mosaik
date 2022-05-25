@@ -1,7 +1,7 @@
 package org.ergoplatform.mosaik.backenddemo;
 
 import org.ergoplatform.mosaik.jackson.MosaikSerializer;
-import org.ergoplatform.mosaik.model.InitialAppInfo;
+import org.ergoplatform.mosaik.model.MosaikApp;
 import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.MosaikManifest;
 import org.ergoplatform.mosaik.model.ViewContent;
@@ -27,11 +27,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class LazyBoxDemoController {
     @GetMapping("/lazybox")
-    public InitialAppInfo loadLazyBoxDemoApp(@RequestHeader Map<String, String> headers,
-                                             HttpServletRequest request) {
+    public MosaikApp loadLazyBoxDemoApp(@RequestHeader Map<String, String> headers,
+                                        HttpServletRequest request) {
         MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
 
-        InitialAppInfo appInfo = new InitialAppInfo();
+        MosaikApp appInfo = new MosaikApp();
         MosaikManifest loadBoxManifest = new MosaikManifest("LazyLoadBoxDemo", BackendDemoApplication.APP_VERSION, 0, null, 0);
         loadBoxManifest.baseUrl = request.getRequestURL().toString();
         appInfo.setManifest(loadBoxManifest);
