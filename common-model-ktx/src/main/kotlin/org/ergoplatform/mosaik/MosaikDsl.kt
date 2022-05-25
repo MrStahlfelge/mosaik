@@ -7,6 +7,7 @@ import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.layout.Box
+import java.util.*
 
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE, AnnotationTarget.FUNCTION)
@@ -22,7 +23,7 @@ fun mosaikApp(
     targetCanvasDimension: MosaikManifest.CanvasDimension? = null,
     cacheLifetime: Int = 0,
     errorReportUrl: String? = null,
-    init: (@MosaikDsl MosaikApp).() -> Unit
+    init: (MosaikApp).() -> Unit
 ): MosaikApp {
     val appInfo = MosaikApp()
 
@@ -46,6 +47,16 @@ fun mosaikApp(
 }
 
 @MosaikDsl
+fun mosaikView(
+    init: (ViewContent).() -> Unit
+): ViewContent {
+    val viewContent = ViewContent()
+
+    viewContent.init()
+    return viewContent
+}
+
+@MosaikDsl
 fun <A : Action> ViewContent.action(
     action: A,
     id: String? = null,
@@ -53,7 +64,7 @@ fun <A : Action> ViewContent.action(
     setDefaultId: Boolean = id == null,
 ): A {
     if (setDefaultId) {
-        action.id = action.javaClass.simpleName + actions.size
+        action.id = UUID.randomUUID().toString()
     }
 
     // add the action to the view content

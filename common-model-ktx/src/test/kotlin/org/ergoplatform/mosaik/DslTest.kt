@@ -16,7 +16,7 @@ class DslTest : TestCase() {
             targetMosaikVersion = 0
         ) {
 
-            dialogAction("This is an error message") {
+            showDialog("This is an error message") {
                 positiveButtonText = "Nothing"
             }
 

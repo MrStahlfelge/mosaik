@@ -20,6 +20,9 @@
       "$ref": "copyclipboardaction.json"
     },
     {
+      "$ref": "reloadaction.json"
+    },
+    {
       "$ref": "changesiteaction.json"
     }
   ]

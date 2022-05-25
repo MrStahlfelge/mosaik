@@ -89,7 +89,6 @@ public class MainController {
         button.setPadding(Padding.DEFAULT);
 
         Image buttonImage = new Image();
-        buttonImage.setId("image_app" + url);
         buttonImage.setSize(Image.Size.MEDIUM);
         buttonImage.setUrl("https://picsum.photos/400");
 

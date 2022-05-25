@@ -19,6 +19,7 @@ import org.ergoplatform.mosaik.model.actions.ErgoPayAction;
 import org.ergoplatform.mosaik.model.actions.NavigateAction;
 import org.ergoplatform.mosaik.model.actions.QrCodeAction;
 import org.ergoplatform.mosaik.model.actions.BackendRequestAction;
+import org.ergoplatform.mosaik.model.actions.ReloadAction;
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction;
 
 import java.lang.reflect.Type;
@@ -77,6 +78,9 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
                 break;
             case "ErgoAuthAction":
                 clazz = ErgoAuthAction.class;
+                break;
+            case "ReloadAction":
+                clazz = ReloadAction.class;
                 break;
             default:
                 throw new JsonParseException("Action with name " + actionName + " not known.");

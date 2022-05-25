@@ -43,10 +43,6 @@ class MainController {
             appBaseUrl = baseUrl,
 
             ) {
-            val appInfo = this
-
-            val errorDialog =
-                dialogAction("Sorry, not implemented yet on this demo. Use the Java backend demo.")
 
             column {
                 label("Welcome to the Mosaik demo backend") {
@@ -59,13 +55,20 @@ class MainController {
 
                 row {
                     layout(VAlignment.CENTER, 1) {
-                        addAppButton(errorDialog, "Visitor demo", "visitors/")
-                        addAppButton(errorDialog, "Lazy box demo", "lazybox/")
+                        addAppButton(
+                            navigateToApp(serverRequestUrl + "viewelements"),
+                            "View Elements demo"
+                        )
+
+                        box {
+                            label("Placeholder")
+                        }
                     }
+
                 }
                 row {
                     layout(VAlignment.CENTER, 1) {
-                        addAppButton(errorDialog, "Alignments demo", "alignments/")
+                        addAppButton(null, "coming soon")
 
                         box {
                             // just a blank placeholder
@@ -77,23 +80,23 @@ class MainController {
     }
 
     private fun ViewGroup.addAppButton(
-        action: Action,
+        action: Action?,
         text: String,
-        url: String,
     ): ViewElement = box(Padding.DEFAULT) {
-        onClickAction(action)
+        action?.let {
+            onClickAction(action)
+        }
 
         column {
             padding = Padding.DEFAULT
 
             image("https://picsum.photos/400") {
-                id = "image_app$url"
                 size = Image.Size.MEDIUM
             }
 
             box(Padding.HALF_DEFAULT)
 
-            label(text) { style = LabelStyle.BODY1BOLD }
+            label(text, style = LabelStyle.BODY1BOLD, textAlignment = HAlignment.CENTER)
         }
     }
 }

@@ -37,6 +37,7 @@ open class MosaikRuntime(
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
+    private var appUrl: String? = null
 
     open fun runAction(action: Action) {
         MosaikLogger.logDebug("Running action ${action.id}...")
@@ -59,6 +60,9 @@ open class MosaikRuntime(
                 }
                 is NavigateAction -> {
                     runNavigateAction(action)
+                }
+                is ReloadAction -> {
+                    loadMosaikApp(appManifest?.baseUrl ?: appUrl!!)
                 }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
@@ -158,7 +162,7 @@ open class MosaikRuntime(
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
-
+                appUrl = url
                 appLoaded?.invoke(mosaikApp.manifest)
             } catch (t: Throwable) {
                 // TODO errors during first app loading (with empty screen) should be handled
