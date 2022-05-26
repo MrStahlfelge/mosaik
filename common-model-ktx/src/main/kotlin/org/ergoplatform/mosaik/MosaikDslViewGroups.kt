@@ -36,8 +36,13 @@ fun <G : ViewGroup> G.lazyLoadBox(
     }, init)
 
 @MosaikDsl
-fun ViewContent.column(init: (@MosaikDsl Column).() -> Unit): Column =
-    viewElement(Column(), init)
+fun ViewContent.column(
+    padding: Padding? = null,
+    init: (@MosaikDsl Column).() -> Unit
+): Column =
+    viewElement(Column().apply {
+        padding?.let { this.padding = padding }
+    }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.column(

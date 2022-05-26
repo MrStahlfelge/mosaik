@@ -15,7 +15,7 @@ class ViewElementsDemoController {
     @GetMapping("/viewelements")
     fun viewElementsApp(request: HttpServletRequest) =
         mosaikApp(
-            "App Selector",
+            "View elements demo",
             appVersion = APP_VERSION,
             targetMosaikVersion = 0,
             appBaseUrl = request.requestURL.toString(),

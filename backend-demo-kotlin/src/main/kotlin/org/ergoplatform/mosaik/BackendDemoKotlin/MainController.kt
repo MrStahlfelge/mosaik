@@ -60,9 +60,10 @@ class MainController {
                             "View Elements demo"
                         )
 
-                        box {
-                            label("Placeholder")
-                        }
+                        addAppButton(
+                            navigateToApp(serverRequestUrl + "actions"),
+                            "Mosaik actions demo"
+                        )
                     }
 
                 }
