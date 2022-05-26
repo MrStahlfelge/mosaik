@@ -41,7 +41,8 @@
           {
             "type": "TextInputField",
             "id": "userName",
-            "value": "",
+            "minValue": 1,
+            "onImeAction": "proceedButtonClicked",
             "placeholder": "Your name"
           }
         ]

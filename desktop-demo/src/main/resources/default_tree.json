@@ -141,6 +141,8 @@
             "id": "inputText",
             "type": "TextInputField",
             "value": "initial text",
+            "minValue": 3,
+            "maxValue": 20,
             "placeholder": "An input text field",
             "endIcon": "INFO",
             "onEndIconClicked": "showInfo"

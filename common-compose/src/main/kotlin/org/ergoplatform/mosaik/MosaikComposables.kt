@@ -2,6 +2,8 @@ package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
@@ -10,14 +12,17 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -218,6 +223,7 @@ fun MosaikLoadingIndicator(treeElement: TreeElement, modifier: Modifier) {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as TextInputField
@@ -233,6 +239,7 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                 )
             )
         }
+    val errorState = remember(treeElement.createdAtContentVersion) { mutableStateOf(false) }
 
     Column(modifier.fillMaxWidth()) {
         val customTextSelectionColors = TextSelectionColors(
@@ -245,15 +252,35 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                 textFieldState.value,
                 onValueChange = {
                     if (textFieldState.value.text != it.text) {
-                        treeElement.valueChanged(it.text.ifEmpty { null })
+                        errorState.value = !treeElement.valueChanged(it.text.ifEmpty { null })
                     }
                     textFieldState.value = it
                 },
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().then(if (element.onImeAction != null)
+                    Modifier.onKeyEvent {
+                        if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
+                            treeElement.runActionFromUserInteraction(element.onImeAction)
+                            true
+                        } else false
+                    }
+                else Modifier),
                 enabled = element.isEnabled,
-                isError = !element.errorMessage.isNullOrBlank(),
+                isError = errorState.value,
                 maxLines = 1,
                 singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = element.onImeAction?.let { action ->
+                        {
+                            treeElement.runActionFromUserInteraction(action)
+                        }
+                    }),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = when (element.imeActionType) {
+                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.NEXT -> ImeAction.Next
+                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.DONE -> ImeAction.Done
+                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.SEARCH -> ImeAction.Search
+                    }
+                ),
                 label = { element.placeholder?.let { Text(it) } },
                 trailingIcon = {
                     element.endIcon?.getImageVector()?.let { iv ->

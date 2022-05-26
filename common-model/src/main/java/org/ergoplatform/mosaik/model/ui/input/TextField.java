@@ -6,6 +6,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -114,11 +115,13 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
         this.maxValue = maxValue;
     }
 
+    @Nonnull
     public ImeActionType getImeActionType() {
         return imeActionType;
     }
 
-    public void setImeActionType(ImeActionType imeActionType) {
+    public void setImeActionType(@Nonnull ImeActionType imeActionType) {
+        Objects.requireNonNull(imeActionType);
         this.imeActionType = imeActionType;
     }
 

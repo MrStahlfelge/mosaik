@@ -67,6 +67,9 @@ open class MosaikRuntime(
                 }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
+        } catch (e: InvalidValuesException) {
+            // show user, do not log an error
+            showError(e)
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
@@ -77,16 +80,17 @@ open class MosaikRuntime(
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
+        viewTree.ensureValuesAreCorrect()
+
         viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
-                viewTree.ensureValuesAreUpdated()
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,
                         appBaseUrl,
                         mosaikContext,
-                        viewTree.currentValues,
+                        viewTree.currentValidValues,
                         actualAppUrl
                     )
                 val appVersion = fetchActionResponse.appVersion
@@ -107,6 +111,7 @@ open class MosaikRuntime(
 
             viewTree.uiLocked = false
         }
+
     }
 
     private fun runCopyClipboardAction(action: CopyClipboardAction) {

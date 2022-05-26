@@ -7,6 +7,7 @@ import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.InputElement
+import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 /**
@@ -17,7 +18,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
         private set
 
     private val idMap = HashMap<String, TreeElement>()
-    private val valueMap = HashMap<String, Any?>()
+    private val valueMap = HashMap<String, CheckedValue>()
     private val jobMap = HashMap<String, Job>()
     private val actionMap = HashMap<String, Action>()
     private val resourceMap = HashMap<String, ByteArray>()
@@ -43,8 +44,9 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     /**
      * flow that emits when values map is changed
      */
-    val valueState: StateFlow<Pair<Int, Map<String, Any?>>> get() = _valueFlow
-    private val _valueFlow = MutableStateFlow<Pair<Int, Map<String, Any?>>>(Pair(0, valueMap))
+    val valueState: StateFlow<Pair<Int, Map<String, CheckedValue>>> get() = _valueFlow
+    private val _valueFlow =
+        MutableStateFlow<Pair<Int, Map<String, CheckedValue>>>(Pair(0, valueMap))
 
     /**
      * ui is locked when backend requests are running
@@ -129,7 +131,11 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 }
                 idMap[newId] = treeElement
                 if (treeElement.hasValue) {
-                    valueMap[newId] = getCurrentValue(treeElement) ?: treeElement.initialValue
+                    valueMap[newId] =
+                        getCurrentValue(treeElement)
+                            ?: treeElement.initialValue.let { initialValue ->
+                                CheckedValue(initialValue, treeElement.isValueValid(initialValue))
+                            }
                     valuesChanged = true
                 }
             } else if (treeElement.element is InputElement<*>) {
@@ -260,29 +266,61 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
         }
     }
 
-    fun onItemValueChanged(treeElement: TreeElement, newValue: Any?) {
+    fun onItemValueChanged(treeElement: TreeElement, newValue: Any?, isValid: Boolean) {
         if (treeElement.hasId) {
             val id = treeElement.id!!
-            if (valueMap[id] != newValue) {
-                valueMap[id] = newValue
+            if (valueMap[id]?.inputValue != newValue) {
+                valueMap[id] = CheckedValue(newValue, isValid)
                 notifyValuesChanged()
                 MosaikLogger.logInfo("Value $id changed to $newValue")
                 getAction((treeElement.element as? InputElement<*>)?.onValueChangedAction)?.let { action ->
-                    mosaikRuntime.runAction(action)
+                    if (treeElement.element is TextField<*>) {
+                        // delay value change for 300 ms so that not every key stroke fires the event
+                        registerJobFor(treeElement) { coroutine ->
+                            delay(300)
+                            if (coroutine.isActive) {
+                                mosaikRuntime.runAction(action)
+                            }
+                        }
+                    } else {
+                        mosaikRuntime.runAction(action)
+                    }
                 }
             }
         }
     }
 
-    fun getCurrentValue(treeElement: TreeElement): Any? =
+    /**
+     * returns pair of current value and if the value is valid
+     */
+    fun getCurrentValue(treeElement: TreeElement): CheckedValue? =
         valueMap[treeElement.id]
 
     fun getResourceBytes(treeElement: TreeElement): ByteArray? =
         resourceMap[treeElement.idOrUuid]
 
-    fun ensureValuesAreUpdated() {
-        // TODO make sure all values are already updated and no delayed jobs are active
+    /**
+     * throws [InvalidValuesException] if invalid values are entered by user
+     */
+    fun ensureValuesAreCorrect() {
+        val invalidPairs = valueMap.entries.filter { valueValidEntry -> !valueValidEntry.value.valid }
+
+        if (invalidPairs.isNotEmpty()) {
+            val errorList = invalidPairs.map { entry -> findElementById(entry.key)!!.getInvalidValueError() }.joinToString("\n")
+
+            throw InvalidValuesException("Please enter valid inputs for\n$errorList", errorList)
+        }
     }
 
-    val currentValues: Map<String, Any?> get() = valueMap
+    /**
+     * returns map (id, Pair(value, validity))
+     */
+    val currentValues: Map<String, CheckedValue> get() = valueMap
+
+    /**
+     * returns map (id, value) for valid values
+     */
+    val currentValidValues: Map<String, Any?> get() = valueMap.mapValues { it.value.inputValue }
+
+    data class CheckedValue(val inputValue: Any?, val valid: Boolean)
 }

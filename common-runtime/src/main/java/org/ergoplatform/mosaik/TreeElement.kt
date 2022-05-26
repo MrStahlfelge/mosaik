@@ -1,14 +1,11 @@
 package org.ergoplatform.mosaik
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.input.InputElement
-import org.ergoplatform.mosaik.model.ui.input.TextField
-import java.lang.IllegalArgumentException
+import org.ergoplatform.mosaik.model.ui.input.IntegerTextField
+import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * holds a [ViewElement] and wraps it with convenience accessors
@@ -36,7 +33,7 @@ class TreeElement(
 
     val currentValue
         get() = if (hasValue) {
-            viewTree.getCurrentValue(this)
+            viewTree.getCurrentValue(this)?.inputValue
         } else null
 
     val getResourceBytes get() = viewTree.getResourceBytes(this)
@@ -98,18 +95,36 @@ class TreeElement(
         viewTree.runActionFromUserInteraction(actionId)
     }
 
-    fun valueChanged(newValue: Any?) {
-        if (element is TextField<*>) {
-            // delay value change for 300 ms so that not every key stroke fires the event
-            viewTree.registerJobFor(this) { coroutine ->
-                delay(300)
-                if (coroutine.isActive) {
-                    viewTree.onItemValueChanged(this, newValue)
-                }
-            }
-        } else {
-            viewTree.onItemValueChanged(this, newValue)
-        }
+    fun valueChanged(newValue: Any?): Boolean {
+        val isValid = isValueValid(newValue)
+        viewTree.onItemValueChanged(this, newValue, isValid)
+        return isValid
+    }
 
+    fun isValueValid(value: Any?): Boolean {
+        return when (element) {
+            is TextInputField -> {
+                val length = (value as? String)?.length ?: 0
+                length >= element.minValue && length <= element.maxValue
+            }
+            is IntegerTextField -> {
+                // TODO check
+                value is Long && value >= element.minValue && value <= element.maxValue
+            }
+            else -> {
+                // TODO mandatory elements should return false
+                true
+            }
+        }
+    }
+
+    fun getInvalidValueError(): String {
+        return when (element) {
+            is TextInputField -> {
+                element.errorMessage ?: element.placeholder ?: element.id!!
+            } else -> {
+                id!!
+            }
+        }
     }
 }
