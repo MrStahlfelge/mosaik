@@ -22,9 +22,14 @@ fun <G : ViewGroup> G.label(
     }, init)
 
 @MosaikDsl
-fun <G : ViewGroup> G.button(text: String, init: (@MosaikDsl Button).() -> Unit = {}): Button =
+fun <G : ViewGroup> G.button(
+    text: String,
+    style: Button.ButtonStyle? = null,
+    init: (@MosaikDsl Button).() -> Unit = {}
+): Button =
     viewElement(Button().apply {
         this.text = text
+        style?.let { this.style = style }
     }, init)
 
 @MosaikDsl

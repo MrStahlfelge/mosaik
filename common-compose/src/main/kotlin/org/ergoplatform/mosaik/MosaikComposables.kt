@@ -303,20 +303,24 @@ private fun MosaikButton(
     }
 
     if (element.style == Button.ButtonStyle.TEXT) {
-        // TODO Use TextButton
-        Text(
-            element.text ?: "",
+        Surface(
+            shape = MaterialTheme.shapes.medium,
             modifier = newModifier.padding(Padding.HALF_DEFAULT.toCompose()),
-            maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
-            textAlign = (when (element.textAlignment) {
-                HAlignment.START -> TextAlign.Start
-                HAlignment.CENTER -> TextAlign.Center
-                HAlignment.END -> TextAlign.End
-                HAlignment.JUSTIFY -> TextAlign.Justify
-            }),
-            color = if (element.isEnabled) textButtonTextColor else textButtonColorDisabled,
-            overflow = TextOverflow.Ellipsis,
-        )
+        ) {
+            Text(
+                element.text ?: "",
+                maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
+                textAlign = (when (element.textAlignment) {
+                    HAlignment.START -> TextAlign.Start
+                    HAlignment.CENTER -> TextAlign.Center
+                    HAlignment.END -> TextAlign.End
+                    HAlignment.JUSTIFY -> TextAlign.Justify
+                }),
+                color = if (element.isEnabled) textButtonTextColor else textButtonColorDisabled,
+                overflow = TextOverflow.Ellipsis,
+                style = labelStyle(LabelStyle.BODY2BOLD),
+            )
+        }
     } else {
         Button(
             onClick = treeElement::clicked,

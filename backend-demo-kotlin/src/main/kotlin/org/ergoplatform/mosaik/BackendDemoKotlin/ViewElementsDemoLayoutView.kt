@@ -16,19 +16,8 @@ object ViewElementsDemoLayoutView {
 
             column {
 
-                layout(HAlignment.JUSTIFY) {
-                    box {
-                        layout(HAlignment.START, VAlignment.CENTER) {
-                            button("Back") {
-                                onClickAction(reloadApp())
-                            }
-                        }
-                        label(
-                            "Layout elements",
-                            style = LabelStyle.HEADLINE1
-                        )
-                    }
-                }
+                // example for reusing parts of views - see ViewElementsDemoCommon.kt for source
+                addHeader("Layout elements")
 
                 label(
                     "View source on GitHub",

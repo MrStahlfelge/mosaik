@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik
 
+import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.*
 
@@ -10,10 +11,22 @@ fun ViewContent.showDialog(
     id: String? = null,
     init: (@MosaikDsl DialogAction).() -> Unit = {}
 ): DialogAction {
+    return addAction(buildDialogAction(message), id, init)
+}
+
+@MosaikDsl
+fun showDialog(
+    message: String,
+    id: String? = null,
+    init: (@MosaikDsl DialogAction).() -> Unit = {}
+): DialogAction {
+    return initAction(buildDialogAction(message), id, init)
+}
+
+private fun buildDialogAction(message: String): DialogAction {
     val dialogAction = DialogAction()
     dialogAction.message = message
-
-    return action(dialogAction, id, init)
+    return dialogAction
 }
 
 @MosaikDsl
@@ -24,7 +37,7 @@ fun ViewContent.openBrowser(
 ): BrowserAction {
     val browserAction = BrowserAction()
     browserAction.url = url
-    return action(browserAction, id, init)
+    return addAction(browserAction, id, init)
 }
 
 @MosaikDsl
@@ -35,7 +48,7 @@ fun ViewContent.navigateToApp(
 ): NavigateAction {
     val browserAction = NavigateAction()
     browserAction.url = url
-    return action(browserAction, id, init)
+    return addAction(browserAction, id, init)
 }
 
 @MosaikDsl
@@ -44,9 +57,22 @@ fun ViewContent.invokeErgoPay(
     id: String? = null,
     init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
 ): ErgoPayAction {
+    return addAction(buildErgoPayAction(url), id, init)
+}
+
+@MosaikDsl
+fun invokeErgoPay(
+    url: String,
+    id: String? = null,
+    init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
+): ErgoPayAction {
+    return initAction(buildErgoPayAction(url), id, init)
+}
+
+private fun buildErgoPayAction(url: String): ErgoPayAction {
     val browserAction = ErgoPayAction()
     browserAction.url = url
-    return action(browserAction, id, init)
+    return browserAction
 }
 
 @MosaikDsl
@@ -54,10 +80,21 @@ fun ViewContent.changeView(
     newContent: ViewContent,
     id: String? = null,
     init: (@MosaikDsl ChangeSiteAction).() -> Unit = {}
-): ChangeSiteAction {
+) = addAction(buildChangeSiteAction(newContent), id, init)
+
+
+@MosaikDsl
+fun changeView(
+    newContent: ViewContent,
+    id: String? = null,
+    init: (@MosaikDsl ChangeSiteAction).() -> Unit = {}
+) = initAction(buildChangeSiteAction(newContent), id, init)
+
+
+private fun buildChangeSiteAction(newContent: ViewContent): ChangeSiteAction {
     val changeSiteAction = ChangeSiteAction()
     changeSiteAction.newContent = newContent
-    return action(changeSiteAction, id, init)
+    return changeSiteAction
 }
 
 @MosaikDsl
@@ -69,7 +106,7 @@ fun ViewContent.copyToClipboard(
     val clipboardAction = CopyClipboardAction()
     clipboardAction.text = text
 
-    return action(clipboardAction, id, init)
+    return addAction(clipboardAction, id, init)
 }
 
 @MosaikDsl
@@ -81,7 +118,7 @@ fun ViewContent.backendRequest(
     val backendRequestAction = BackendRequestAction()
     backendRequestAction.url = url
 
-    return action(backendRequestAction, id, init)
+    return addAction(backendRequestAction, id, init)
 }
 
 @MosaikDsl
@@ -91,5 +128,11 @@ fun ViewContent.reloadApp(
 ): ReloadAction {
     val backendRequestAction = ReloadAction()
 
-    return action(backendRequestAction, id, init)
+    return addAction(backendRequestAction, id, init)
 }
+
+@MosaikDsl
+fun backendResponse(
+    appVersion: Int,
+    responseAction: Action
+) = FetchActionResponse(appVersion, responseAction)

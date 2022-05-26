@@ -5,6 +5,7 @@ import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
@@ -21,14 +22,19 @@ class ViewElementsDemoController {
 
             ) {
 
+            // add the reload app action so that we can use it in the views by naming its ID
+            reloadApp(RELOAD_APP_ACTION_ID)
+
             column {
 
                 label("View Elements Overview", LabelStyle.HEADLINE2)
 
                 box(Padding.DEFAULT)
 
-                label("Click or tap a button to see an overview for the available view elements " +
-                        "per group. Also check out the document linked on the GitHub repo!")
+                label(
+                    "Click or tap a button to see an overview for the available view elements " +
+                            "per group. Also check out the document linked on the GitHub repo!"
+                )
 
                 box(Padding.HALF_DEFAULT)
 
@@ -37,15 +43,32 @@ class ViewElementsDemoController {
                     textColor = ForegroundColor.PRIMARY
                 }
 
-                box(Padding.DEFAULT) {
-                    button("Layout elements") {
-                        onClickAction(changeView(ViewElementsDemoLayoutView.getView()))
-                    }
+                box(Padding.HALF_DEFAULT)
+
+                button("Layout elements") {
+                    onClickAction(backendRequest("layoutview"))
+                }
+
+                box(Padding.HALF_DEFAULT)
+
+                button("Text elements") {
+                    onClickAction(backendRequest("textelementview"))
                 }
 
             }
 
         }
 
+    @PostMapping("/viewelements/layoutview")
+    fun changeToLayoutView() = backendResponse(
+        APP_VERSION,
+        changeView(ViewElementsDemoLayoutView.getView())
+    )
+
+    @PostMapping("/viewelements/textelementview")
+    fun changeToTextElementView() = backendResponse(
+        APP_VERSION,
+        changeView(ViewElementsDemoTextView.getView())
+    )
 
 }

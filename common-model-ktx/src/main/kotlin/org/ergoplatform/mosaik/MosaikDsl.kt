@@ -57,7 +57,24 @@ fun mosaikView(
 }
 
 @MosaikDsl
-fun <A : Action> ViewContent.action(
+fun <A : Action> ViewContent.addAction(
+    action: A,
+    id: String? = null,
+    init: (@MosaikDsl A).() -> Unit = {},
+    setDefaultId: Boolean = id == null,
+): A {
+    initAction(action, id, init, setDefaultId)
+
+    // add the action to the view content
+    val currentActions = actions
+    currentActions.add(action)
+    actions = currentActions
+
+    return action
+}
+
+@MosaikDsl
+fun <A : Action> initAction(
     action: A,
     id: String? = null,
     init: (@MosaikDsl A).() -> Unit = {},
@@ -65,12 +82,9 @@ fun <A : Action> ViewContent.action(
 ): A {
     if (setDefaultId) {
         action.id = UUID.randomUUID().toString()
+    } else {
+        id?.let { action.id = id }
     }
-
-    // add the action to the view content
-    val currentActions = actions
-    currentActions.add(action)
-    actions = currentActions
 
     // and call the init with ViewContent as receiver
     action.init()
