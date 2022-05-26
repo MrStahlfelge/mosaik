@@ -24,6 +24,10 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
     public static final String KEY_END_ICON = "endIcon";
     public static final String KEY_ON_END_ICON_CLICKED = "onEndIconClicked";
     public static final String KEY_ON_VALUE_CHANGED = "onValueChanged";
+    public static final String KEY_ON_IME_ACTION = "onImeAction";
+    public static final String KEY_IME_ACTION_TYPE = "imeActionType";
+    public static final String KEY_MIN_VALUE = "minValue";
+    public static final String KEY_MAX_VALUE = "maxValue";
     private final Class<U> valueClazz;
     private final Class<T> textFieldClass;
 
@@ -56,6 +60,18 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (src.getOnValueChangedAction() != null) {
             jsonObject.add(KEY_ON_VALUE_CHANGED, new JsonPrimitive(src.getOnValueChangedAction()));
+        }
+        if (src.getOnImeAction() != null) {
+            jsonObject.add(KEY_ON_IME_ACTION, new JsonPrimitive(src.getOnImeAction()));
+        }
+        if (src.getMinValue() != 0) {
+            jsonObject.add(KEY_MIN_VALUE, new JsonPrimitive(src.getMinValue()));
+        }
+        if (src.getMaxValue() != Long.MAX_VALUE) {
+            jsonObject.add(KEY_MAX_VALUE, new JsonPrimitive(src.getMaxValue()));
+        }
+        if (src.getImeActionType() != TextField.ImeActionType.NEXT) {
+            jsonObject.add(KEY_IME_ACTION_TYPE, context.serialize(src.getImeActionType()));
         }
 
         return jsonObject;
@@ -93,6 +109,18 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (jsonObject.has(KEY_ON_VALUE_CHANGED)) {
             textInputField.setOnValueChangedAction(jsonObject.get(KEY_ON_VALUE_CHANGED).getAsString());
+        }
+        if (jsonObject.has(KEY_IME_ACTION_TYPE)) {
+            textInputField.setImeActionType(context.<TextField.ImeActionType>deserialize(jsonObject.get(KEY_IME_ACTION_TYPE), TextField.ImeActionType.class));
+        }
+        if (jsonObject.has(KEY_ON_IME_ACTION)) {
+            textInputField.setOnImeAction(jsonObject.get(KEY_ON_IME_ACTION).getAsString());
+        }
+        if (jsonObject.has(KEY_MIN_VALUE)) {
+            textInputField.setMinValue(jsonObject.get(KEY_MIN_VALUE).getAsLong());
+        }
+        if (jsonObject.has(KEY_MAX_VALUE)) {
+            textInputField.setMaxValue(jsonObject.get(KEY_MAX_VALUE).getAsLong());
         }
 
         return textInputField;

@@ -17,17 +17,19 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     @Nullable
     private String onEndIconClicked;
     @Nullable
+    private String onImeAction;
+    @Nullable
     private String errorMessage;
     @Nullable
     private String placeholder;
     @Nullable
     private T value;
+    private long minValue = 0;
+    private long maxValue = Long.MAX_VALUE;
     @Nullable
     private String onValueChangedAction;
+    private ImeActionType imeActionType = ImeActionType.NEXT;
     private boolean enabled = true;
-
-    // TODO add min/max properties for string length/number values
-    // TODO add default action type (DONE, NEXT, SEARCH) and onDefaultAction (on Enter and IME done)
 
     @Nullable
     public IconType getEndIcon() {
@@ -87,6 +89,39 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
         this.placeholder = placeholder;
     }
 
+    @Nullable
+    public String getOnImeAction() {
+        return onImeAction;
+    }
+
+    public void setOnImeAction(@Nullable String onImeAction) {
+        this.onImeAction = onImeAction;
+    }
+
+    public long getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(long minValue) {
+        this.minValue = minValue;
+    }
+
+    public long getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(long maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public ImeActionType getImeActionType() {
+        return imeActionType;
+    }
+
+    public void setImeActionType(ImeActionType imeActionType) {
+        this.imeActionType = imeActionType;
+    }
+
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -103,11 +138,17 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TextField<?> textField = (TextField<?>) o;
-        return isEnabled() == textField.isEnabled() && endIconType == textField.endIconType && Objects.equals(getOnEndIconClicked(), textField.getOnEndIconClicked()) && Objects.equals(getErrorMessage(), textField.getErrorMessage()) && Objects.equals(getValue(), textField.getValue()) && Objects.equals(getOnValueChangedAction(), textField.getOnValueChangedAction());
+        return getMinValue() == textField.getMinValue() && getMaxValue() == textField.getMaxValue() && isEnabled() == textField.isEnabled() && endIconType == textField.endIconType && Objects.equals(getOnEndIconClicked(), textField.getOnEndIconClicked()) && Objects.equals(getOnImeAction(), textField.getOnImeAction()) && Objects.equals(getErrorMessage(), textField.getErrorMessage()) && Objects.equals(getPlaceholder(), textField.getPlaceholder()) && Objects.equals(getValue(), textField.getValue()) && Objects.equals(getOnValueChangedAction(), textField.getOnValueChangedAction()) && getImeActionType() == textField.getImeActionType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), endIconType, getOnEndIconClicked(), getErrorMessage(), getValue(), getOnValueChangedAction(), isEnabled());
+        return Objects.hash(super.hashCode(), endIconType, getOnEndIconClicked(), getOnImeAction(), getErrorMessage(), getPlaceholder(), getValue(), getMinValue(), getMaxValue(), getOnValueChangedAction(), getImeActionType(), isEnabled());
+    }
+
+    public enum ImeActionType {
+        NEXT,
+        DONE,
+        SEARCH
     }
 }

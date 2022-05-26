@@ -34,20 +34,22 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
         if (src instanceof Row && ((Row) src).isPacked()) {
             jsonObject.add(KEY_PACKED, context.serialize(((Row) src).isPacked()));
         }
-        JsonArray children = new JsonArray();
-        for (ViewElement child : src.getChildren()) {
-            JsonObject childJson = context.serialize(child).getAsJsonObject();
-            int childWeight = src.getChildWeight(child);
-            if (childWeight != DEFAULT_WEIGHT) {
-                childJson.add(KEY_WEIGHT, new JsonPrimitive(childWeight));
+        if (!src.getChildren().isEmpty()) {
+            JsonArray children = new JsonArray();
+            for (ViewElement child : src.getChildren()) {
+                JsonObject childJson = context.serialize(child).getAsJsonObject();
+                int childWeight = src.getChildWeight(child);
+                if (childWeight != DEFAULT_WEIGHT) {
+                    childJson.add(KEY_WEIGHT, new JsonPrimitive(childWeight));
+                }
+                Object childAlignment = src.getChildAlignment(child);
+                if (childAlignment != src.defaultChildAlignment()) {
+                    childJson.add(KEY_ALIGNMENT, context.serialize(childAlignment));
+                }
+                children.add(childJson);
             }
-            Object childAlignment = src.getChildAlignment(child);
-            if (childAlignment != src.defaultChildAlignment()) {
-                childJson.add(KEY_ALIGNMENT, context.serialize(childAlignment));
-            }
-            children.add(childJson);
+            jsonObject.add(KEY_CHILDREN, children);
         }
-        jsonObject.add(KEY_CHILDREN, children);
 
         return jsonObject;
     }

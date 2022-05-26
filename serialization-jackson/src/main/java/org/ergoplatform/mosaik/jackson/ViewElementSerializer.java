@@ -9,10 +9,12 @@ import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.InputElement;
+import org.ergoplatform.mosaik.model.ui.input.TextField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.ergoplatform.mosaik.model.ui.layout.LinearLayout;
 import org.ergoplatform.mosaik.model.ui.layout.Padding;
+import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.layout.VAlignment;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.Label;
@@ -157,6 +159,12 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
                 return null;
 
         }
+        if (value instanceof TextField) {
+            if (propertyName.equals("imeActionType") && ((TextField<?>) value).getImeActionType() == TextField.ImeActionType.NEXT ||
+                    propertyName.equals("maxValue") && ((TextField<?>) value).getMaxValue() == Long.MAX_VALUE ||
+                    propertyName.equals("minValue") && ((TextField<?>) value).getMaxValue() == 0)
+                return null;
+        }
 
         if (propertyName.equals("visible") && value.isVisible()) {
             return null;
@@ -165,6 +173,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
             return null;
         }
         if (propertyName.equals(KEY_PADDING) && (value instanceof Box && ((Box) value).getPadding() == Padding.NONE || value instanceof LinearLayout<?> && ((LinearLayout<?>) value).getPadding() == Padding.NONE)) {
+            return null;
+        }
+        if (propertyName.equals("packed") && value instanceof Row && ((Row) value).isPacked() == false) {
             return null;
         }
 
