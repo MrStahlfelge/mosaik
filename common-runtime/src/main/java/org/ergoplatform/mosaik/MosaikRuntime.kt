@@ -21,7 +21,7 @@ open class MosaikRuntime(
     val showError: (t: Throwable) -> Unit = { error ->
         showDialog(
             MosaikDialog(
-                "Error running Mosaik app: ${error.javaClass.simpleName} ${error.message}",
+                "Error: ${error.javaClass.simpleName} ${error.message}",
                 "OK",
                 null,
                 null,
@@ -37,7 +37,8 @@ open class MosaikRuntime(
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
-    private var appUrl: String? = null
+    private var actualAppUrl: String? = null
+    val appBaseUrl get() = appManifest?.baseUrl ?: actualAppUrl
 
     open fun runAction(action: Action) {
         MosaikLogger.logDebug("Running action ${action.id}...")
@@ -62,7 +63,7 @@ open class MosaikRuntime(
                     runNavigateAction(action)
                 }
                 is ReloadAction -> {
-                    loadMosaikApp(appManifest?.baseUrl ?: appUrl!!)
+                    loadMosaikApp(appBaseUrl!!)
                 }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
@@ -72,7 +73,7 @@ open class MosaikRuntime(
     }
 
     open fun runNavigateAction(action: NavigateAction) {
-        loadMosaikApp(action.url)
+        loadMosaikApp(action.url, actualAppUrl)
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
@@ -83,9 +84,10 @@ open class MosaikRuntime(
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,
-                        appManifest?.baseUrl,
+                        appBaseUrl,
                         mosaikContext,
-                        viewTree.currentValues
+                        viewTree.currentValues,
+                        actualAppUrl
                     )
                 val appVersion = fetchActionResponse.appVersion
                 val newAction = fetchActionResponse.action
@@ -154,15 +156,15 @@ open class MosaikRuntime(
     /**
      * starts loading a new Mosaik app. Please make sure this is not called twice simultaneously.
      */
-    open fun loadMosaikApp(url: String) {
+    open fun loadMosaikApp(url: String, referrer: String? = null) {
         viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
             try {
-                val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext)
+                val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext, referrer)
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
-                appUrl = url
+                actualAppUrl = url
                 appLoaded?.invoke(mosaikApp.manifest)
             } catch (t: Throwable) {
                 // TODO errors during first app loading (with empty screen) should be handled
@@ -187,7 +189,7 @@ open class MosaikRuntime(
      */
     fun downloadImage(url: String): ByteArray {
         return try {
-            backendConnector.fetchImage(url, appManifest?.baseUrl)
+            backendConnector.fetchImage(url, appBaseUrl, actualAppUrl)
         } catch (t: Throwable) {
             MosaikLogger.logWarning("Could not download image $url", t)
             ByteArray(0)
@@ -199,7 +201,7 @@ open class MosaikRuntime(
      */
     fun fetchLazyContents(url: String): ViewContent? {
         return try {
-            backendConnector.fetchLazyContent(url, appManifest?.baseUrl, mosaikContext)
+            backendConnector.fetchLazyContent(url, appBaseUrl, mosaikContext, actualAppUrl!!)
         } catch (t: Throwable) {
             MosaikLogger.logError("Could not fetch content $url", t)
             null

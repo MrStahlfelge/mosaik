@@ -56,13 +56,14 @@ fun main() {
         val backendConnector = object : OkHttpBackendConnector(OkHttpClient.Builder()) {
             override fun loadMosaikApp(
                 url: String,
-                context: MosaikContext
+                context: MosaikContext,
+                referrer: String?,
             ): MosaikApp {
                 return if (url.isBlank()) {
                     MosaikSerializer().firstRequestResponseFromJson(json)
                 } else {
                     val urlToUse = if (url.contains("://")) url else "http://$url"
-                    super.loadMosaikApp(urlToUse, context)
+                    super.loadMosaikApp(urlToUse, context, referrer)
                 }
             }
         }
@@ -178,7 +179,7 @@ private fun MosaikAppHeader(
     Column {
         val urlTextFieldState = remember(manifestState.value) {
             mutableStateOf(
-                TextFieldValue(runtime.appManifest?.baseUrl ?: "", selection = TextRange(0, 1000))
+                TextFieldValue(runtime.appBaseUrl ?: "", selection = TextRange(0, 1000))
             )
         }
         Text(manifestState.value?.appName ?: "(No app)")

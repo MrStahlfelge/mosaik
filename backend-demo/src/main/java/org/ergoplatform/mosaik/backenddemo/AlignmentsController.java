@@ -20,13 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class AlignmentsController {
     @GetMapping("/alignments")
-    public MosaikApp loadAlignmentsDemoApp(@RequestHeader Map<String, String> headers,
-                                           HttpServletRequest request) {
+    public MosaikApp loadAlignmentsDemoApp(@RequestHeader Map<String, String> headers) {
         MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
 
         MosaikApp appInfo = new MosaikApp();
         MosaikManifest loadBoxManifest = new MosaikManifest("AlignmentsDemo", BackendDemoApplication.APP_VERSION, 0, null, 0);
-        loadBoxManifest.baseUrl = request.getRequestURL().toString();
         appInfo.setManifest(loadBoxManifest);
 
         Column container = new Column();

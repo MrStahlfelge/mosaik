@@ -53,7 +53,8 @@ class ViewTreeTest : TestCase() {
                 backendConnector = object : MosaikBackendConnector {
                     override fun loadMosaikApp(
                         url: String,
-                        context: MosaikContext
+                        context: MosaikContext,
+                        referrer: String?
                     ): MosaikApp {
                         return MosaikApp().apply {
                             manifest = MosaikManifest(
@@ -71,7 +72,8 @@ class ViewTreeTest : TestCase() {
                         url: String,
                         baseUrl: String?,
                         context: MosaikContext,
-                        values: Map<String, Any?>
+                        values: Map<String, Any?>,
+                        referrer: String?
                     ): FetchActionResponse {
                         throw UnsupportedOperationException()
                     }
@@ -79,12 +81,17 @@ class ViewTreeTest : TestCase() {
                     override fun fetchLazyContent(
                         url: String,
                         baseUrl: String?,
-                        context: MosaikContext
+                        context: MosaikContext,
+                        referrer: String
                     ): ViewContent {
                         throw UnsupportedOperationException()
                     }
 
-                    override fun fetchImage(url: String, baseUrl: String?): ByteArray {
+                    override fun fetchImage(
+                        url: String,
+                        baseUrl: String?,
+                        referrer: String?
+                    ): ByteArray {
                         throw UnsupportedOperationException()
                     }
                 },

@@ -32,7 +32,7 @@ public class MosaikManifest {
 
     /**
      * Base url this app runs on. If set, this will be used and updated when the user saves the app
-     * to favorites, and if set {@link BackendRequestAction#getUrl()} might contain relative urls
+     * to favorites, and used to resolve relative URLs
      */
     @Nullable
     public String baseUrl;

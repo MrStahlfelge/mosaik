@@ -20,13 +20,10 @@ open class OkHttpBackendConnector(
         .readTimeout(timeoutSeconds, TimeUnit.SECONDS)
         .writeTimeout(timeoutSeconds, TimeUnit.SECONDS).build()
 
-    override fun loadMosaikApp(
-        url: String,
-        context: MosaikContext
-    ): MosaikApp {
+    override fun loadMosaikApp(url: String, context: MosaikContext, referrer: String?): MosaikApp {
         val (contentType, json) = fetchHttpGetStringSync(
             url,
-            Headers.of(serializer.contextHeadersMap(context))
+            Headers.of(serializer.contextHeadersMap(context, referrer))
         )
         if (contentType?.lowercase()?.startsWith("text/html") == true) {
             // we could have a website here, check for <link rel="mosaik" tag>
@@ -34,7 +31,7 @@ open class OkHttpBackendConnector(
             val mosaikRelLink = checkForMosaikRelTag(json)
             if (mosaikRelLink != null) {
                 // found a mosaik rel tag, so let's load from there
-                return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), context)
+                return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), context, referrer)
             }
         }
         return try {
@@ -74,12 +71,13 @@ open class OkHttpBackendConnector(
         url: String,
         baseUrl: String?,
         context: MosaikContext,
-        values: Map<String, Any?>
+        values: Map<String, Any?>,
+        referrer: String?
     ): FetchActionResponse {
         val json = httpPostStringSync(
             makeAbsoluteUrl(baseUrl, url),
             serializer.valuesMapToJson(values),
-            Headers.of(serializer.contextHeadersMap(context))
+            Headers.of(serializer.contextHeadersMap(context, referrer))
         )
         return serializer.fetchActionResponseFromJson(json)
     }
@@ -87,11 +85,12 @@ open class OkHttpBackendConnector(
     override fun fetchLazyContent(
         url: String,
         baseUrl: String?,
-        context: MosaikContext
+        context: MosaikContext,
+        referrer: String
     ): ViewContent {
         val (_, json) = fetchHttpGetStringSync(
             makeAbsoluteUrl(baseUrl, url),
-            Headers.of(serializer.contextHeadersMap(context))
+            Headers.of(serializer.contextHeadersMap(context, referrer))
         )
 
         return serializer.viewContentFromJson(json)
@@ -103,13 +102,13 @@ open class OkHttpBackendConnector(
         return loadUrl
     }
 
-    override fun fetchImage(url: String, baseUrl: String?): ByteArray =
-        fetchHttpGetBytes(makeAbsoluteUrl(baseUrl, url))
+    override fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray =
+        fetchHttpGetBytes(makeAbsoluteUrl(baseUrl, url), referrer)
 
-    private fun fetchHttpGetBytes(url: String): ByteArray {
-        val request = Request.Builder()
-            .url(url)
-            .build()
+    private fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
+        val builder = Request.Builder().url(url)
+        referrer?.let { builder.header("Referer", referrer) }
+        val request = builder.build()
         okClient.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
             return response.body()!!.bytes()

@@ -42,7 +42,7 @@ public class MosaikSerializer {
     /**
      * @return map of key, value for MosaikContext http header fields
      */
-    public Map<String, String> contextHeadersMap(MosaikContext context) {
+    public Map<String, String> contextHeadersMap(MosaikContext context, String referrer) {
         HashMap<String, String> retMap = new HashMap<>();
         for (Map.Entry<String, JsonElement> stringJsonElementEntry : getGson(false).toJsonTree(context).getAsJsonObject().entrySet()) {
             retMap.put(HTTP_HEADER_PREFIX + stringJsonElementEntry.getKey(),
@@ -52,6 +52,9 @@ public class MosaikSerializer {
         retMap.put("User-Agent", context.walletAppName +
                 "(" + context.walletAppVersion + "/" + context.walletAppPlatform + ")");
         retMap.put("Accept-Language", context.language);
+        if (referrer != null) {
+            retMap.put("Referer", referrer);
+        }
 
         return retMap;
     }

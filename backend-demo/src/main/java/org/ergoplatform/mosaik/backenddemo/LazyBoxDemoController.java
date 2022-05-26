@@ -27,13 +27,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class LazyBoxDemoController {
     @GetMapping("/lazybox")
-    public MosaikApp loadLazyBoxDemoApp(@RequestHeader Map<String, String> headers,
-                                        HttpServletRequest request) {
+    public MosaikApp loadLazyBoxDemoApp(@RequestHeader Map<String, String> headers) {
         MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
 
         MosaikApp appInfo = new MosaikApp();
         MosaikManifest loadBoxManifest = new MosaikManifest("LazyLoadBoxDemo", BackendDemoApplication.APP_VERSION, 0, null, 0);
-        loadBoxManifest.baseUrl = request.getRequestURL().toString();
         appInfo.setManifest(loadBoxManifest);
 
         Column container = new Column();
