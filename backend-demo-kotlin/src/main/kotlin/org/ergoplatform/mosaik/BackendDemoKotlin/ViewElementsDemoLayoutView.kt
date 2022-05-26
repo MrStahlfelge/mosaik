@@ -81,8 +81,8 @@ object ViewElementsDemoLayoutView {
                         label("Card", style = LabelStyle.HEADLINE2)
 
                         label(
-                            "The card can organize your views by grouping elements" +
-                                    "graphically. You'll see cards in this demo used to group" +
+                            "The card can organize your views by grouping elements " +
+                                    "graphically. You'll see cards in this demo used to group " +
                                     "information for each element demonstrated."
                         )
 
@@ -105,7 +105,7 @@ object ViewElementsDemoLayoutView {
                         label(
                             "Row aligns multiple elements in a row. Elements can have different " +
                                     "vertical alignments and weights. " +
-                                    "Elements with same weight take the same horizontal space, demonstrated" +
+                                    "Elements with same weight take the same horizontal space, demonstrated " +
                                     "by the two information icons below."
                         )
 
