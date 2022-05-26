@@ -450,7 +450,9 @@ private fun MosaikRow(
 ) {
     val element = treeElement.element as Row
 
-    Row(modifier) {
+    val rowModifier = if (element.isPacked) modifier.width(IntrinsicSize.Min) else modifier
+
+    Row(rowModifier) {
         treeElement.children.forEach { childElement ->
             key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)
@@ -477,7 +479,7 @@ private fun MosaikColumn(
 ) {
     val element = treeElement.element as Column
 
-    Column(modifier) {
+    Column(modifier.height(IntrinsicSize.Min)) {
         treeElement.children.forEach { childElement ->
             key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)

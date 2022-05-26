@@ -22,6 +22,10 @@
       "description": "Visibility of this object. Optional, defaults to true",
       "type": "boolean"
     },
+    "packed": {
+      "description": "When set to true, Row will not take up all horizontal space",
+      "type": "boolean"
+    },
     "children": {
       "description": "Children in this view",
       "type": "array",
@@ -31,6 +35,7 @@
     }
   },
   "required": [
-    "type", "children"
+    "type",
+    "children"
   ]
 }

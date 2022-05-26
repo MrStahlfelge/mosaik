@@ -8,10 +8,10 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.LinearLayout;
 import org.ergoplatform.mosaik.model.ui.layout.Padding;
+import org.ergoplatform.mosaik.model.ui.layout.Row;
 
 import java.lang.reflect.Type;
 
@@ -21,6 +21,7 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
     public static final String KEY_WEIGHT = "weight";
     public static final String KEY_ALIGNMENT = "align";
     public static final String KEY_CHILDREN = "children";
+    public static final String KEY_PACKED = "packed";
     public static final int DEFAULT_WEIGHT = 0;
 
     @Override
@@ -29,6 +30,9 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
 
         if (src.getPadding() != Padding.NONE) {
             jsonObject.add(KEY_PADDING, context.serialize(src.getPadding()));
+        }
+        if (src instanceof Row && ((Row) src).isPacked()) {
+            jsonObject.add(KEY_PACKED, context.serialize(((Row) src).isPacked()));
         }
         JsonArray children = new JsonArray();
         for (ViewElement child : src.getChildren()) {
@@ -53,6 +57,9 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
                                              JsonDeserializationContext context) {
         if (json.has(KEY_PADDING)) {
             layout.setPadding(context.<Padding>deserialize(json.get(KEY_PADDING), Padding.class));
+        }
+        if (json.has(KEY_PACKED) && layout instanceof Row) {
+            ((Row) layout).setPacked(json.get(KEY_PACKED).getAsBoolean());
         }
         JsonArray childrenArray = json.get(KEY_CHILDREN).getAsJsonArray();
         for (JsonElement childJson : childrenArray) {

@@ -41,9 +41,14 @@ fun ViewContent.row(init: (@MosaikDsl Row).() -> Unit): Row =
     viewElement(Row(), init)
 
 @MosaikDsl
-fun <G : ViewGroup> G.row(padding: Padding? = null, init: (@MosaikDsl Row).() -> Unit): Row =
+fun <G : ViewGroup> G.row(
+    padding: Padding? = null,
+    packed: Boolean? = false,
+    init: (@MosaikDsl Row).() -> Unit
+): Row =
     viewElement(Row().apply {
         padding?.let { this.padding = padding }
+        packed?.let { this.isPacked = packed }
     }, init)
 
 @MosaikDsl
