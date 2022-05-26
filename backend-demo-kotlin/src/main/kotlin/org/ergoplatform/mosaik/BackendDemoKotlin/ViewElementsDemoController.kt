@@ -61,6 +61,12 @@ class ViewElementsDemoController {
                     onClickAction(backendRequest("inputelementview"))
                 }
 
+                box(Padding.HALF_DEFAULT)
+
+                button("Other elements") {
+                    onClickAction(backendRequest("otherelementview"))
+                }
+
             }
 
         }
@@ -82,9 +88,24 @@ class ViewElementsDemoController {
     )
 
     @PostMapping("/viewelements/inputelementview")
-    fun changeToInoutElementView() = backendResponse(
+    fun changeToInputElementView() = backendResponse(
         APP_VERSION,
         changeView(ViewElementsDemoInputView.getView())
     )
 
+    @PostMapping("/viewelements/otherelementview")
+    fun changeToOtherElementView() = backendResponse(
+        APP_VERSION,
+        changeView(ViewElementsDemoOthersView.getView())
+    )
+
+    // Lazy box view content responses
+    @GetMapping("/viewelements/slowView")
+    fun lazyLoadBoxView() = mosaikView {
+        Thread.sleep(5000)
+
+        box {
+            label("This took long to load")
+        }
+    }
 }

@@ -65,8 +65,17 @@ fun <G : ViewGroup> G.textInputField(
     init: (@MosaikDsl TextInputField).() -> Unit = {}
 ): TextInputField =
     viewElement(TextInputField().apply {
-       this.id = id
+        this.id = id
         placeholder?.let { this.placeholder = placeholder }
         initialValue?.let { this.value = initialValue }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.loadingIndicator(
+    size: LoadingIndicator.Size? = null,
+    init: (@MosaikDsl LoadingIndicator).() -> Unit = {}
+): LoadingIndicator =
+    viewElement(LoadingIndicator().apply {
+        size?.let { this.size = size }
     }, init)
 

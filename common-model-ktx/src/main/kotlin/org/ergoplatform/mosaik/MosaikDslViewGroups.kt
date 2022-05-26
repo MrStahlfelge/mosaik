@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.ui.LazyLoadBox
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.layout.*
@@ -21,6 +22,17 @@ fun <G : ViewGroup> G.card(
 ): Card =
     viewElement(Card().apply {
         outerPadding?.let { padding = outerPadding }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.lazyLoadBox(
+    url: String,
+    padding: Padding? = null,
+    init: (@MosaikDsl Box).() -> Unit = {}
+): LazyLoadBox =
+    viewElement(LazyLoadBox().apply {
+        this.requestUrl = url
+        padding?.let { this.padding = padding }
     }, init)
 
 @MosaikDsl
