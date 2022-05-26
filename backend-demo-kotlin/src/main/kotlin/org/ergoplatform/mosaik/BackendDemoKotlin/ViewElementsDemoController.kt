@@ -55,9 +55,19 @@ class ViewElementsDemoController {
                     onClickAction(backendRequest("textelementview"))
                 }
 
+                box(Padding.HALF_DEFAULT)
+
+                button("Input elements") {
+                    onClickAction(backendRequest("inputelementview"))
+                }
+
             }
 
         }
+
+    // the following are the defined responses for backend requests
+    // Since they are constant, a backend request wouldn't be necessary, but is done
+    // here to demonstrate the implementation
 
     @PostMapping("/viewelements/layoutview")
     fun changeToLayoutView() = backendResponse(
@@ -69,6 +79,12 @@ class ViewElementsDemoController {
     fun changeToTextElementView() = backendResponse(
         APP_VERSION,
         changeView(ViewElementsDemoTextView.getView())
+    )
+
+    @PostMapping("/viewelements/inputelementview")
+    fun changeToInoutElementView() = backendResponse(
+        APP_VERSION,
+        changeView(ViewElementsDemoInputView.getView())
     )
 
 }

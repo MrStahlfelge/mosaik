@@ -12,6 +12,11 @@
       "url": "https://github.com/MrStahlfelge/mosaik"
     },
     {
+      "type": "NavigateAction",
+      "id": "openLocalhost",
+      "url": "http://localhost:8080"
+    },
+    {
       "type": "ChangeSiteAction",
       "id": "replaceButton",
       "newContent": {
@@ -75,7 +80,7 @@
       {
         "type": "Button",
         "id": "backendButton",
-        "onClick": "showDialog",
+        "onClick": "openLocalhost",
         "text": "Clicking to load app from http://localhost:8080"
       },
       {
