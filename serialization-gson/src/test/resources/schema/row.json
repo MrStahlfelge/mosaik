@@ -35,7 +35,6 @@
     }
   },
   "required": [
-    "type",
-    "children"
+    "type"
   ]
 }

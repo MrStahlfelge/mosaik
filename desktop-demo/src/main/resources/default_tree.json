@@ -63,8 +63,24 @@
     "children": [
       {
         "type": "Label",
-        "text": "This is a headline 2 label",
+        "text": "Welcome to Mosaik demo app",
         "style": "HEADLINE2"
+      },
+      {
+        "type": "Label",
+        "style": "BODY1",
+        "text": "This is the demo app showing a built in placeholder view.\nIt demonstrates some offline capabilities, however, it is mainly intended to load a Mosaik app from a backend and help you debug it or tweak its interface. ",
+        "textAlignment": "CENTER"
+      },
+      {
+        "type": "Button",
+        "id": "backendButton",
+        "onClick": "showDialog",
+        "text": "Clicking to load app from http://localhost:8080"
+      },
+      {
+        "type": "Box",
+        "padding": "DEFAULT"
       },
       {
         "id": "clickButton",

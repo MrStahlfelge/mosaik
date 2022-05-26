@@ -31,6 +31,6 @@
     }
   },
   "required": [
-    "type", "children"
+    "type"
   ]
 }

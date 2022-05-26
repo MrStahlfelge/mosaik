@@ -61,13 +61,15 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
         if (json.has(KEY_PACKED) && layout instanceof Row) {
             ((Row) layout).setPacked(json.get(KEY_PACKED).getAsBoolean());
         }
-        JsonArray childrenArray = json.get(KEY_CHILDREN).getAsJsonArray();
-        for (JsonElement childJson : childrenArray) {
-            JsonObject childJsonObject = childJson.getAsJsonObject();
-            ViewElement childElement = context.deserialize(childJson, ViewElement.class);
-            int childWeight = childJsonObject.has(KEY_WEIGHT) ? childJsonObject.get(KEY_WEIGHT).getAsInt() : DEFAULT_WEIGHT;
-            T alignment = childJsonObject.has(KEY_ALIGNMENT) ? context.<T>deserialize(childJsonObject.get(KEY_ALIGNMENT), alignmentType) : defaultAlignment;
-            layout.addChild(childElement, alignment, childWeight);
+        if (json.has(KEY_CHILDREN)) {
+            JsonArray childrenArray = json.get(KEY_CHILDREN).getAsJsonArray();
+            for (JsonElement childJson : childrenArray) {
+                JsonObject childJsonObject = childJson.getAsJsonObject();
+                ViewElement childElement = context.deserialize(childJson, ViewElement.class);
+                int childWeight = childJsonObject.has(KEY_WEIGHT) ? childJsonObject.get(KEY_WEIGHT).getAsInt() : DEFAULT_WEIGHT;
+                T alignment = childJsonObject.has(KEY_ALIGNMENT) ? context.<T>deserialize(childJsonObject.get(KEY_ALIGNMENT), alignmentType) : defaultAlignment;
+                layout.addChild(childElement, alignment, childWeight);
+            }
         }
 
     }

@@ -41,20 +41,22 @@ public class BoxSerializer<T extends Box> implements JsonSerializer<Box>, JsonDe
         if (src.getPadding() != Padding.NONE) {
             jsonObject.add(KEY_PADDING, context.serialize(src.getPadding()));
         }
-        JsonArray children = new JsonArray();
-        for (ViewElement child : src.getChildren()) {
-            JsonObject childJson = context.serialize(child).getAsJsonObject();
-            HAlignment childHAlignment = src.getChildHAlignment(child);
-            VAlignment childVAlignment = src.getChildVAlignment(child);
-            if (childHAlignment != HAlignment.CENTER) {
-                childJson.add(KEY_H_ALIGN, context.serialize(childHAlignment));
+        if (!src.getChildren().isEmpty()) {
+            JsonArray children = new JsonArray();
+            for (ViewElement child : src.getChildren()) {
+                JsonObject childJson = context.serialize(child).getAsJsonObject();
+                HAlignment childHAlignment = src.getChildHAlignment(child);
+                VAlignment childVAlignment = src.getChildVAlignment(child);
+                if (childHAlignment != HAlignment.CENTER) {
+                    childJson.add(KEY_H_ALIGN, context.serialize(childHAlignment));
+                }
+                if (childVAlignment != VAlignment.CENTER) {
+                    childJson.add(KEY_V_ALIGN, context.serialize(childVAlignment));
+                }
+                children.add(childJson);
             }
-            if (childVAlignment != VAlignment.CENTER) {
-                childJson.add(KEY_V_ALIGN, context.serialize(childVAlignment));
-            }
-            children.add(childJson);
+            jsonObject.add(KEY_CHILDREN, children);
         }
-        jsonObject.add(KEY_CHILDREN, children);
     }
 
     @Override
@@ -77,13 +79,15 @@ public class BoxSerializer<T extends Box> implements JsonSerializer<Box>, JsonDe
         if (jsonObject.has(KEY_PADDING)) {
             box.setPadding(context.<Padding>deserialize(jsonObject.get(KEY_PADDING), Padding.class));
         }
-        JsonArray childrenArray = jsonObject.get(KEY_CHILDREN).getAsJsonArray();
-        for (JsonElement childJson : childrenArray) {
-            JsonObject childJsonObject = childJson.getAsJsonObject();
-            ViewElement childElement = context.deserialize(childJson, ViewElement.class);
-            HAlignment hAlignment = childJsonObject.has(KEY_H_ALIGN) ? context.<HAlignment>deserialize(childJsonObject.get(KEY_H_ALIGN), HAlignment.class) : HAlignment.CENTER;
-            VAlignment vAlignment = childJsonObject.has(KEY_V_ALIGN) ? context.<VAlignment>deserialize(childJsonObject.get(KEY_V_ALIGN), VAlignment.class) : VAlignment.CENTER;
-            box.addChild(childElement, hAlignment, vAlignment);
+        if (jsonObject.has(KEY_CHILDREN)) {
+            JsonArray childrenArray = jsonObject.get(KEY_CHILDREN).getAsJsonArray();
+            for (JsonElement childJson : childrenArray) {
+                JsonObject childJsonObject = childJson.getAsJsonObject();
+                ViewElement childElement = context.deserialize(childJson, ViewElement.class);
+                HAlignment hAlignment = childJsonObject.has(KEY_H_ALIGN) ? context.<HAlignment>deserialize(childJsonObject.get(KEY_H_ALIGN), HAlignment.class) : HAlignment.CENTER;
+                VAlignment vAlignment = childJsonObject.has(KEY_V_ALIGN) ? context.<VAlignment>deserialize(childJsonObject.get(KEY_V_ALIGN), VAlignment.class) : VAlignment.CENTER;
+                box.addChild(childElement, hAlignment, vAlignment);
+            }
         }
     }
 }

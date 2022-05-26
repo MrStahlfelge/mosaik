@@ -75,43 +75,47 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
     }
 
     private void serializeBoxChildren(Box value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        // alignment and weight written to children elements
-        jgen.writeFieldName(KEY_CHILDREN);
-        jgen.writeStartArray();
-        for (ViewElement child : value.getChildren()) {
-            jgen.writeStartObject();
-            serializeObjectFields(child, jgen, provider);
-            HAlignment childHAlignment = value.getChildHAlignment(child);
-            VAlignment childVAlignment = value.getChildVAlignment(child);
-            if (childHAlignment != HAlignment.CENTER) {
-                jgen.writeObjectField(KEY_H_ALIGN, childHAlignment);
+        if (!value.getChildren().isEmpty()) {
+            // alignment and weight written to children elements
+            jgen.writeFieldName(KEY_CHILDREN);
+            jgen.writeStartArray();
+            for (ViewElement child : value.getChildren()) {
+                jgen.writeStartObject();
+                serializeObjectFields(child, jgen, provider);
+                HAlignment childHAlignment = value.getChildHAlignment(child);
+                VAlignment childVAlignment = value.getChildVAlignment(child);
+                if (childHAlignment != HAlignment.CENTER) {
+                    jgen.writeObjectField(KEY_H_ALIGN, childHAlignment);
+                }
+                if (childVAlignment != VAlignment.CENTER) {
+                    jgen.writeObjectField(KEY_V_ALIGN, childVAlignment);
+                }
+                jgen.writeEndObject();
             }
-            if (childVAlignment != VAlignment.CENTER) {
-                jgen.writeObjectField(KEY_V_ALIGN, childVAlignment);
-            }
-            jgen.writeEndObject();
+            jgen.writeEndArray();
         }
-        jgen.writeEndArray();
     }
 
     private void serializeLinearLayoutChildren(LinearLayout<?> value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-        // alignment and weight written to children elements
-        jgen.writeFieldName(KEY_CHILDREN);
-        jgen.writeStartArray();
-        for (ViewElement child : value.getChildren()) {
-            jgen.writeStartObject();
-            serializeObjectFields(child, jgen, provider);
-            int childWeight = value.getChildWeight(child);
-            if (childWeight != DEFAULT_WEIGHT) {
-                jgen.writeObjectField(KEY_WEIGHT, childWeight);
+        if (!value.getChildren().isEmpty()) {
+            // alignment and weight written to children elements
+            jgen.writeFieldName(KEY_CHILDREN);
+            jgen.writeStartArray();
+            for (ViewElement child : value.getChildren()) {
+                jgen.writeStartObject();
+                serializeObjectFields(child, jgen, provider);
+                int childWeight = value.getChildWeight(child);
+                if (childWeight != DEFAULT_WEIGHT) {
+                    jgen.writeObjectField(KEY_WEIGHT, childWeight);
+                }
+                Object childAlignment = value.getChildAlignment(child);
+                if (childAlignment != value.defaultChildAlignment()) {
+                    provider.defaultSerializeField(KEY_ALIGNMENT, childAlignment, jgen);
+                }
+                jgen.writeEndObject();
             }
-            Object childAlignment = value.getChildAlignment(child);
-            if (childAlignment != value.defaultChildAlignment()) {
-                provider.defaultSerializeField(KEY_ALIGNMENT, childAlignment, jgen);
-            }
-            jgen.writeEndObject();
+            jgen.writeEndArray();
         }
-        jgen.writeEndArray();
     }
 
     /**
