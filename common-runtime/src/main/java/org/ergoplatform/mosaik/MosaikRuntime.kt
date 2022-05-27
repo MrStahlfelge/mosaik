@@ -82,7 +82,8 @@ open class MosaikRuntime(
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
-        viewTree.ensureValuesAreCorrect()
+        if (action.postValues == BackendRequestAction.PostValueType.ALL)
+            viewTree.ensureValuesAreCorrect()
 
         viewTree.uiLocked = true
         coroutineScope().launch(Dispatchers.IO) {
@@ -92,7 +93,8 @@ open class MosaikRuntime(
                         action.url,
                         appBaseUrl,
                         mosaikContext,
-                        viewTree.currentValidValues,
+                        if (action.postValues == BackendRequestAction.PostValueType.NONE) emptyMap()
+                        else viewTree.currentValidValues,
                         actualAppUrl
                     )
                 val appVersion = fetchActionResponse.appVersion

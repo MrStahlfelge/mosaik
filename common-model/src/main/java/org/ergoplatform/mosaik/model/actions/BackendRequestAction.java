@@ -4,6 +4,8 @@ import org.ergoplatform.mosaik.model.Since;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 /**
  * Makes a Request to URL. If postDataValues is true, it is a POST request and the body contains all
  * data values of the current view.
@@ -16,14 +18,16 @@ import java.util.Objects;
  */
 @Since(0)
 public class BackendRequestAction extends UrlAction {
-    private boolean postDataValues = true;
+    private PostValueType postValues = PostValueType.ALL;
 
-    public boolean isPostDataValues() {
-        return postDataValues;
+    @Nonnull
+    public PostValueType getPostValues() {
+        return postValues;
     }
 
-    public void setPostDataValues(boolean postDataValues) {
-        this.postDataValues = postDataValues;
+    public void setPostValues(@Nonnull PostValueType postValues) {
+        Objects.requireNonNull(postValues);
+        this.postValues = postValues;
     }
 
     @Override
@@ -32,11 +36,26 @@ public class BackendRequestAction extends UrlAction {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         BackendRequestAction that = (BackendRequestAction) o;
-        return isPostDataValues() == that.isPostDataValues();
+        return getPostValues() == that.getPostValues();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), isPostDataValues());
+        return Objects.hash(super.hashCode(), getPostValues());
+    }
+
+    public enum PostValueType {
+        /**
+         * sends all data values, enforces validity before backend requests is executed
+         */
+        ALL,
+        /**
+         * sends valid data values, ignores invalid data
+         */
+        VALID,
+        /**
+         * does not send any data values, ignores invalid data
+         */
+        NONE
     }
 }
