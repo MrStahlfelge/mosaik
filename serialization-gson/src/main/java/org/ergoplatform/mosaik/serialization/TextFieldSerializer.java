@@ -11,6 +11,7 @@ import com.google.gson.JsonSerializer;
 
 import org.ergoplatform.mosaik.model.ui.IconType;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
 
 import java.lang.reflect.Type;
@@ -28,6 +29,7 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
     public static final String KEY_IME_ACTION_TYPE = "imeActionType";
     public static final String KEY_MIN_VALUE = "minValue";
     public static final String KEY_MAX_VALUE = "maxValue";
+    public static final String KEY_DECIMAL_SCALE = "scale";
     private final Class<U> valueClazz;
     private final Class<T> textFieldClass;
 
@@ -72,6 +74,9 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (src.getImeActionType() != TextField.ImeActionType.NEXT) {
             jsonObject.add(KEY_IME_ACTION_TYPE, context.serialize(src.getImeActionType()));
+        }
+        if (src instanceof DecimalInputField) {
+            jsonObject.add(KEY_DECIMAL_SCALE, new JsonPrimitive(((DecimalInputField) src).getScale()));
         }
 
         return jsonObject;
@@ -121,6 +126,9 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (jsonObject.has(KEY_MAX_VALUE)) {
             textInputField.setMaxValue(jsonObject.get(KEY_MAX_VALUE).getAsLong());
+        }
+        if (textInputField instanceof DecimalInputField) {
+            ((DecimalInputField) textInputField).setScale(jsonObject.get(KEY_DECIMAL_SCALE).getAsInt());
         }
 
         return textInputField;

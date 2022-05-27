@@ -15,8 +15,8 @@ import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
-import org.ergoplatform.mosaik.model.ui.input.DecimalTextField;
-import org.ergoplatform.mosaik.model.ui.input.ErgAmountTextField;
+import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
+import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.PasswordTextField;
@@ -80,9 +80,6 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             case "LazyLoadBox":
                 clazz = LazyLoadBox.class;
                 break;
-            case "IntegerTextField":
-                clazz = IntegerInputField.class;
-                break;
             case "Row":
                 clazz = Row.class;
                 break;
@@ -116,8 +113,8 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             case "PasswordTextField":
                 clazz = PasswordTextField.class;
                 break;
-            case "ErgAmountTextField":
-                clazz = ErgAmountTextField.class;
+            case "ErgAmountInputField":
+                clazz = ErgAmountInputField.class;
                 break;
             case "ErgoAddressChooseButton":
                 clazz = ErgoAddressChooseButton.class;
@@ -128,8 +125,8 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             case "LoadingIndicator":
                 clazz = LoadingIndicator.class;
                 break;
-            case "DecimalTextField":
-                clazz = DecimalTextField.class;
+            case "DecimalInputField":
+                clazz = DecimalInputField.class;
                 break;
             case "QrCode":
                 clazz = QrCode.class;

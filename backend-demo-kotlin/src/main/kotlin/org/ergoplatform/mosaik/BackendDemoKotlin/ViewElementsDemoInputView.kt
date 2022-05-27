@@ -4,6 +4,7 @@ import org.ergoplatform.mosaik.*
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.IconType
 import org.ergoplatform.mosaik.model.ui.layout.Padding
+import org.ergoplatform.mosaik.model.ui.layout.VAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
 object ViewElementsDemoInputView {
@@ -62,7 +63,35 @@ object ViewElementsDemoInputView {
 
             card(Padding.DEFAULT) {
                 column(Padding.DEFAULT) {
-                    label("Other InputField", style = LabelStyle.HEADLINE2)
+                    label("DecimalInputField", style = LabelStyle.HEADLINE2)
+
+                    label(
+                        "An input field the user can type decimal values text in. " +
+                                "The input field has a scale value that controls how many " +
+                                "decimal places are available. Internally, the value is an integer " +
+                                "value based on the given scale. Entering 1.2 with scale 2 is 120 " +
+                                "internally." +
+                                "Min/max controls what raw values are considered valid."
+                    )
+
+                    row {
+                        layout(VAlignment.CENTER, weight = 1) {
+                            decimalInputField("decimalinput1", 2, "Numbers from 0.01 to 2 allowed") {
+                                maxValue = 200
+                                minValue = 1
+                            }
+                            decimalInputField("decimalinput2", 5, "Numbers from -5 to 5 allowed") {
+                                maxValue = 500000
+                                minValue = -500000
+                            }
+                        }
+                    }
+                }
+            }
+
+            card(Padding.DEFAULT) {
+                column(Padding.DEFAULT) {
+                    label("Other input fields", style = LabelStyle.HEADLINE2)
 
                     label(
                         "Input fields for EMail, Password, Decimal, ErgAmount, FiatOrErgAmount"

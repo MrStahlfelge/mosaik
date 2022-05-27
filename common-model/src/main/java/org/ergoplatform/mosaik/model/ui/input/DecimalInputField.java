@@ -1,11 +1,14 @@
 package org.ergoplatform.mosaik.model.ui.input;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 /**
  * Text field to enter decimal numbers.
  */
-public class DecimalTextField extends LongTextField {
+@Since(0)
+public class DecimalInputField extends LongTextField {
     private int scale = 9;
 
     public int getScale() {
@@ -21,7 +24,7 @@ public class DecimalTextField extends LongTextField {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DecimalTextField that = (DecimalTextField) o;
+        DecimalInputField that = (DecimalInputField) o;
         return getScale() == that.getScale();
     }
 

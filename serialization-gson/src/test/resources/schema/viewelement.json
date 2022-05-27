@@ -20,6 +20,9 @@
       "$ref": "integerinputfield.json"
     },
     {
+      "$ref": "decimalinputfield.json"
+    },
+    {
       "$ref": "button.json"
     },
     {

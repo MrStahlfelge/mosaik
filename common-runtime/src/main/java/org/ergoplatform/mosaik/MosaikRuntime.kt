@@ -21,7 +21,7 @@ open class MosaikRuntime(
     val showError: (t: Throwable) -> Unit = { error ->
         showDialog(
             MosaikDialog(
-                "Error: ${error.javaClass.simpleName} ${error.message}",
+                "Error:\n${error.message}\n(${error.javaClass.simpleName})",
                 "OK",
                 null,
                 null,
@@ -70,6 +70,8 @@ open class MosaikRuntime(
         } catch (e: InvalidValuesException) {
             // show user, do not log an error
             showError(e)
+        } catch (e: ChangeViewContentException) {
+            errorRaised(e)
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
@@ -155,6 +157,9 @@ open class MosaikRuntime(
                 nf
             )
             viewTree.setContentView(null, action.newContent)
+        } catch (t: Throwable) {
+            // we are probably in a very bad state now, tell the user to reload
+            throw ChangeViewContentException(t)
         }
     }
 

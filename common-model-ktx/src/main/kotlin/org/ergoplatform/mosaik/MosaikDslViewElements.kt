@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.input.DecimalInputField
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField
 import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
@@ -82,6 +83,21 @@ fun <G : ViewGroup> G.integerInputField(
         this.id = id
         placeholder?.let { this.placeholder = placeholder }
         initialValue?.let { this.value = initialValue }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.decimalInputField(
+    id: String,
+    scale: Int,
+    placeholder: String? = null,
+    initialRawValue: Long? = null,
+    init: (@MosaikDsl DecimalInputField).() -> Unit = {}
+): DecimalInputField =
+    viewElement(DecimalInputField().apply {
+        this.id = id
+        this.scale = scale
+        placeholder?.let { this.placeholder = placeholder }
+        initialRawValue?.let { this.value = initialRawValue }
     }, init)
 
 @MosaikDsl
