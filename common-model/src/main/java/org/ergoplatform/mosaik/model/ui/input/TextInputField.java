@@ -6,5 +6,5 @@ import org.ergoplatform.mosaik.model.Since;
  * Text field to enter general text
  */
 @Since(0)
-public class TextInputField extends TextField<String> {
+public class TextInputField extends StringTextField {
 }

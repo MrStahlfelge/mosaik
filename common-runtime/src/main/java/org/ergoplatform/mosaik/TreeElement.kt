@@ -2,9 +2,7 @@ package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
-import org.ergoplatform.mosaik.model.ui.input.InputElement
-import org.ergoplatform.mosaik.model.ui.input.IntegerTextField
-import org.ergoplatform.mosaik.model.ui.input.TextInputField
+import org.ergoplatform.mosaik.model.ui.input.*
 import java.util.*
 
 /**
@@ -103,11 +101,11 @@ class TreeElement(
 
     fun isValueValid(value: Any?): Boolean {
         return when (element) {
-            is TextInputField -> {
+            is StringTextField -> {
                 val length = (value as? String)?.length ?: 0
                 length >= element.minValue && length <= element.maxValue
             }
-            is IntegerTextField -> {
+            is LongTextField -> {
                 // TODO check
                 value is Long && value >= element.minValue && value <= element.maxValue
             }
@@ -120,7 +118,7 @@ class TreeElement(
 
     fun getInvalidValueError(): String {
         return when (element) {
-            is TextInputField -> {
+            is TextField<*> -> {
                 element.errorMessage ?: element.placeholder ?: element.id!!
             } else -> {
                 id!!

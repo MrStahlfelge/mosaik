@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Text field to enter decimal numbers.
  */
-public class DecimalTextField extends TextField<Long> {
+public class DecimalTextField extends LongTextField {
     private int scale = 9;
 
     public int getScale() {
