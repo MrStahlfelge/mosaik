@@ -11,6 +11,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +40,7 @@ fun main() {
         val windowState = rememberWindowState()
 
         MosaikLogger.logger = MosaikLogger.DefaultLogger
+        convertByteArrayToImageBitmap = { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
 
@@ -208,9 +210,11 @@ private fun MosaikStateInfo(
     Text("Current values:", fontWeight = FontWeight.Bold)
     val map = viewTree.valueState.collectAsState()
     map.value.second.forEach { (key, value) ->
-        Text(key + ": " + value.inputValue.toString() +
-                " (" + (value.inputValue?.javaClass?.simpleName ?: "no type") + ", " +
-                (if (value.valid) "valid" else "invalid") + ")")
+        Text(
+            key + ": " + value.inputValue.toString() +
+                    " (" + (value.inputValue?.javaClass?.simpleName ?: "no type") + ", " +
+                    (if (value.valid) "valid" else "invalid") + ")"
+        )
     }
     Box(Modifier.height(20.dp))
     Text("Current view tree (${viewTree.contentState.value.first}):", fontWeight = FontWeight.Bold)

@@ -16,9 +16,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -154,7 +154,7 @@ fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
         if (imageBytes != null && imageBytes.isNotEmpty()) {
 
             try {
-                loadImageBitmap(imageBytes.inputStream())
+                convertByteArrayToImageBitmap(imageBytes)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Could not load bitmap", t)
                 null
@@ -592,3 +592,5 @@ var foregroundColor: (ForegroundColor) -> Color = { color ->
         ForegroundColor.SECONDARY -> secondaryLabelColor
     }
 }
+
+lateinit var convertByteArrayToImageBitmap: (ByteArray) -> ImageBitmap
