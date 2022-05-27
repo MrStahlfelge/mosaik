@@ -19,6 +19,7 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
     @Nullable
     private String onValueChangedAction;
     private boolean enabled;
+    private boolean mandatory = true;
 
     @Nullable
     @Override
@@ -52,6 +53,14 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
         this.enabled = enabled;
     }
 
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
     @Override
     public void setOnClickAction(@Nullable String action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
@@ -64,11 +73,11 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WalletChooseButton that = (WalletChooseButton) o;
-        return isEnabled() == that.isEnabled() && Objects.equals(addresses, that.addresses) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
+        return isMandatory() == that.isMandatory() && isEnabled() == that.isEnabled() && Objects.equals(addresses, that.addresses) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), addresses, getOnValueChangedAction(), isEnabled());
+        return Objects.hash(super.hashCode(), addresses, getOnValueChangedAction(), isEnabled(), isMandatory());
     }
 }

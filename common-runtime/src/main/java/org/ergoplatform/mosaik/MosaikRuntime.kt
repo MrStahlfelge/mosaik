@@ -184,6 +184,9 @@ open class MosaikRuntime(
         }
     }
 
+    /**
+     * an error that is shown to user and reported to the error report url
+     */
     private fun errorRaised(t: Throwable) {
         // TODO report error to error report url
         showError(t)

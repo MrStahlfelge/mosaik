@@ -37,7 +37,6 @@ class StringInputHandler(val element: StringTextField) : InputElementValueHandle
 
 class LongInputHandler(val element: LongTextField) : InputElementValueHandler<Long>() {
     override fun isValueValid(value: Any?): Boolean {
-        // TODO check
         return value is Long && value >= element.minValue && value <= element.maxValue
     }
 

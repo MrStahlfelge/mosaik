@@ -16,6 +16,7 @@ public class ErgoAddressChooseButton extends ViewElement implements InputElement
     @Nullable
     private String onValueChangedAction;
     private boolean enabled;
+    private boolean mandatory = true;
 
     @Nullable
     @Override
@@ -49,6 +50,14 @@ public class ErgoAddressChooseButton extends ViewElement implements InputElement
         this.enabled = enabled;
     }
 
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
     @Override
     public void setOnClickAction(@Nullable String action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
@@ -61,11 +70,11 @@ public class ErgoAddressChooseButton extends ViewElement implements InputElement
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ErgoAddressChooseButton that = (ErgoAddressChooseButton) o;
-        return isEnabled() == that.isEnabled() && Objects.equals(address, that.address) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
+        return isMandatory() == that.isMandatory() && isEnabled() == that.isEnabled() && Objects.equals(address, that.address) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), address, getOnValueChangedAction(), isEnabled());
+        return Objects.hash(super.hashCode(), address, getOnValueChangedAction(), isEnabled(), isMandatory());
     }
 }
