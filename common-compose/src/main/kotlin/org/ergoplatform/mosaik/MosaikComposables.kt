@@ -54,9 +54,18 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
     Box(modifier) {
         modification.second?.let { viewTreeRoot ->
             // Crossfade animation here caused some elements to not update
+
+            // the view root should be scrollable if it is a column, otherwise it will fill
+            // the max height
+            val scrollable = viewTreeRoot.element is Column
+
+            val sizeModifier =
+                if (scrollable) Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
+                else Modifier.fillMaxSize()
+
             MosaikTreeElement(
-                viewTreeRoot, Modifier.fillMaxWidth().alpha(if (locked) .3f else 1f)
-                    .verticalScroll(rememberScrollState()).padding(Padding.DEFAULT.toCompose())
+                viewTreeRoot,
+                sizeModifier.alpha(if (locked) .3f else 1f).padding(Padding.DEFAULT.toCompose())
             )
         }
         if (locked) {

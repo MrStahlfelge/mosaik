@@ -46,7 +46,7 @@ class ViewElementsDemoController {
                 box(Padding.HALF_DEFAULT)
 
                 button("Layout elements") {
-                    onClickAction(backendRequest("layoutview"))
+                    onClickAction(backendRequest("layoutview", layoutViewRequestId))
                 }
 
                 box(Padding.HALF_DEFAULT)
@@ -109,3 +109,5 @@ class ViewElementsDemoController {
         }
     }
 }
+
+const val layoutViewRequestId = "layoutviewrequest"

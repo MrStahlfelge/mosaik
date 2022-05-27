@@ -16,6 +16,9 @@ fun <G : ViewGroup> G.box(padding: Padding? = null, init: (@MosaikDsl Box).() ->
     }, init)
 
 @MosaikDsl
+fun ViewContent.card(init: (@MosaikDsl Card).() -> Unit): Card = viewElement(Card(), init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.card(
     outerPadding: Padding? = null,
     init: (@MosaikDsl Card).() -> Unit = {}

@@ -155,8 +155,39 @@ object ViewElementsDemoLayoutView {
 
                 }
 
+                card(Padding.DEFAULT) {
+
+                    column(Padding.DEFAULT) {
+
+                        label("Tree root", style = LabelStyle.HEADLINE2)
+
+                        label(
+                            "Layout elements can be used as the root of the view tree. " +
+                                    "There is a slightly different rendering behaviour based on the " +
+                                    "type of the tree root: If it is a Column, this root Column is " +
+                                    "verically packed, aligned at the top and scrollable. This " +
+                                    "is demonstrated by the whole screen you see here. " +
+                                    "Other elements will be sized to the full screen size and " +
+                                    "not scrolled."
+                        )
+
+                        button("Show a Card as tree root") {
+                            onClickAction(changeView(boxAsRootView()))
+                        }
+                    }
+
+                }
+
             }
 
         }
+
+    private fun boxAsRootView() = mosaikView {
+        card {
+            button("Single button, centered\nClick to go back") {
+                onClickAction(layoutViewRequestId)
+            }
+        }
+    }
 
 }

@@ -65,10 +65,12 @@ fun <A : Action> ViewContent.addAction(
 ): A {
     initAction(action, id, init, setDefaultId)
 
-    // add the action to the view content
+    // add the action to the view content, if there is no equal one
     val currentActions = actions
-    currentActions.add(action)
-    actions = currentActions
+    if (currentActions.none { it == action }) {
+        currentActions.add(action)
+        actions = currentActions
+    }
 
     return action
 }
