@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.input.IntegerInputField
 import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.text.Button
@@ -65,6 +66,19 @@ fun <G : ViewGroup> G.textInputField(
     init: (@MosaikDsl TextInputField).() -> Unit = {}
 ): TextInputField =
     viewElement(TextInputField().apply {
+        this.id = id
+        placeholder?.let { this.placeholder = placeholder }
+        initialValue?.let { this.value = initialValue }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.integerInputField(
+    id: String,
+    placeholder: String? = null,
+    initialValue: Long? = null,
+    init: (@MosaikDsl IntegerInputField).() -> Unit = {}
+): IntegerInputField =
+    viewElement(IntegerInputField().apply {
         this.id = id
         placeholder?.let { this.placeholder = placeholder }
         initialValue?.let { this.value = initialValue }

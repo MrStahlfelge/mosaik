@@ -17,6 +17,9 @@
       "$ref": "textinputfield.json"
     },
     {
+      "$ref": "integerinputfield.json"
+    },
+    {
       "$ref": "button.json"
     },
     {

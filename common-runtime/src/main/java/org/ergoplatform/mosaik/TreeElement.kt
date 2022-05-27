@@ -34,6 +34,9 @@ class TreeElement(
             viewTree.getCurrentValue(this)?.inputValue
         } else null
 
+    private val inputValueHandler: InputElementValueHandler<*>? =
+        InputElementValueHandler.getForElement(element)
+
     val getResourceBytes get() = viewTree.getResourceBytes(this)
 
     /**
@@ -93,34 +96,37 @@ class TreeElement(
         viewTree.runActionFromUserInteraction(actionId)
     }
 
-    fun valueChanged(newValue: Any?): Boolean {
-        val isValid = isValueValid(newValue)
+    val keyboardType get() = inputValueHandler!!.keyboardType
+
+    fun changeValueFromInput(newValue: String?): Boolean {
+        return try {
+            val nativeValue = inputValueHandler!!.valueFromStringInput(newValue)
+            valueChanged(nativeValue)
+        } catch (t: Throwable) {
+            valueChanged(null, true)
+        }
+    }
+
+    fun valueChanged(newValue: Any?, isInvalid: Boolean = false): Boolean {
+        val isValid = if (isInvalid) false else isValueValid(newValue)
         viewTree.onItemValueChanged(this, newValue, isValid)
         return isValid
     }
 
     fun isValueValid(value: Any?): Boolean {
-        return when (element) {
-            is StringTextField -> {
-                val length = (value as? String)?.length ?: 0
-                length >= element.minValue && length <= element.maxValue
-            }
-            is LongTextField -> {
-                // TODO check
-                value is Long && value >= element.minValue && value <= element.maxValue
-            }
-            else -> {
-                // TODO mandatory elements should return false
-                true
-            }
-        }
+        return inputValueHandler!!.isValueValid(value)
     }
+
+    val currentValueAsString: String
+        get() =
+            currentValue?.let { currentValue.toString() } ?: ""
 
     fun getInvalidValueError(): String {
         return when (element) {
             is TextField<*> -> {
                 element.errorMessage ?: element.placeholder ?: element.id!!
-            } else -> {
+            }
+            else -> {
                 id!!
             }
         }

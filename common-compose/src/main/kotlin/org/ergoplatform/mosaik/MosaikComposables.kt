@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -39,7 +40,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.ui.*
-import org.ergoplatform.mosaik.model.ui.input.TextInputField
+import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.Button
 import org.ergoplatform.mosaik.model.ui.text.Label
@@ -116,8 +117,8 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Button -> {
             MosaikButton(treeElement, newModifier)
         }
-        is TextInputField -> {
-            MosaikTextInputField(treeElement, newModifier)
+        is TextField<*> -> {
+            MosaikTextField(treeElement, newModifier)
         }
         is LoadingIndicator -> {
             MosaikLoadingIndicator(treeElement, newModifier)
@@ -129,7 +130,7 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
             MosaikImage(treeElement, newModifier)
         }
         else -> {
-            throw IllegalArgumentException("Unsupported view element: ${element.javaClass.simpleName}")
+            Text("Unsupported view element: ${element.javaClass.simpleName}", newModifier)
         }
     }
 }
@@ -234,13 +235,13 @@ fun MosaikLoadingIndicator(treeElement: TreeElement, modifier: Modifier) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
-    val element = treeElement.element as TextInputField
+fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as TextField<*>
 
     // keep everything the user entered, as long as the [ViewTree] is not changed
     val textFieldState =
         remember(treeElement.createdAtContentVersion) {
-            val currentValue = treeElement.currentValue as String? ?: ""
+            val currentValue = treeElement.currentValueAsString
             mutableStateOf(
                 TextFieldValue(
                     currentValue,
@@ -261,7 +262,8 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                 textFieldState.value,
                 onValueChange = {
                     if (textFieldState.value.text != it.text) {
-                        errorState.value = !treeElement.valueChanged(it.text.ifEmpty { null })
+                        errorState.value =
+                            !treeElement.changeValueFromInput(it.text.ifEmpty { null })
                     }
                     textFieldState.value = it
                 },
@@ -284,10 +286,17 @@ fun MosaikTextInputField(treeElement: TreeElement, modifier: Modifier) {
                         }
                     }),
                 keyboardOptions = KeyboardOptions(
+                    keyboardType = when (treeElement.keyboardType) {
+                        org.ergoplatform.mosaik.KeyboardType.Text -> KeyboardType.Text
+                        org.ergoplatform.mosaik.KeyboardType.Number -> KeyboardType.Number
+                        org.ergoplatform.mosaik.KeyboardType.NumberDecimal -> KeyboardType.Number
+                        org.ergoplatform.mosaik.KeyboardType.Email -> KeyboardType.Email
+                        org.ergoplatform.mosaik.KeyboardType.Password -> KeyboardType.Password
+                    },
                     imeAction = when (element.imeActionType) {
-                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.NEXT -> ImeAction.Next
-                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.DONE -> ImeAction.Done
-                        org.ergoplatform.mosaik.model.ui.input.TextField.ImeActionType.SEARCH -> ImeAction.Search
+                        TextField.ImeActionType.NEXT -> ImeAction.Next
+                        TextField.ImeActionType.DONE -> ImeAction.Done
+                        TextField.ImeActionType.SEARCH -> ImeAction.Search
                     }
                 ),
                 label = { element.placeholder?.let { Text(it) } },

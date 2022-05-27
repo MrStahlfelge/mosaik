@@ -18,7 +18,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DecimalTextField;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountTextField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
-import org.ergoplatform.mosaik.model.ui.input.IntegerTextField;
+import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.PasswordTextField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
@@ -81,7 +81,7 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 clazz = LazyLoadBox.class;
                 break;
             case "IntegerTextField":
-                clazz = IntegerTextField.class;
+                clazz = IntegerInputField.class;
                 break;
             case "Row":
                 clazz = Row.class;
@@ -109,6 +109,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "TextInputField":
                 clazz = TextInputField.class;
+                break;
+            case "IntegerInputField":
+                clazz = IntegerInputField.class;
                 break;
             case "PasswordTextField":
                 clazz = PasswordTextField.class;

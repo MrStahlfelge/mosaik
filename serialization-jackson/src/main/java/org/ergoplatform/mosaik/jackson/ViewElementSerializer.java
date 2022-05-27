@@ -162,7 +162,7 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (value instanceof TextField) {
             if (propertyName.equals("imeActionType") && ((TextField<?>) value).getImeActionType() == TextField.ImeActionType.NEXT ||
                     propertyName.equals("maxValue") && ((TextField<?>) value).getMaxValue() == Long.MAX_VALUE ||
-                    propertyName.equals("minValue") && ((TextField<?>) value).getMaxValue() == 0)
+                    propertyName.equals("minValue") && ((TextField<?>) value).getMinValue() == 0)
                 return null;
         }
 

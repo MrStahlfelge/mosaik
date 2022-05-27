@@ -16,6 +16,7 @@ import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
@@ -106,6 +107,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(TokenLabel.class, new TokenLabelSerializer());
         gsonBuilder.registerTypeAdapter(Action.class, new ActionAdapter());
         gsonBuilder.registerTypeAdapter(TextInputField.class, new TextFieldSerializer<>(String.class, TextInputField.class));
+        gsonBuilder.registerTypeAdapter(IntegerInputField.class, new TextFieldSerializer<>(Long.class, IntegerInputField.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
         gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer());
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());

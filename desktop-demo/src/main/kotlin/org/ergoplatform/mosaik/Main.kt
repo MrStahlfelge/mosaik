@@ -208,7 +208,9 @@ private fun MosaikStateInfo(
     Text("Current values:", fontWeight = FontWeight.Bold)
     val map = viewTree.valueState.collectAsState()
     map.value.second.forEach { (key, value) ->
-        Text(key + ": " + value.inputValue.toString() + " (" + (if (value.valid) "valid" else "invalid") + ")")
+        Text(key + ": " + value.inputValue.toString() +
+                " (" + (value.inputValue?.javaClass?.simpleName ?: "no type") + ", " +
+                (if (value.valid) "valid" else "invalid") + ")")
     }
     Box(Modifier.height(20.dp))
     Text("Current view tree (${viewTree.contentState.value.first}):", fontWeight = FontWeight.Bold)

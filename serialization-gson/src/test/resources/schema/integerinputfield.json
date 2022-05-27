@@ -1,10 +1,10 @@
 {
-  "title": "TextInputField",
+  "title": "IntegerInputField",
   "description": "Text field to enter general text",
   "type": "object",
   "properties": {
     "type": {
-      "const": "TextInputField"
+      "const": "IntegerInputField"
     },
     "id": {
       "description": "The unique identifier for the element. Optional.",
@@ -27,7 +27,7 @@
       "type": "string"
     },
     "value": {
-      "type": "string"
+      "type": "long"
     },
     "minValue": {
       "type": "long"

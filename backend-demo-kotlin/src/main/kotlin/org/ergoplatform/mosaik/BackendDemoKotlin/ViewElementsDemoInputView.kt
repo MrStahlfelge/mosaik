@@ -33,17 +33,30 @@ object ViewElementsDemoInputView {
                     label("TextInputField", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "An input field the user can type any text in."
+                        "An input field the user can type any text in. Min/max controls how many " +
+                                "characters are needed for the input to be considered valid."
                     )
 
-                    textInputField("textinput", "Enter something here") {
+                    textInputField("textinput", "Enter max 10 chars here") {
                         endIcon = IconType.INFO
+                        maxValue = 10
                     }
+                }
+            }
 
-                    box(Padding.DEFAULT)
+            card(Padding.DEFAULT) {
+                column(Padding.DEFAULT) {
+                    label("IntegerInputField", style = LabelStyle.HEADLINE2)
 
-                    label("(Not implemented yet: min/max properties for string length/number values, " +
-                            "soft keyboard button type (DONE, NEXT, SEARCH) and onDefaultAction (on Enter and IME done))")
+                    label(
+                        "An input field the user can type integer numbers text in. " +
+                                "Min/max controls what numbers are considered valid."
+                    )
+
+                    integerInputField("integerinput", "Numbers from 3 to 300 allowed") {
+                        maxValue = 300
+                        minValue = 3
+                    }
                 }
             }
 
@@ -52,7 +65,7 @@ object ViewElementsDemoInputView {
                     label("Other InputField", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "Input fields for EMail, Password, Integer, Decimal, ErgAmount, FiatOrErgAmount"
+                        "Input fields for EMail, Password, Decimal, ErgAmount, FiatOrErgAmount"
                     )
 
                     box(Padding.DEFAULT)
