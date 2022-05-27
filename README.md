@@ -2,7 +2,21 @@
 
 See [current draft](https://docs.google.com/document/d/1Pc4DLChaKyGbMnY4gu92mcBEDfeNiBCQ5hq9lJUssGg/edit?usp=sharing)
 
-## Modules
+## Library modules
+
+The library modules are released on Jitpack. To add it to your environment, make sure Jitpack 
+is in your repositories list:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+Add each library module like follows:
+
+    implementation 'com.github.MrStahlfelge.mosaik:common-model:develop-SNAPSHOT'
 
 ### common-model
 Java 7. Base models Mosaik library works on.
@@ -42,6 +56,8 @@ Kotlin. Jetpack Compose/Desktop Compose implementation to render ViewContent int
 Can be used on Android and Desktop.
 
 Depends on common-runtime and Jetbrains Compose. For use in Mosaik executors building up on Compose.
+
+## Demo modules
 
 ### desktop-demo
 Kotlin. Demo and debug application showcasing how a view tree is shown on screen, displaying 
