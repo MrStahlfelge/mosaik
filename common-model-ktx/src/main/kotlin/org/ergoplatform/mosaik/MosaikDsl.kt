@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.MosaikApp
+import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
@@ -19,7 +20,7 @@ fun mosaikApp(
     appDescription: String? = null,
     appIconUrl: String? = null,
     appBaseUrl: String? = null,
-    targetMosaikVersion: Int,
+    targetMosaikVersion: Int = MosaikContext.LIBRARY_MOSAIK_VERSION,
     targetCanvasDimension: MosaikManifest.CanvasDimension? = null,
     cacheLifetime: Int = 0,
     errorReportUrl: String? = null,

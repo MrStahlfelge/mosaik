@@ -60,7 +60,7 @@ class ViewTreeTest : TestCase() {
                             manifest = MosaikManifest(
                                 "appname",
                                 0,
-                                0,
+                                MosaikContext.LIBRARY_MOSAIK_VERSION,
                                 null,
                                 0,
                             )
@@ -99,7 +99,7 @@ class ViewTreeTest : TestCase() {
                 pasteToClipboard = {},
                 openBrowser = { true },
                 mosaikContext = MosaikContext(
-                    0,
+                    MosaikContext.LIBRARY_MOSAIK_VERSION,
                     UUID.randomUUID().toString(),
                     "",
                     "Testexecutor",

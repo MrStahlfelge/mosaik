@@ -31,7 +31,7 @@ public class LazyBoxDemoController {
         MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
 
         MosaikApp appInfo = new MosaikApp();
-        MosaikManifest loadBoxManifest = new MosaikManifest("LazyLoadBoxDemo", BackendDemoApplication.APP_VERSION, 0, null, 0);
+        MosaikManifest loadBoxManifest = new MosaikManifest("LazyLoadBoxDemo", BackendDemoApplication.APP_VERSION, MosaikContext.LIBRARY_MOSAIK_VERSION, null, 0);
         appInfo.setManifest(loadBoxManifest);
 
         Column container = new Column();

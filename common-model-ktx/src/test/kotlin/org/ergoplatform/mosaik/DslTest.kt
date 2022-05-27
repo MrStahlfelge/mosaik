@@ -13,7 +13,6 @@ class DslTest : TestCase() {
         val app = mosaikApp(
             appName = "Test",
             appVersion = 0,
-            targetMosaikVersion = 0
         ) {
 
             showDialog("This is an error message") {

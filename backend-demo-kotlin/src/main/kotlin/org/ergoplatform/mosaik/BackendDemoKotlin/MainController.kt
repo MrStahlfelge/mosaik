@@ -35,7 +35,6 @@ class MainController {
         return mosaikApp(
             "App Selector",
             appVersion = APP_VERSION,
-            targetMosaikVersion = 0,
 
             // when writing your own app on a fixed server, you can use a constant here. Since
             // this demo might run locally on various ports and contacted through localhost or an IP

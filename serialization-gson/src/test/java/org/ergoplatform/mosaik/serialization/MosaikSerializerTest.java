@@ -11,6 +11,7 @@ import net.jimblackler.jsonschemafriend.ValidationException;
 import net.jimblackler.jsonschemafriend.Validator;
 
 import org.ergoplatform.mosaik.model.MosaikApp;
+import org.ergoplatform.mosaik.model.MosaikContext;
 import org.ergoplatform.mosaik.model.MosaikManifest;
 import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ViewContent;
@@ -115,7 +116,7 @@ public class MosaikSerializerTest extends TestCase {
         content.setManifest(new MosaikManifest(
                 "appname",
                 0,
-                0,
+                MosaikContext.LIBRARY_MOSAIK_VERSION,
                 null,
                 0
         ));

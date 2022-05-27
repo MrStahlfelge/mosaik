@@ -45,7 +45,7 @@ fun main() {
         val dialogHandler = MosaikComposeDialogHandler()
 
         val mosaikContext = MosaikContext(
-            1,
+            MosaikContext.LIBRARY_MOSAIK_VERSION,
             UUID.randomUUID().toString(),
             "EN",
             "demoapp",

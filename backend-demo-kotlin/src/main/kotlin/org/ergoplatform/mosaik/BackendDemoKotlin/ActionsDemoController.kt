@@ -16,7 +16,6 @@ class ActionsDemoController {
         mosaikApp(
             "Mosaik actions demo",
             appVersion = APP_VERSION,
-            targetMosaikVersion = 0,
             appBaseUrl = request.requestURL.toString(),
 
             ) {
