@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -55,45 +56,49 @@ fun main() {
             MosaikContext.Platform.DESKTOP
         )
 
-        val backendConnector = object : OkHttpBackendConnector(OkHttpClient.Builder()) {
-            override fun loadMosaikApp(
-                url: String,
-                context: MosaikContext,
-                referrer: String?,
-            ): MosaikApp {
-                return if (url.isBlank()) {
-                    MosaikSerializer().firstRequestResponseFromJson(json)
-                } else {
-                    val urlToUse = if (url.contains("://")) url else "http://$url"
-                    super.loadMosaikApp(urlToUse, context, referrer)
+        val backendConnector =
+            object : OkHttpBackendConnector(OkHttpClient.Builder(), { mosaikContext }) {
+                override fun loadMosaikApp(
+                    url: String,
+                    referrer: String?,
+                ): MosaikApp {
+                    return if (url.isBlank()) {
+                        MosaikSerializer().firstRequestResponseFromJson(json)
+                    } else {
+                        val urlToUse = if (url.contains("://")) url else "http://$url"
+                        super.loadMosaikApp(urlToUse, referrer)
+                    }
                 }
             }
-        }
 
         val manifestState: MutableState<MosaikManifest?> = mutableStateOf(null)
 
         val runtime =
-            MosaikRuntime(
-                coroutineScope = {
+            object : MosaikRuntime(
+                backendConnector = backendConnector,
+            ) {
+                override val coroutineScope: CoroutineScope
                     // for our demo GlobalScope is good to use
                     // for a wallet application, the scope should be bound to the lifecycle of the view
                     // showing the view tree
-                    GlobalScope
-                },
-                backendConnector = backendConnector,
-                mosaikContext = mosaikContext,
-                showDialog = dialogHandler.showDialog,
-                pasteToClipboard = { text ->
+                    get() = GlobalScope
+
+                override fun showDialog(dialog: MosaikDialog) {
+                    dialogHandler.showDialog(dialog)
+                }
+
+                override fun pasteToClipboard(text: String) {
                     val selection = StringSelection(text)
                     val clipboard = Toolkit.getDefaultToolkit().systemClipboard
                     clipboard.setContents(selection, selection)
-                },
-                openBrowser = { url ->
+                }
+
+                override fun openBrowser(url: String): Boolean {
                     val osName by lazy(LazyThreadSafetyMode.NONE) {
                         System.getProperty("os.name").lowercase(Locale.getDefault())
                     }
                     val desktop = Desktop.getDesktop()
-                    when {
+                    return when {
                         Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE) -> {
                             desktop.browse(URI(url))
                             true
@@ -108,9 +113,10 @@ fun main() {
                         }
                         else -> false
                     }
-                },
-                appLoaded = { manifestState.value = it }
-            )
+                }
+            }
+
+        runtime.appLoaded = { manifestState.value = it }
         runtime.loadMosaikApp("")
         val viewTree = runtime.viewTree
 

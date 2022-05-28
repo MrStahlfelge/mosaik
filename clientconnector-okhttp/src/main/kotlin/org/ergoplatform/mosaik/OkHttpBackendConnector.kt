@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 open class OkHttpBackendConnector(
     okClientBuilder: OkHttpClient.Builder,
+    val getContextFor: (url: String) -> MosaikContext,
     timeoutSeconds: Long = 30
 ) : MosaikBackendConnector {
 
@@ -20,10 +21,10 @@ open class OkHttpBackendConnector(
         .readTimeout(timeoutSeconds, TimeUnit.SECONDS)
         .writeTimeout(timeoutSeconds, TimeUnit.SECONDS).build()
 
-    override fun loadMosaikApp(url: String, context: MosaikContext, referrer: String?): MosaikApp {
+    override fun loadMosaikApp(url: String, referrer: String?): MosaikApp {
         val (contentType, json) = fetchHttpGetStringSync(
             url,
-            Headers.of(serializer.contextHeadersMap(context, referrer))
+            Headers.of(serializer.contextHeadersMap(getContextFor(url), referrer))
         )
         if (contentType?.lowercase()?.startsWith("text/html") == true) {
             // we could have a website here, check for <link rel="mosaik" tag>
@@ -31,7 +32,7 @@ open class OkHttpBackendConnector(
             val mosaikRelLink = checkForMosaikRelTag(json)
             if (mosaikRelLink != null) {
                 // found a mosaik rel tag, so let's load from there
-                return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), context, referrer)
+                return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), referrer)
             }
         }
         return try {
@@ -70,14 +71,14 @@ open class OkHttpBackendConnector(
     override fun fetchAction(
         url: String,
         baseUrl: String?,
-        context: MosaikContext,
         values: Map<String, Any?>,
         referrer: String?
     ): FetchActionResponse {
+        val httpUrl = makeAbsoluteUrl(baseUrl, url)
         val json = httpPostStringSync(
-            makeAbsoluteUrl(baseUrl, url),
+            httpUrl,
             serializer.valuesMapToJson(values),
-            Headers.of(serializer.contextHeadersMap(context, referrer))
+            Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
         )
         return serializer.fetchActionResponseFromJson(json)
     }
@@ -85,12 +86,12 @@ open class OkHttpBackendConnector(
     override fun fetchLazyContent(
         url: String,
         baseUrl: String?,
-        context: MosaikContext,
         referrer: String
     ): ViewContent {
+        val httpUrl = makeAbsoluteUrl(baseUrl, url)
         val (_, json) = fetchHttpGetStringSync(
-            makeAbsoluteUrl(baseUrl, url),
-            Headers.of(serializer.contextHeadersMap(context, referrer))
+            httpUrl,
+            Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
         )
 
         return serializer.viewContentFromJson(json)

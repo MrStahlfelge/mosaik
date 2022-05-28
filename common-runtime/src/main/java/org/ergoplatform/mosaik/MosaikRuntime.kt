@@ -1,24 +1,32 @@
 package org.ergoplatform.mosaik
 
 import kotlinx.coroutines.*
-import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.*
 
-open class MosaikRuntime(
-    val coroutineScope: () -> CoroutineScope,
-    val mosaikContext: MosaikContext,
+abstract class MosaikRuntime(
     val backendConnector: MosaikBackendConnector,
+) {
+
+    abstract val coroutineScope: CoroutineScope
+
     /**
      * Handler to show and manage modal dialogs. These dialogs are managed outside Mosaik's
      * [ViewTree] so that implementations can use platform's modal dialogs
      */
-    val showDialog: (MosaikDialog) -> Unit,
+    abstract fun showDialog(dialog: MosaikDialog)
+
+    abstract fun pasteToClipboard(text: String)
+
+    abstract fun openBrowser(url: String): Boolean
+
+    var appLoaded: ((MosaikManifest) -> Unit)? = null
+
     /**
      * Show error to user. Can be called on background thread
      */
-    val showError: (t: Throwable) -> Unit = { error ->
+    open fun showError(error: Throwable) {
         showDialog(
             MosaikDialog(
                 "Error:\n${error.message}\n(${error.javaClass.simpleName})",
@@ -28,11 +36,7 @@ open class MosaikRuntime(
                 null
             )
         )
-    },
-    val pasteToClipboard: (text: String) -> Unit,
-    val openBrowser: (url: String) -> Boolean,
-    val appLoaded: ((MosaikManifest) -> Unit)? = null,
-) {
+    }
 
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
@@ -86,13 +90,12 @@ open class MosaikRuntime(
             viewTree.ensureValuesAreCorrect()
 
         viewTree.uiLocked = true
-        coroutineScope().launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             try {
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,
                         appBaseUrl,
-                        mosaikContext,
                         if (action.postValues == BackendRequestAction.PostValueType.NONE) emptyMap()
                         else viewTree.currentValidValues,
                         actualAppUrl
@@ -170,9 +173,9 @@ open class MosaikRuntime(
      */
     open fun loadMosaikApp(url: String, referrer: String? = null) {
         viewTree.uiLocked = true
-        coroutineScope().launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             try {
-                val mosaikApp = backendConnector.loadMosaikApp(url, mosaikContext, referrer)
+                val mosaikApp = backendConnector.loadMosaikApp(url, referrer)
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
@@ -216,7 +219,7 @@ open class MosaikRuntime(
      */
     fun fetchLazyContents(url: String): ViewContent? {
         return try {
-            backendConnector.fetchLazyContent(url, appBaseUrl, mosaikContext, actualAppUrl!!)
+            backendConnector.fetchLazyContent(url, appBaseUrl, actualAppUrl!!)
         } catch (t: Throwable) {
             MosaikLogger.logError("Could not fetch content $url", t)
             null

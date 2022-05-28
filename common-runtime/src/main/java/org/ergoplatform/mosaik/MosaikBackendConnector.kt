@@ -2,7 +2,6 @@ package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.MosaikApp
-import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ViewContent
 
 /**
@@ -14,8 +13,6 @@ interface MosaikBackendConnector {
      */
     fun loadMosaikApp(
         url: String,
-        context:
-        MosaikContext,
         referrer: String?,
     ): MosaikApp
 
@@ -24,7 +21,6 @@ interface MosaikBackendConnector {
      */
     fun fetchAction(
         url: String, baseUrl: String?,
-        context: MosaikContext,
         values: Map<String, Any?>,
         referrer: String?,
     ): FetchActionResponse
@@ -35,7 +31,6 @@ interface MosaikBackendConnector {
     fun fetchLazyContent(
         url: String,
         baseUrl: String?,
-        context: MosaikContext,
         referrer: String
     ): ViewContent
 

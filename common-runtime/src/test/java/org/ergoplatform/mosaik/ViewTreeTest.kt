@@ -1,10 +1,10 @@
 package org.ergoplatform.mosaik
 
 import junit.framework.TestCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.*
 import org.ergoplatform.mosaik.model.ui.layout.Box
-import java.util.*
 
 class ViewTreeTest : TestCase() {
 
@@ -48,12 +48,10 @@ class ViewTreeTest : TestCase() {
         boxRoot.addChild(boxB)
 
         val runtime =
-            MosaikRuntime(
-                coroutineScope = { GlobalScope },
+            object : MosaikRuntime(
                 backendConnector = object : MosaikBackendConnector {
                     override fun loadMosaikApp(
                         url: String,
-                        context: MosaikContext,
                         referrer: String?
                     ): MosaikApp {
                         return MosaikApp().apply {
@@ -71,7 +69,6 @@ class ViewTreeTest : TestCase() {
                     override fun fetchAction(
                         url: String,
                         baseUrl: String?,
-                        context: MosaikContext,
                         values: Map<String, Any?>,
                         referrer: String?
                     ): FetchActionResponse {
@@ -81,7 +78,6 @@ class ViewTreeTest : TestCase() {
                     override fun fetchLazyContent(
                         url: String,
                         baseUrl: String?,
-                        context: MosaikContext,
                         referrer: String
                     ): ViewContent {
                         throw UnsupportedOperationException()
@@ -94,19 +90,23 @@ class ViewTreeTest : TestCase() {
                     ): ByteArray {
                         throw UnsupportedOperationException()
                     }
-                },
-                showDialog = { },
-                pasteToClipboard = {},
-                openBrowser = { true },
-                mosaikContext = MosaikContext(
-                    MosaikContext.LIBRARY_MOSAIK_VERSION,
-                    UUID.randomUUID().toString(),
-                    "",
-                    "Testexecutor",
-                    "0",
-                    MosaikContext.Platform.DESKTOP
-                )
-            )
+                }) {
+                override val coroutineScope: CoroutineScope
+                    get() = GlobalScope
+
+                override fun showDialog(dialog: MosaikDialog) {
+
+                }
+
+                override fun pasteToClipboard(text: String) {
+
+                }
+
+                override fun openBrowser(url: String): Boolean {
+                    return true
+                }
+            }
+
 
         runtime.loadMosaikApp("")
 

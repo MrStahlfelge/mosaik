@@ -218,7 +218,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     fun registerJobFor(element: TreeElement, job: suspend (CoroutineScope) -> Unit) {
         synchronized(jobMap) {
             cancelRunningJobFor(element)
-            val newJob = mosaikRuntime.coroutineScope().launch {
+            val newJob = mosaikRuntime.coroutineScope.launch {
                 job(this)
             }
             jobMap[element.idOrUuid] = newJob

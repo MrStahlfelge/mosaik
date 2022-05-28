@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 public class LazyBoxDemoController {
     @GetMapping("/lazybox")
@@ -74,11 +72,12 @@ public class LazyBoxDemoController {
     }
 
     @GetMapping("lazybox/boxcontents")
-    public ViewContent boxContents() throws InterruptedException {
+    public ViewContent boxContents(@RequestHeader Map<String, String> headers) throws InterruptedException {
+        MosaikContext context = MosaikSerializer.fromContextHeadersMap(headers);
         Thread.sleep(5000);
 
         Label text = new Label();
-        text.setText("This text was loaded later");
+        text.setText("This text was loaded later; you are using " + context.walletAppName);
 
         return new ViewContent(text);
     }
