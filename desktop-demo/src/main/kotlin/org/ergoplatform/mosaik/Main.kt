@@ -23,7 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
@@ -97,25 +96,31 @@ fun main() {
                     clipboard.setContents(selection, selection)
                 }
 
-                override fun openBrowser(url: String): Boolean {
+                override fun openBrowser(url: String) {
                     val osName by lazy(LazyThreadSafetyMode.NONE) {
                         System.getProperty("os.name").lowercase(Locale.getDefault())
                     }
                     val desktop = Desktop.getDesktop()
-                    return when {
+                    when {
                         Desktop.isDesktopSupported() && desktop.isSupported(Desktop.Action.BROWSE) -> {
                             desktop.browse(URI(url))
-                            true
                         }
                         "mac" in osName -> {
                             Runtime.getRuntime().exec("open $url")
-                            true
                         }
                         "nix" in osName || "nux" in osName -> {
                             Runtime.getRuntime().exec("xdg-open $url")
-                            true
                         }
-                        else -> false
+                        else -> {
+                            showDialog(
+                                MosaikDialog(
+                                    url, "OK",
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
+                        }
                     }
                 }
             }

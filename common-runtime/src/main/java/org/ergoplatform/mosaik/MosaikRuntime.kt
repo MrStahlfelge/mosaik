@@ -19,7 +19,7 @@ abstract class MosaikRuntime(
 
     abstract fun pasteToClipboard(text: String)
 
-    abstract fun openBrowser(url: String): Boolean
+    abstract fun openBrowser(url: String)
 
     var appLoaded: ((MosaikManifest) -> Unit)? = null
 
@@ -126,17 +126,7 @@ abstract class MosaikRuntime(
     }
 
     open fun runBrowserAction(action: BrowserAction) {
-        val success = openBrowser(action.url)
-        if (!success) {
-            showDialog(
-                MosaikDialog(
-                    action.url, "OK",
-                    null,
-                    null,
-                    null
-                )
-            )
-        }
+        openBrowser(action.url)
     }
 
     open fun runDialogAction(action: DialogAction) {

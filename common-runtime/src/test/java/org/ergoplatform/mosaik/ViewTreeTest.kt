@@ -102,8 +102,8 @@ class ViewTreeTest : TestCase() {
 
                 }
 
-                override fun openBrowser(url: String): Boolean {
-                    return true
+                override fun openBrowser(url: String) {
+
                 }
             }
 
