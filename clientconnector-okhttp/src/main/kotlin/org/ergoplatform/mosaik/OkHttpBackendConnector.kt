@@ -21,7 +21,7 @@ open class OkHttpBackendConnector(
         .readTimeout(timeoutSeconds, TimeUnit.SECONDS)
         .writeTimeout(timeoutSeconds, TimeUnit.SECONDS).build()
 
-    override fun loadMosaikApp(url: String, referrer: String?): MosaikApp {
+    override fun loadMosaikApp(url: String, referrer: String?): MosaikBackendConnector.AppLoaded {
         val (contentType, json) = fetchHttpGetStringSync(
             url,
             Headers.of(serializer.contextHeadersMap(getContextFor(url), referrer))
@@ -35,11 +35,13 @@ open class OkHttpBackendConnector(
                 return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), referrer)
             }
         }
-        return try {
-            serializer.firstRequestResponseFromJson(json)
-        } catch (t: Throwable) {
-            throw IllegalArgumentException("$url did not send a valid response.")
-        }
+        return MosaikBackendConnector.AppLoaded(
+            try {
+                serializer.firstRequestResponseFromJson(json)
+            } catch (t: Throwable) {
+                throw IllegalArgumentException("$url did not send a valid response.")
+            }, url
+        )
     }
 
     internal fun checkForMosaikRelTag(html: String): String? {

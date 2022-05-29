@@ -53,8 +53,8 @@ class ViewTreeTest : TestCase() {
                     override fun loadMosaikApp(
                         url: String,
                         referrer: String?
-                    ): MosaikApp {
-                        return MosaikApp().apply {
+                    ): MosaikBackendConnector.AppLoaded {
+                        return MosaikBackendConnector.AppLoaded(MosaikApp().apply {
                             manifest = MosaikManifest(
                                 "appname",
                                 0,
@@ -63,7 +63,7 @@ class ViewTreeTest : TestCase() {
                                 0,
                             )
                             view = boxRoot
-                        }
+                        }, url)
                     }
 
                     override fun fetchAction(

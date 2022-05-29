@@ -175,11 +175,12 @@ abstract class MosaikRuntime(
         viewTree.uiLocked = true
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val mosaikApp = backendConnector.loadMosaikApp(url, referrer)
+                val loadAppResponse = backendConnector.loadMosaikApp(url, referrer)
+                val mosaikApp = loadAppResponse.mosaikApp
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
-                appUrl = url
+                appUrl = loadAppResponse.appUrl
                 appLoaded?.invoke(mosaikApp.manifest)
             } catch (t: Throwable) {
                 // TODO errors during first app loading (with empty screen) should be handled

@@ -61,9 +61,13 @@ fun main() {
                 override fun loadMosaikApp(
                     url: String,
                     referrer: String?,
-                ): MosaikApp {
+                ): MosaikBackendConnector.AppLoaded {
                     return if (url.isBlank()) {
-                        MosaikSerializer().firstRequestResponseFromJson(json)
+                        MosaikBackendConnector.AppLoaded(
+                            MosaikSerializer().firstRequestResponseFromJson(
+                                json
+                            ), url
+                        )
                     } else {
                         val urlToUse = if (url.contains("://")) url else "http://$url"
                         super.loadMosaikApp(urlToUse, referrer)

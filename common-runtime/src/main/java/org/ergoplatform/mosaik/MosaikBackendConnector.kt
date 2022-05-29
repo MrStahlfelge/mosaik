@@ -14,7 +14,7 @@ interface MosaikBackendConnector {
     fun loadMosaikApp(
         url: String,
         referrer: String?,
-    ): MosaikApp
+    ): AppLoaded
 
     /**
      * loads an action from Mosaik app. Blocking, call on a background thread
@@ -42,4 +42,6 @@ interface MosaikBackendConnector {
         baseUrl: String?,
         referrer: String?
     ): ByteArray
+
+    data class AppLoaded(val mosaikApp: MosaikApp, val appUrl: String)
 }
