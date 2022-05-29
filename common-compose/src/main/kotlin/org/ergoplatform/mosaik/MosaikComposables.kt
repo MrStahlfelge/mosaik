@@ -39,6 +39,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonTextColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
@@ -67,10 +68,18 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
                         .verticalScroll(scrollState)
                 } else Modifier.fillMaxSize()
 
-            MosaikTreeElement(
-                viewTreeRoot,
-                sizeModifier.alpha(if (locked) .3f else 1f).padding(Padding.DEFAULT.toCompose())
-            )
+            Box(sizeModifier) {
+                MosaikTreeElement(
+                    viewTreeRoot,
+                    Modifier.alpha(if (locked) .3f else 1f).padding(Padding.DEFAULT.toCompose())
+                        .align(Alignment.Center).widthIn(max = when (viewTree.targetCanvasDimension) {
+                            // https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes
+                            MosaikManifest.CanvasDimension.COMPACT_WIDTH -> 600.dp
+                            MosaikManifest.CanvasDimension.MEDIUM_WIDTH -> 840.dp
+                            else -> Dp.Unspecified
+                        })
+                )
+            }
         }
         if (locked) {
             Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.1f)))

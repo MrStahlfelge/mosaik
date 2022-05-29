@@ -82,14 +82,14 @@ public class MosaikManifest {
         /**
          * Portrait canvas comparable to a mobile phone or a browser side bar
          */
-        PORTRAIT_SMALL,
+        COMPACT_WIDTH,
         /**
          * Portrait canvas comparable to a tablet in portrait mode
          */
-        PORTRAIT_MEDIUM,
+        MEDIUM_WIDTH,
         /**
          * Full screen canvas in landscape mode
          */
-        LANDSCAPE
+        FULL_WIDTH
     }
 }

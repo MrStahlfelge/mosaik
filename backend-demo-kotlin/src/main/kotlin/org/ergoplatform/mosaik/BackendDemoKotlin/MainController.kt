@@ -35,6 +35,7 @@ class MainController {
         return mosaikApp(
             "App Selector",
             appVersion = APP_VERSION,
+            targetCanvasDimension = CANVAS,
 
             ) {
 

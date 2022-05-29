@@ -16,6 +16,7 @@ import org.ergoplatform.mosaik.model.ui.layout.Box
 class ViewTree(val mosaikRuntime: MosaikRuntime) {
     var content: TreeElement? = null
         private set
+    val targetCanvasDimension get() = mosaikRuntime.appManifest?.targetCanvasDimension
 
     private val idMap = HashMap<String, TreeElement>()
     private val valueMap = HashMap<String, CheckedValue>()
@@ -303,10 +304,13 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      * throws [InvalidValuesException] if invalid values are entered by user
      */
     fun ensureValuesAreCorrect() {
-        val invalidPairs = valueMap.entries.filter { valueValidEntry -> !valueValidEntry.value.valid }
+        val invalidPairs =
+            valueMap.entries.filter { valueValidEntry -> !valueValidEntry.value.valid }
 
         if (invalidPairs.isNotEmpty()) {
-            val errorList = invalidPairs.map { entry -> findElementById(entry.key)!!.getInvalidValueError() }.joinToString("\n")
+            val errorList =
+                invalidPairs.map { entry -> findElementById(entry.key)!!.getInvalidValueError() }
+                    .joinToString("\n")
 
             throw InvalidValuesException("Please enter valid inputs for\n$errorList", errorList)
         }

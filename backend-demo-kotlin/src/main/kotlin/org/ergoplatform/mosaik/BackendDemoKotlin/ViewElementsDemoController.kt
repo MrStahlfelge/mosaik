@@ -17,6 +17,7 @@ class ViewElementsDemoController {
         mosaikApp(
             "View elements demo",
             appVersion = APP_VERSION,
+            targetCanvasDimension = CANVAS,
 
             ) {
 

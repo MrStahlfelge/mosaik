@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.ergoplatform.mosaik.model.MosaikManifest
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -23,4 +24,4 @@ fun main(args: Array<String>) {
 }
 
 const val APP_VERSION = 1
-
+val CANVAS = MosaikManifest.CanvasDimension.MEDIUM_WIDTH
