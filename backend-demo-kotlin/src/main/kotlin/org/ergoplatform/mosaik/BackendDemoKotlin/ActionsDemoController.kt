@@ -59,6 +59,20 @@ class ActionsDemoController {
                     onClickAction(backendRequest("changesite"))
                 }
 
+                box(Padding.HALF_DEFAULT)
+
+                button("Copy into clipboard") {
+                    onClickAction(copyToClipboard("Copied into clipboard"))
+                }
+
+                box(Padding.HALF_DEFAULT)
+
+                button("Show a dialog with two options") {
+                    onClickAction(showDialog("This is your dialog") {
+                        negativeButtonText = "Cancel"
+                    })
+                }
+
             }
 
         }
