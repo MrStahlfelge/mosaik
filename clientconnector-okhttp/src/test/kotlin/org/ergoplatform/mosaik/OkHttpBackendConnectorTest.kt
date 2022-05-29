@@ -30,6 +30,13 @@ class OkHttpBackendConnectorTest {
         assertNull(backendConnector.checkForMosaikRelTag("<head><link rel=\"mossaik\" href=\"visitors/\"></head>"))
         assertNull(backendConnector.checkForMosaikRelTag("<head><link rel=\"mosaik\" href=\"\"></head>"))
         assertNull(backendConnector.checkForMosaikRelTag("<head><link rel=\"mosaik\"></head>"))
+        assertNull(
+            backendConnector.checkForMosaikRelTag(
+                "<head>"
+                        + List<Char>(100) { ' ' }.joinToString()
+                        + "<link rel=\"mosaik\"></head>"
+            )
+        )
         assertNull(backendConnector.checkForMosaikRelTag("<head></head>"))
         assertEquals(
             "_",

@@ -65,7 +65,7 @@ open class OkHttpBackendConnector(
                 }
             }
 
-            startIndex = searchNext(50)
+            startIndex = searchNext(endIndex)
         }
         return null
     }
