@@ -36,11 +36,6 @@ class MainController {
             "App Selector",
             appVersion = APP_VERSION,
 
-            // when writing your own app on a fixed server, you can use a constant here. Since
-            // this demo might run locally on various ports and contacted through localhost or an IP
-            // address, this is a safe bet to use
-            appBaseUrl = baseUrl,
-
             ) {
 
             column {

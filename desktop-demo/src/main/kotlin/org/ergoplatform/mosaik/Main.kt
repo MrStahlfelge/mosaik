@@ -187,7 +187,7 @@ private fun MosaikAppHeader(
     Column {
         val urlTextFieldState = remember(manifestState.value) {
             mutableStateOf(
-                TextFieldValue(runtime.appBaseUrl ?: "", selection = TextRange(0, 1000))
+                TextFieldValue(runtime.appUrl ?: "", selection = TextRange(0, 1000))
             )
         }
         Text(manifestState.value?.appName ?: "(No app)")

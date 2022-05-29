@@ -43,7 +43,6 @@ public class MainController {
         // this demo might run locally on various ports and contacted through localhost or an IP
         // address, this is a safe bet to use
         String baseUrl = request.getRequestURL().toString();
-        loadBoxManifest.baseUrl = baseUrl;
         String serverRequestUrl = baseUrl.substring(0, baseUrl.indexOf("appselect"));
 
         MosaikApp appInfo = new MosaikApp();

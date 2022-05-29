@@ -17,7 +17,6 @@ class ViewElementsDemoController {
         mosaikApp(
             "View elements demo",
             appVersion = APP_VERSION,
-            appBaseUrl = request.requestURL.toString(),
 
             ) {
 

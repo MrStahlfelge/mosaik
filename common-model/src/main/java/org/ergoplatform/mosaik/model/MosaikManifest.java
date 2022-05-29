@@ -31,13 +31,6 @@ public class MosaikManifest {
     public String iconUrl;
 
     /**
-     * Base url this app runs on. If set, this will be used and updated when the user saves the app
-     * to favorites, and used to resolve relative URLs
-     */
-    @Nullable
-    public String baseUrl;
-
-    /**
      * defines the current apps version. If the version flag changes while a user runs the app,
      * it will be reloaded from base URL.
      */

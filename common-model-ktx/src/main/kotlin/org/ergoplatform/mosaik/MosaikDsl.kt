@@ -19,7 +19,6 @@ fun mosaikApp(
     appName: String, appVersion: Int,
     appDescription: String? = null,
     appIconUrl: String? = null,
-    appBaseUrl: String? = null,
     targetMosaikVersion: Int = MosaikContext.LIBRARY_MOSAIK_VERSION,
     targetCanvasDimension: MosaikManifest.CanvasDimension? = null,
     cacheLifetime: Int = 0,
@@ -37,7 +36,6 @@ fun mosaikApp(
     ).apply {
         this.appDescription = appDescription
         this.iconUrl = appIconUrl
-        this.baseUrl = appBaseUrl
         this.errorReportUrl = errorReportUrl
     }
 

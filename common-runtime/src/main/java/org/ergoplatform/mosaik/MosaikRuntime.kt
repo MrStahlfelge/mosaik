@@ -41,8 +41,8 @@ abstract class MosaikRuntime(
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
-    private var actualAppUrl: String? = null
-    val appBaseUrl get() = appManifest?.baseUrl ?: actualAppUrl
+    var appUrl: String? = null
+        private set
 
     open fun runAction(action: Action) {
         MosaikLogger.logDebug("Running action ${action.id}...")
@@ -67,7 +67,7 @@ abstract class MosaikRuntime(
                     runNavigateAction(action)
                 }
                 is ReloadAction -> {
-                    loadMosaikApp(appBaseUrl!!)
+                    loadMosaikApp(appUrl!!)
                 }
                 else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
             }
@@ -82,7 +82,7 @@ abstract class MosaikRuntime(
     }
 
     open fun runNavigateAction(action: NavigateAction) {
-        loadMosaikApp(action.url, actualAppUrl)
+        loadMosaikApp(action.url, appUrl)
     }
 
     open fun runBackendRequest(action: BackendRequestAction) {
@@ -95,10 +95,10 @@ abstract class MosaikRuntime(
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,
-                        appBaseUrl,
+                        appUrl,
                         if (action.postValues == BackendRequestAction.PostValueType.NONE) emptyMap()
                         else viewTree.currentValidValues,
-                        actualAppUrl
+                        appUrl
                     )
                 val appVersion = fetchActionResponse.appVersion
                 val newAction = fetchActionResponse.action
@@ -179,7 +179,7 @@ abstract class MosaikRuntime(
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
-                actualAppUrl = url
+                appUrl = url
                 appLoaded?.invoke(mosaikApp.manifest)
             } catch (t: Throwable) {
                 // TODO errors during first app loading (with empty screen) should be handled
@@ -207,7 +207,7 @@ abstract class MosaikRuntime(
      */
     fun downloadImage(url: String): ByteArray {
         return try {
-            backendConnector.fetchImage(url, appBaseUrl, actualAppUrl)
+            backendConnector.fetchImage(url, appUrl, appUrl)
         } catch (t: Throwable) {
             MosaikLogger.logWarning("Could not download image $url", t)
             ByteArray(0)
@@ -219,7 +219,7 @@ abstract class MosaikRuntime(
      */
     fun fetchLazyContents(url: String): ViewContent? {
         return try {
-            backendConnector.fetchLazyContent(url, appBaseUrl, actualAppUrl!!)
+            backendConnector.fetchLazyContent(url, appUrl, appUrl!!)
         } catch (t: Throwable) {
             MosaikLogger.logError("Could not fetch content $url", t)
             null
