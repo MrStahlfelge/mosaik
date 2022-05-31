@@ -197,7 +197,7 @@ abstract class MosaikRuntime(
      * Returns false if there us no previous Mosaik app
      */
     open fun navigateBack(): Boolean {
-        return if (_appUrlStack.size >= 2) {
+        return if (canNavigateBack()) {
             _appUrlStack.remove()
             val lastApp = _appUrlStack.first
             loadMosaikApp(lastApp.url, lastApp.referrer)
@@ -205,6 +205,8 @@ abstract class MosaikRuntime(
         } else
             false
     }
+
+    fun canNavigateBack() = _appUrlStack.size >= 2
 
     /**
      * an error that is shown to user and reported to the error report url
