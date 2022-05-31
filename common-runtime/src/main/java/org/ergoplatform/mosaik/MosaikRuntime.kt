@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.*
+import java.util.*
 
 abstract class MosaikRuntime(
     val backendConnector: MosaikBackendConnector,
@@ -41,8 +42,9 @@ abstract class MosaikRuntime(
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
-    var appUrl: String? = null
-        private set
+    private val _appUrlStack = LinkedList<UrlHistoryEntry>()
+    val appUrlHistory: List<String> get() = _appUrlStack.map { it.url }
+    val appUrl: String? get() = if (_appUrlStack.isNotEmpty()) appUrlHistory.first() else null
 
     open fun runAction(action: Action) {
         MosaikLogger.logDebug("Running action ${action.id}...")
@@ -170,8 +172,7 @@ abstract class MosaikRuntime(
                 appManifest = mosaikApp.manifest
 
                 viewTree.setRootView(mosaikApp)
-                appUrl = loadAppResponse.appUrl
-                appLoaded?.invoke(mosaikApp.manifest)
+                navigatedTo(UrlHistoryEntry(loadAppResponse.appUrl, referrer), mosaikApp.manifest)
             } catch (t: Throwable) {
                 // TODO errors during first app loading (with empty screen) should be handled
                 //  different from errors
@@ -183,6 +184,26 @@ abstract class MosaikRuntime(
 
             viewTree.uiLocked = false
         }
+    }
+
+    private fun navigatedTo(urlHistoryEntry: UrlHistoryEntry, manifest: MosaikManifest) {
+        if (appUrl != urlHistoryEntry.url)
+            _appUrlStack.addFirst(urlHistoryEntry)
+        appLoaded?.invoke(manifest)
+    }
+
+    /**
+     * Navigates back to the previous Mosaik App, if any and returns true.
+     * Returns false if there us no previous Mosaik app
+     */
+    open fun navigateBack(): Boolean {
+        return if (_appUrlStack.size >= 2) {
+            _appUrlStack.remove()
+            val lastApp = _appUrlStack.first
+            loadMosaikApp(lastApp.url, lastApp.referrer)
+            true
+        } else
+            false
     }
 
     /**
@@ -225,3 +246,5 @@ data class MosaikDialog(
     val positiveButtonClicked: Runnable?,
     val negativeButtonClicked: Runnable?
 )
+
+data class UrlHistoryEntry(val url: String, val referrer: String?)

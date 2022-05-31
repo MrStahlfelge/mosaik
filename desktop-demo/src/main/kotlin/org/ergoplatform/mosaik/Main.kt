@@ -2,10 +2,9 @@ package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -210,6 +209,11 @@ private fun MosaikAppHeader(
                 } else false
             },
             singleLine = true,
+            leadingIcon = {
+                IconButton(onClick = { runtime.navigateBack() }) {
+                    Icon(Icons.Default.ArrowBack, null)
+                }
+            },
             placeholder = { Text("Enter http url here and hit Return. Blank loads the built-in app") }
         )
     }
