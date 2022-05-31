@@ -210,7 +210,7 @@ private fun MosaikAppHeader(
             },
             singleLine = true,
             leadingIcon = {
-                IconButton(onClick = { runtime.navigateBack() }) {
+                IconButton(onClick = { runtime.navigateBack() }, enabled = runtime.canNavigateBack()) {
                     Icon(Icons.Default.ArrowBack, null)
                 }
             },

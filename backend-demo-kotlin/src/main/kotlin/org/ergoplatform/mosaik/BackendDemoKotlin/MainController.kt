@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.Image
@@ -12,6 +13,7 @@ import org.ergoplatform.mosaik.model.ui.layout.VAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
@@ -28,9 +30,15 @@ class MainController {
 
     @GetMapping("/appselect")
     @ResponseBody
-    fun selectorApp(request: HttpServletRequest): MosaikApp {
+    fun selectorApp(@RequestHeader headers: Map<String, String>, request: HttpServletRequest): MosaikApp {
         val baseUrl = request.requestURL.toString()
         val serverRequestUrl = baseUrl.substring(0, baseUrl.indexOf("appselect"))
+        try {
+            val context = MosaikSerializer.fromContextHeadersMap(headers)
+            println("Selector app opened by guid ${context.guid}")
+        } catch (t: Throwable) {
+
+        }
 
         return mosaikApp(
             "App Selector",
