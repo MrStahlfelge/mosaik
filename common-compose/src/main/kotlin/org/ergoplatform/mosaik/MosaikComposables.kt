@@ -296,7 +296,20 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                 keyboardActions = KeyboardActions(
                     onDone = element.onImeAction?.let { action ->
                         {
-                            treeElement.runActionFromUserInteraction(action)
+                            if (element.imeActionType == TextField.ImeActionType.DONE)
+                                treeElement.runActionFromUserInteraction(action)
+                        }
+                    },
+                    onGo = element.onImeAction?.let { action ->
+                        {
+                            if (element.imeActionType == TextField.ImeActionType.GO)
+                                treeElement.runActionFromUserInteraction(action)
+                        }
+                    },
+                    onSearch = element.onImeAction?.let { action ->
+                        {
+                            if (element.imeActionType == TextField.ImeActionType.SEARCH)
+                                treeElement.runActionFromUserInteraction(action)
                         }
                     }),
                 keyboardOptions = KeyboardOptions(
@@ -311,6 +324,7 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                         TextField.ImeActionType.NEXT -> ImeAction.Next
                         TextField.ImeActionType.DONE -> ImeAction.Done
                         TextField.ImeActionType.SEARCH -> ImeAction.Search
+                        TextField.ImeActionType.GO -> ImeAction.Go
                     }
                 ),
                 label = { element.placeholder?.let { Text(it) } },
@@ -340,7 +354,7 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                     focusedLabelColor = defaultLabelColor,
                     unfocusedLabelColor = secondaryLabelColor,
                     trailingIconColor = secondaryLabelColor,
-                    )
+                )
             )
         }
         if (!element.errorMessage.isNullOrBlank()) {

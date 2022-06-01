@@ -152,6 +152,7 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     public enum ImeActionType {
         NEXT,
         DONE,
+        GO,
         SEARCH
     }
 }
