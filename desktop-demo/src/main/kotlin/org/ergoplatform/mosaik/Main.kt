@@ -39,7 +39,8 @@ fun main() {
         val windowState = rememberWindowState()
 
         MosaikLogger.logger = MosaikLogger.DefaultLogger
-        convertByteArrayToImageBitmap = { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
+        MosaikComposeConfig.convertByteArrayToImageBitmap = { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
+        MosaikComposeConfig.interceptReturnForImeAction = true
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
 

@@ -174,10 +174,6 @@ abstract class MosaikRuntime(
                 viewTree.setRootView(mosaikApp)
                 navigatedTo(UrlHistoryEntry(loadAppResponse.appUrl, referrer), mosaikApp.manifest)
             } catch (t: Throwable) {
-                // TODO errors during first app loading (with empty screen) should be handled
-                //  different from errors
-                // while the app is running to not present an empty view
-                // instead, show a built-in error screen with a Retry button
                 MosaikLogger.logError("Error loading Mosaik app", t)
                 errorRaised(t)
             }

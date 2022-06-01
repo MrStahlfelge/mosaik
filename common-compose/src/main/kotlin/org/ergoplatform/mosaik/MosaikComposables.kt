@@ -16,7 +16,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextRange
@@ -72,12 +71,14 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
                 MosaikTreeElement(
                     viewTreeRoot,
                     Modifier.alpha(if (locked) .3f else 1f).padding(Padding.DEFAULT.toCompose())
-                        .align(Alignment.Center).widthIn(max = when (viewTree.targetCanvasDimension) {
-                            // https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes
-                            MosaikManifest.CanvasDimension.COMPACT_WIDTH -> 600.dp
-                            MosaikManifest.CanvasDimension.MEDIUM_WIDTH -> 840.dp
-                            else -> Dp.Unspecified
-                        })
+                        .align(Alignment.Center).widthIn(
+                            max = when (viewTree.targetCanvasDimension) {
+                                // https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes
+                                MosaikManifest.CanvasDimension.COMPACT_WIDTH -> 600.dp
+                                MosaikManifest.CanvasDimension.MEDIUM_WIDTH -> 840.dp
+                                else -> Dp.Unspecified
+                            }
+                        )
                 )
             }
         }
@@ -166,7 +167,7 @@ fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
         if (imageBytes != null && imageBytes.isNotEmpty()) {
 
             try {
-                convertByteArrayToImageBitmap(imageBytes)
+                MosaikComposeConfig.convertByteArrayToImageBitmap(imageBytes)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Could not load bitmap", t)
                 null
@@ -279,14 +280,15 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                     }
                     textFieldState.value = it
                 },
-                Modifier.fillMaxWidth().then(if (element.onImeAction != null)
-                    Modifier.onKeyEvent {
-                        if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
-                            treeElement.runActionFromUserInteraction(element.onImeAction)
-                            true
-                        } else false
-                    }
-                else Modifier),
+                Modifier.fillMaxWidth()
+                    .then(if (MosaikComposeConfig.interceptReturnForImeAction && element.onImeAction != null)
+                        Modifier.onKeyEvent {
+                            if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
+                                treeElement.runActionFromUserInteraction(element.onImeAction)
+                                true
+                            } else false
+                        }
+                    else Modifier),
                 enabled = element.isEnabled,
                 isError = errorState.value,
                 maxLines = 1,
@@ -604,5 +606,3 @@ var foregroundColor: (ForegroundColor) -> Color = { color ->
         ForegroundColor.SECONDARY -> secondaryLabelColor
     }
 }
-
-lateinit var convertByteArrayToImageBitmap: (ByteArray) -> ImageBitmap

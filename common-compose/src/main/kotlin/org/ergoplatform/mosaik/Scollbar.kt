@@ -164,12 +164,12 @@ private fun Modifier.drawScrollbar(
         }
     }
 
-    val alpha = remember { Animatable(scrollMinAlpha) }
+    val alpha = remember { Animatable(MosaikComposeConfig.scrollMinAlpha) }
     LaunchedEffect(scrolled, alpha) {
         scrolled.collectLatest {
             alpha.snapTo(1f)
             delay(500)
-            alpha.animateTo(scrollMinAlpha, animationSpec = FadeOutAnimationSpec)
+            alpha.animateTo(MosaikComposeConfig.scrollMinAlpha, animationSpec = FadeOutAnimationSpec)
         }
     }
 
@@ -181,7 +181,7 @@ private fun Modifier.drawScrollbar(
 
     // Calculate thickness here to workaround https://issuetracker.google.com/issues/206972664
     val thickness = with(LocalDensity.current) { Thickness.toPx() }
-    val color = foregroundColor(ForegroundColor.SECONDARY).copy(alpha = 0.5f)
+    val color = foregroundColor(ForegroundColor.SECONDARY).copy(alpha = MosaikComposeConfig.scrollMaxAlpha)
     Modifier
         .nestedScroll(nestedScrollConnection)
         .drawWithCache {
@@ -211,5 +211,3 @@ fun ScrollbarPreview() {
         }
     }
 }
-
-var scrollMinAlpha = .5f

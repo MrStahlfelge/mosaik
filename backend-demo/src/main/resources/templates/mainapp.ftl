@@ -43,6 +43,7 @@
             "id": "userName",
             "minValue": 1,
             "onImeAction": "proceedButtonClicked",
+            "imeActionType": "DONE",
             "placeholder": "Your name"
           }
         ]
