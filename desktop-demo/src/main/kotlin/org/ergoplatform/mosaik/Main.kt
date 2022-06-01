@@ -137,6 +137,36 @@ fun main() {
                         }
                     }
                 }
+
+                override fun isErgoAddressValid(ergoAddress: String): Boolean {
+                    // this is just for the desktop demo...
+                    return ergoAddress.startsWith('9') || ergoAddress.startsWith('3')
+                }
+
+                override fun getErgoAddressLabel(ergoAddress: String): String? {
+                    return if (ergoAddress.startsWith('9'))
+                        "Mainnet $ergoAddress"
+                    else if (ergoAddress.startsWith('3'))
+                        "Testnet $ergoAddress"
+                    else null
+                }
+
+                override fun formatString(string: StringConstant, values: String?): String {
+                    return when (string) {
+                        StringConstant.ChooseAddress -> "Choose an address..."
+                    }
+                }
+
+                override fun showErgoAddressChooser(valueId: String) {
+                    TextInputDialog.showInputDialog(
+                        { newAddress ->
+                            viewTree.findElementById(valueId)?.valueChanged(newAddress)
+                        },
+                        "Address chooser",
+                        "",
+                        "Enter an Ergo address here.\nYes, this is ugly but only for debugging. :-)"
+                    )
+                }
             }
 
         runtime.appLoaded = { manifestState.value = it }

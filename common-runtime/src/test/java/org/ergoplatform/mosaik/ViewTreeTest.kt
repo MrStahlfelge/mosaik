@@ -110,6 +110,22 @@ class ViewTreeTest : TestCase() {
                 override fun runErgoPayAction(action: ErgoPayAction) {
 
                 }
+
+                override fun isErgoAddressValid(ergoAddress: String): Boolean {
+                    return false
+                }
+
+                override fun getErgoAddressLabel(ergoAddress: String): String? {
+                    return null
+                }
+
+                override fun formatString(string: StringConstant, values: String?): String {
+                    return string.toString()
+                }
+
+                override fun showErgoAddressChooser(valueId: String) {
+
+                }
             }
 
 

@@ -40,6 +40,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.Button
@@ -142,9 +143,39 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Image -> {
             MosaikImage(treeElement, newModifier)
         }
+        is ErgoAddressChooseButton -> {
+            MosaikAddressChooseButton(treeElement, newModifier)
+        }
         else -> {
             Text("Unsupported view element: ${element.javaClass.simpleName}", newModifier)
         }
+    }
+}
+
+@Composable
+fun MosaikAddressChooseButton(treeElement: TreeElement, newModifier: Modifier) {
+    val element = treeElement.element as ErgoAddressChooseButton
+
+    val valueState = treeElement.viewTree.valueState.collectAsState()
+
+    // remember this to not fire up searching for the wallet when not needed
+    val buttonLabel =
+        remember(valueState.value.second[element.id]?.inputValue) { treeElement.currentValueAsString }
+
+    Button(
+        onClick = treeElement::clicked,
+        modifier = newModifier.width(96.dp * 3),
+        colors = ButtonDefaults.buttonColors(
+            primaryLabelColor,
+            primaryButtonTextColor
+        ),
+        enabled = element.isEnabled
+    ) {
+        Text(
+            buttonLabel,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.Box
@@ -251,7 +252,12 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      * called when user clicked or tapped an element
      */
     fun onItemClicked(element: TreeElement) {
-        runActionFromUserInteraction(element.element.onClickAction)
+        when (element.element) {
+            is ErgoAddressChooseButton -> {
+                element.id?.let { mosaikRuntime.showErgoAddressChooser(it) }
+            }
+            else -> runActionFromUserInteraction(element.element.onClickAction)
+        }
     }
 
     /**

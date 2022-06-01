@@ -248,6 +248,21 @@ abstract class MosaikRuntime(
             null
         }
     }
+
+    abstract fun isErgoAddressValid(ergoAddress: String): Boolean
+
+    /**
+     * return an address label, if available
+     */
+    abstract fun getErgoAddressLabel(ergoAddress: String): String?
+
+    abstract fun formatString(string: StringConstant, values: String? = null): String
+
+    /**
+     * open a chooser for an ergo address. If the user sets a new value, this should call
+     * [TreeElement.valueChanged] with the new value.
+     */
+    abstract fun showErgoAddressChooser(valueId: String)
 }
 
 data class MosaikDialog(
@@ -259,3 +274,7 @@ data class MosaikDialog(
 )
 
 data class UrlHistoryEntry(val url: String, val referrer: String?)
+
+enum class StringConstant {
+    ChooseAddress,
+}

@@ -1,6 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.input;
 
-import org.ergoplatform.mosaik.model.actions.Action;
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.Objects;
@@ -10,12 +10,13 @@ import javax.annotation.Nullable;
 /**
  * Button type element to let the user choose a single of his addresses.
  */
-public class ErgoAddressChooseButton extends ViewElement implements InputElement<String> {
+@Since(0)
+public class ErgoAddressChooseButton extends ViewElement implements OptionalInputElement<String> {
     @Nullable
     private String address;
     @Nullable
     private String onValueChangedAction;
-    private boolean enabled;
+    private boolean enabled = true;
     private boolean mandatory = true;
 
     @Nullable
@@ -50,10 +51,12 @@ public class ErgoAddressChooseButton extends ViewElement implements InputElement
         this.enabled = enabled;
     }
 
+    @Override
     public boolean isMandatory() {
         return mandatory;
     }
 
+    @Override
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }

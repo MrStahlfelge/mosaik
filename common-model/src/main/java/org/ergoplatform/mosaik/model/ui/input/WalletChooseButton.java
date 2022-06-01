@@ -13,12 +13,12 @@ import javax.annotation.Nullable;
  * <p>
  * {@link #getValue()} might contain a list of wallet addresses or a single address.
  */
-public class WalletChooseButton extends ViewElement implements InputElement<List<String>> {
+public class WalletChooseButton extends ViewElement implements OptionalInputElement<List<String>> {
     @Nullable
     private List<String> addresses;
     @Nullable
     private String onValueChangedAction;
-    private boolean enabled;
+    private boolean enabled = true;
     private boolean mandatory = true;
 
     @Nullable
@@ -53,10 +53,12 @@ public class WalletChooseButton extends ViewElement implements InputElement<List
         this.enabled = enabled;
     }
 
+    @Override
     public boolean isMandatory() {
         return mandatory;
     }
 
+    @Override
     public void setMandatory(boolean mandatory) {
         this.mandatory = mandatory;
     }

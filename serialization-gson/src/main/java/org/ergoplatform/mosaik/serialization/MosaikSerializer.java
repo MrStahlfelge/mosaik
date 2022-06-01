@@ -18,6 +18,7 @@ import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
+import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
@@ -112,6 +113,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(IntegerInputField.class, new TextFieldSerializer<>(Long.class, IntegerInputField.class));
         gsonBuilder.registerTypeAdapter(DecimalInputField.class, new TextFieldSerializer<>(Long.class, DecimalInputField.class));
         gsonBuilder.registerTypeAdapter(ErgAmountInputField.class, new TextFieldSerializer<>(Long.class, ErgAmountInputField.class));
+        gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class, new OptionalInputSerializer<>(String.class, ErgoAddressChooseButton.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
         gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer());
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());

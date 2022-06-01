@@ -131,7 +131,7 @@ object ViewElementsDemoInputView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    ergoAddressChooser("ergoAddress")
                 }
             }
 

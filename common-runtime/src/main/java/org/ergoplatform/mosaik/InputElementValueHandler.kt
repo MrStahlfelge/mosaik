@@ -9,14 +9,16 @@ abstract class InputElementValueHandler<T> {
     abstract val keyboardType: KeyboardType
     abstract fun isValueValid(value: Any?): Boolean
     abstract fun valueFromStringInput(value: String?): T?
+    open fun getAsString(currentValue: Any?): String = currentValue?.toString() ?: ""
 
     companion object {
-        fun getForElement(element: ViewElement): InputElementValueHandler<*>? =
+        fun getForElement(element: ViewElement, mosaikRuntime: MosaikRuntime): InputElementValueHandler<*>? =
             when (element) {
                 is StringTextField -> StringInputHandler(element)
                 is ErgAmountInputField -> DecimalInputHandler(element, scaleErg)
                 is DecimalInputField -> DecimalInputHandler(element, element.scale)
                 is LongTextField -> IntegerInputHandler(element)
+                is ErgoAddressChooseButton -> ErgoAddressInputHandler(element, mosaikRuntime)
                 is InputElement<*> -> OtherInputHandler(element)
                 else -> null
             }
@@ -66,10 +68,9 @@ class DecimalInputHandler(private val element: LongTextField, val scale: Int) :
         get() = KeyboardType.NumberDecimal
 }
 
-class OtherInputHandler(private val element: InputElement<*>) : InputElementValueHandler<Any>() {
+open class OtherInputHandler(private val element: InputElement<*>) : InputElementValueHandler<Any>() {
     override fun isValueValid(value: Any?): Boolean {
-        // TODO mandatory elements should return false
-        return true
+        return if (element is OptionalInputElement<*>) !element.isMandatory || value != null else true
     }
 
     override fun valueFromStringInput(value: String?): Any? {

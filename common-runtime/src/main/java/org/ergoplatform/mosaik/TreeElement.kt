@@ -11,7 +11,7 @@ import java.util.*
 class TreeElement(
     val element: ViewElement,
     val parent: TreeElement?,
-    private val viewTree: ViewTree,
+    val viewTree: ViewTree,
 ) {
     private val _children = ArrayList<TreeElement>()
 
@@ -35,7 +35,7 @@ class TreeElement(
         } else null
 
     private val inputValueHandler: InputElementValueHandler<*>? =
-        InputElementValueHandler.getForElement(element)
+        InputElementValueHandler.getForElement(element, viewTree.mosaikRuntime)
 
     val getResourceBytes get() = viewTree.getResourceBytes(this)
 
@@ -118,8 +118,7 @@ class TreeElement(
     }
 
     val currentValueAsString: String
-        get() =
-            currentValue?.let { currentValue.toString() } ?: ""
+        get() = inputValueHandler!!.getAsString(currentValue)
 
     fun getInvalidValueError(): String {
         return when (element) {

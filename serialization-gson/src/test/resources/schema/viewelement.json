@@ -26,6 +26,9 @@
       "$ref": "button.json"
     },
     {
+      "$ref": "ergoaddresschoosebutton.json"
+    },
+    {
       "$ref": "label.json"
     },
     {

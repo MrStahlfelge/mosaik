@@ -22,6 +22,9 @@
       "description": "Visibility of this object. Optional, defaults to true",
       "type": "boolean"
     },
+    "enabled": {
+      "type": "boolean"
+    },
     "text": {
       "description": "Button text",
       "type": "string"

@@ -9,6 +9,7 @@ import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.InputElement;
+import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
@@ -164,6 +165,10 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
                     propertyName.equals("maxValue") && ((TextField<?>) value).getMaxValue() == Long.MAX_VALUE ||
                     propertyName.equals("minValue") && ((TextField<?>) value).getMinValue() == 0)
                 return null;
+        }
+        if (value instanceof OptionalInputElement && propertyName.equals("mandatory")
+                && ((OptionalInputElement<?>) value).isMandatory()) {
+            return null;
         }
 
         if (propertyName.equals("visible") && value.isVisible()) {
