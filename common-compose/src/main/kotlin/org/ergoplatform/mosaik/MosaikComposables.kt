@@ -229,6 +229,13 @@ private fun IconType.getImageVector() =
         IconType.QR_CODE -> Icons.Default.QrCode
         IconType.QR_SCAN -> Icons.Default.QrCodeScanner
         IconType.COPY -> Icons.Default.ContentCopy
+        IconType.EDIT -> Icons.Default.Edit
+        IconType.BACK -> Icons.Default.ArrowBack
+        IconType.FORWARD -> Icons.Default.ArrowForward
+        IconType.SWITCH -> Icons.Default.SyncAlt
+        IconType.REFRESH -> Icons.Default.Refresh
+        IconType.DELETE -> Icons.Default.Delete
+        IconType.CROSS -> Icons.Default.Close
     }
 
 @Composable
