@@ -12,15 +12,15 @@ const val RELOAD_APP_ACTION_ID = "RELOAD_APP"
 fun @MosaikDsl Column.addHeader(title: String) {
     layout(HAlignment.JUSTIFY) {
         box {
+            label(
+                title,
+                style = LabelStyle.HEADLINE1
+            )
             layout(HAlignment.START, VAlignment.CENTER) {
                 button("Back") {
                     onClickAction(RELOAD_APP_ACTION_ID)
                 }
             }
-            label(
-                title,
-                style = LabelStyle.HEADLINE1
-            )
         }
     }
 }

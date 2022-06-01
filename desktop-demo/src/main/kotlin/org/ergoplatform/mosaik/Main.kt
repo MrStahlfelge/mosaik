@@ -49,7 +49,7 @@ fun main() {
         val mosaikContext = MosaikContext(
             MosaikContext.LIBRARY_MOSAIK_VERSION,
             UUID.randomUUID().toString(),
-            "EN",
+            Locale.getDefault().language,
             "demoapp",
             "1",
             MosaikContext.Platform.DESKTOP

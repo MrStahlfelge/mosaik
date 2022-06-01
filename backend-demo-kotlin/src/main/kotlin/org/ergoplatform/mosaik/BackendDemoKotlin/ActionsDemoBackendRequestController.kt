@@ -1,12 +1,15 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
+import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -18,7 +21,7 @@ class ActionsDemoBackendRequestController {
     // here to demonstrate the implementation
 
     @PostMapping("/actions/backendrequest")
-    fun changeToBackendRequestView(): FetchActionResponse {
+    fun changeToBackendRequestView(@RequestHeader headers: Map<String, String>): FetchActionResponse {
         return backendResponse(
             APP_VERSION,
             changeView(
@@ -48,13 +51,37 @@ class ActionsDemoBackendRequestController {
 
                         card(Padding.DEFAULT) {
                             column(Padding.DEFAULT) {
-                                textInputField(textInputId, "Enter something")
+                                val backendRequest = backendRequest("slowDownDialog")
+                                textInputField(textInputId, "Enter something") {
+                                    imeActionType = TextField.ImeActionType.DONE
+                                    onImeAction = backendRequest.id
+                                }
 
                                 button("Backend request, slowed down, showing a dialog") {
-                                    onClickAction(backendRequest("slowDownDialog"))
+                                    onClickAction(backendRequest)
                                 }
                             }
                         }
+
+                        try {
+                            box(Padding.HALF_DEFAULT)
+
+                            val context = MosaikSerializer.fromContextHeadersMap(headers)
+
+                            label(
+                                "Every backend requests get information about the user's context. " +
+                                        "This is your's:\n" +
+                                        "App: ${context.walletAppName} ${context.walletAppVersion}\n" +
+                                        "Platform: ${context.walletAppPlatform}\n" +
+                                        "GUID: ${context.guid}\n" +
+                                        "Language: ${context.language}\n" +
+                                        "Mosaik Executor version: ${context.mosaikVersion}\n",
+                                LabelStyle.BODY2
+                            )
+                        } catch (t: Throwable) {
+                            // could not deserialize the context from headers
+                        }
+
                     }
                 }
             )
