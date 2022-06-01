@@ -4,6 +4,7 @@ import junit.framework.TestCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.*
+import org.ergoplatform.mosaik.model.actions.ErgoPayAction
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 class ViewTreeTest : TestCase() {
@@ -103,6 +104,10 @@ class ViewTreeTest : TestCase() {
                 }
 
                 override fun openBrowser(url: String) {
+
+                }
+
+                override fun runErgoPayAction(action: ErgoPayAction) {
 
                 }
             }

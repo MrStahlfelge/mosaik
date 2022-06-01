@@ -54,10 +54,13 @@ fun ViewContent.navigateToApp(
 @MosaikDsl
 fun ViewContent.invokeErgoPay(
     url: String,
+    onFinishedAction: Action,
     id: String? = null,
     init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
 ): ErgoPayAction {
-    return addAction(buildErgoPayAction(url), id, init)
+    return addAction(buildErgoPayAction(url).apply {
+        onFinished = onFinishedAction.id
+    }, id, init)
 }
 
 @MosaikDsl

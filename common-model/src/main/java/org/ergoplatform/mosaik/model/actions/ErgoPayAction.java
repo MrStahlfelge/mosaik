@@ -12,14 +12,14 @@ import javax.annotation.Nullable;
  */
 @Since(0)
 public class ErgoPayAction extends UrlAction {
-    @Nullable private Action onFinished;
+    @Nullable private String onFinished;
 
     @Nullable
-    public Action getOnFinished() {
+    public String getOnFinished() {
         return onFinished;
     }
 
-    public void setOnFinished(@Nullable Action onFinished) {
+    public void setOnFinished(@Nullable String onFinished) {
         this.onFinished = onFinished;
     }
 

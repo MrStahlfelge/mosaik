@@ -46,6 +46,10 @@ abstract class MosaikRuntime(
     val appUrlHistory: List<String> get() = _appUrlStack.map { it.url }
     val appUrl: String? get() = if (_appUrlStack.isNotEmpty()) appUrlHistory.first() else null
 
+    fun runAction(actionId: String) {
+        viewTree.getAction(actionId)?.let { runAction(it) }
+    }
+
     open fun runAction(action: Action) {
         MosaikLogger.logDebug("Running action ${action.id}...")
         try {
@@ -71,7 +75,10 @@ abstract class MosaikRuntime(
                 is ReloadAction -> {
                     loadMosaikApp(appUrl!!)
                 }
-                else -> TODO("Action type ${action.javaClass.simpleName} not yet implemented")
+                is ErgoPayAction -> {
+                    runErgoPayAction(action)
+                }
+                else -> runUnknownAction(action)
             }
         } catch (e: InvalidValuesException) {
             // show user, do not log an error
@@ -81,6 +88,12 @@ abstract class MosaikRuntime(
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
+    }
+
+    abstract fun runErgoPayAction(action: ErgoPayAction)
+
+    open fun runUnknownAction(action: Action) {
+        TODO("Action type ${action.javaClass.simpleName} not yet implemented")
     }
 
     open fun runNavigateAction(action: NavigateAction) {

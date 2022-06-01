@@ -29,8 +29,8 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        mosaikDialog.positiveButtonClicked?.run()
                         dialog.dismiss()
+                        mosaikDialog.positiveButtonClicked?.run()
                     }
                 ) {
                     Text(mosaikDialog.positiveButtonText)
@@ -40,8 +40,8 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                 mosaikDialog.negativeButtonText?.let { buttonText ->
                     TextButton(
                         onClick = {
-                            mosaikDialog.negativeButtonClicked?.run()
                             dialog.dismiss()
+                            mosaikDialog.negativeButtonClicked?.run()
                         }
                     ) {
                         Text(buttonText)

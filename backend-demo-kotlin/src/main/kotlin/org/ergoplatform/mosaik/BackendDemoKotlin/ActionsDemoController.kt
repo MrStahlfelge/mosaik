@@ -73,10 +73,19 @@ class ActionsDemoController {
                     })
                 }
 
+                box(Padding.HALF_DEFAULT)
+
+                button("Run ErgoPay request") {
+                    onClickAction(
+                        invokeErgoPay(
+                            "ergopay://useanyergopayurlhere/withparams",
+                            showDialog("You can define an action when ErgoPay request was confirmed by the user")
+                        )
+                    )
+                }
+
             }
-
         }
-
 
     // the following are the defined responses for backend requests
     // Since they are constant, a backend request wouldn't be necessary, but is done

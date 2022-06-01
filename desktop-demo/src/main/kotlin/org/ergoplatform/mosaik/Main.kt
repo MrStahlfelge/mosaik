@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.actions.ErgoPayAction
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -39,7 +40,8 @@ fun main() {
         val windowState = rememberWindowState()
 
         MosaikLogger.logger = MosaikLogger.DefaultLogger
-        MosaikComposeConfig.convertByteArrayToImageBitmap = { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
+        MosaikComposeConfig.convertByteArrayToImageBitmap =
+            { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
         MosaikComposeConfig.interceptReturnForImeAction = true
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()
@@ -94,6 +96,18 @@ fun main() {
                     val selection = StringSelection(text)
                     val clipboard = Toolkit.getDefaultToolkit().systemClipboard
                     clipboard.setContents(selection, selection)
+                }
+
+                override fun runErgoPayAction(action: ErgoPayAction) {
+                    showDialog(
+                        MosaikDialog(
+                            "An ErgoPay action should be run:\n${action.url}",
+                            "Ok, was done!",
+                            "Cancel",
+                            { action.onFinished?.let { runAction(it) } },
+                            null
+                        )
+                    )
                 }
 
                 override fun openBrowser(url: String) {
@@ -211,7 +225,10 @@ private fun MosaikAppHeader(
             },
             singleLine = true,
             leadingIcon = {
-                IconButton(onClick = { runtime.navigateBack() }, enabled = runtime.canNavigateBack()) {
+                IconButton(
+                    onClick = { runtime.navigateBack() },
+                    enabled = runtime.canNavigateBack()
+                ) {
                     Icon(Icons.Default.ArrowBack, null)
                 }
             },
