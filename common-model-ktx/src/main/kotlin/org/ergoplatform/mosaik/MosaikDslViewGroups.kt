@@ -72,7 +72,7 @@ fun <G : ViewGroup> G.row(
     }, init)
 
 @MosaikDsl
-private abstract class LayoutingViewGroup<S : ViewGroup>(val realViewGroup: S) : ViewGroup {
+abstract class LayoutingViewGroup<S : ViewGroup>(val realViewGroup: S) : ViewGroup {
     override fun getChildren(): MutableList<ViewElement> {
         return realViewGroup.children
     }
