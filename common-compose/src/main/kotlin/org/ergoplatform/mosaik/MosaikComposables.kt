@@ -339,7 +339,7 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                     disabledLabelColor = secondaryLabelColor,
                     focusedLabelColor = defaultLabelColor,
                     unfocusedLabelColor = secondaryLabelColor,
-
+                    trailingIconColor = secondaryLabelColor,
                     )
             )
         }
