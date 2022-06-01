@@ -44,6 +44,7 @@ class MainController {
             "App Selector",
             appVersion = APP_VERSION,
             targetCanvasDimension = CANVAS,
+            appIconUrl = serverRequestUrl + "applogo.png",
 
             ) {
 
