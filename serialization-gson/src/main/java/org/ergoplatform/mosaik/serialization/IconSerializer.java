@@ -45,7 +45,13 @@ public class IconSerializer implements JsonSerializer<Icon>, JsonDeserializer<Ic
             icon.setTintColor(context.<ForegroundColor>deserialize(jsonObject.get(KEY_TINT_COLOR), ForegroundColor.class));
         }
         icon.setIconSize(context.<Icon.Size>deserialize(jsonObject.get(KEY_SIZE), Icon.Size.class));
-        icon.setIconType(context.<IconType>deserialize(jsonObject.get(KEY_ICON_TYPE), IconType.class));
+
+        try {
+            icon.setIconType(context.<IconType>deserialize(jsonObject.get(KEY_ICON_TYPE), IconType.class));
+        } catch (Throwable t) {
+            // unknown icon type, we swallow this error in this special case
+            icon.setIconType(IconType.ERROR);
+        }
 
         return icon;
     }

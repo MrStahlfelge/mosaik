@@ -129,16 +129,28 @@ public class MosaikSerializer {
     }
 
     public ViewContent viewContentFromJson(String json) {
-        Gson gson = getGson(false);
-        return gson.fromJson(json, ViewContent.class);
+        try {
+            Gson gson = getGson(false);
+            return gson.fromJson(json, ViewContent.class);
+        } catch (Throwable t) {
+            throw new DeserializationException(t);
+        }
     }
 
     public MosaikApp firstRequestResponseFromJson(String json) {
-        return getGson(false).fromJson(json, MosaikApp.class);
+        try {
+            return getGson(false).fromJson(json, MosaikApp.class);
+        } catch (Throwable t) {
+            throw new DeserializationException(t);
+        }
     }
 
     public FetchActionResponse fetchActionResponseFromJson(String json) {
-        return getGson(false).fromJson(json, FetchActionResponse.class);
+        try {
+            return getGson(false).fromJson(json, FetchActionResponse.class);
+        } catch (Throwable t) {
+            throw new DeserializationException(t);
+        }
     }
 
     public String valuesMapToJson(Map<String, Object> values) {
