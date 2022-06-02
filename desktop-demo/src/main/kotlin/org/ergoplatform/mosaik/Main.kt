@@ -159,9 +159,7 @@ fun main() {
 
                 override fun showErgoAddressChooser(valueId: String) {
                     TextInputDialog.showInputDialog(
-                        { newAddress ->
-                            viewTree.findElementById(valueId)?.valueChanged(newAddress)
-                        },
+                        { newAddress -> setValue(valueId, newAddress) },
                         "Address chooser",
                         "",
                         "Enter an Ergo address here.\nYes, this is ugly but only for debugging. :-)"

@@ -260,9 +260,17 @@ abstract class MosaikRuntime(
 
     /**
      * open a chooser for an ergo address. If the user sets a new value, this should call
-     * [TreeElement.valueChanged] with the new value.
+     * [setValue] with the new address.
      */
     abstract fun showErgoAddressChooser(valueId: String)
+
+    /**
+     * set the value for a value element in the current tree. Please note that not all elements
+     * are automatically updated by this in the view.
+     */
+    fun setValue(valueId: String, newValue: Any?) {
+        viewTree.findElementById(valueId)?.valueChanged(newValue)
+    }
 }
 
 data class MosaikDialog(
