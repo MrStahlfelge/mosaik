@@ -95,3 +95,7 @@ Run it by cloning this repo and call
 
     gradlew backend-demo-kotlin:bootRun
 
+Available demo apps: 
+* View elements demo: Showcasing available Mosaik view elements
+* Actions demo: Demonstrating actions that Mosaik apps can launch
+* Typical errors: A malicious Mosaik app to test executor graceful error handling

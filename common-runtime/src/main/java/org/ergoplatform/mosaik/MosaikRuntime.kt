@@ -160,13 +160,15 @@ abstract class MosaikRuntime(
 
     open fun runChangeSiteAction(action: ChangeSiteAction) {
         try {
-            viewTree.setContentView(action.newContent.view.id, action.newContent)
-        } catch (nf: ElementNotFoundException) {
-            MosaikLogger.logInfo(
-                "${action.javaClass.simpleName}: element ${nf.elementId} not found, replacing complete view tree",
-                nf
-            )
-            viewTree.setContentView(null, action.newContent)
+            try {
+                viewTree.setContentView(action.newContent.view.id, action.newContent)
+            } catch (nf: ElementNotFoundException) {
+                MosaikLogger.logInfo(
+                    "${action.javaClass.simpleName}: element ${nf.elementId} not found, replacing complete view tree",
+                    nf
+                )
+                viewTree.setContentView(null, action.newContent)
+            }
         } catch (t: Throwable) {
             // we are probably in a very bad state now, tell the user to reload
             throw ChangeViewContentException(t)

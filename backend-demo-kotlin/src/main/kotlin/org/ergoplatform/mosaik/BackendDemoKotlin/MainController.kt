@@ -30,7 +30,10 @@ class MainController {
 
     @GetMapping("/appselect")
     @ResponseBody
-    fun selectorApp(@RequestHeader headers: Map<String, String>, request: HttpServletRequest): MosaikApp {
+    fun selectorApp(
+        @RequestHeader headers: Map<String, String>,
+        request: HttpServletRequest
+    ): MosaikApp {
         val baseUrl = request.requestURL.toString()
         val serverRequestUrl = baseUrl.substring(0, baseUrl.indexOf("appselect"))
         try {
@@ -73,7 +76,10 @@ class MainController {
                 }
                 row {
                     layout(VAlignment.CENTER, 1) {
-                        addAppButton(null, "coming soon")
+                        addAppButton(
+                            navigateToApp(serverRequestUrl + "errors"),
+                            "Typical errors"
+                        )
 
                         box {
                             // just a blank placeholder

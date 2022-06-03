@@ -164,7 +164,10 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 if (newContent != null) {
                     replaceViewElement(treeElement, newContent)
                 } else {
-                    replaceViewElement(treeElement, ViewContent(lazyLoadBox.errorView) ?: ViewContent(Box()))
+                    replaceViewElement(
+                        treeElement,
+                        ViewContent(lazyLoadBox.errorView ?: Box())
+                    )
                 }
             }
 
