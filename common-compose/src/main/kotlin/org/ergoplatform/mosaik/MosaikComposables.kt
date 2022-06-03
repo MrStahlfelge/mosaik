@@ -413,10 +413,12 @@ private fun MosaikButton(
             MosaikLogger.logWarning("TruncationType ignored for button, not supported by this implementation")
     }
 
+    val buttonModifier = newModifier.widthIn(128.dp)
+
     if (element.style == Button.ButtonStyle.TEXT) {
         Surface(
             shape = MaterialTheme.shapes.medium,
-            modifier = newModifier.padding(Padding.HALF_DEFAULT.toCompose()),
+            modifier = buttonModifier.padding(Padding.HALF_DEFAULT.toCompose()),
         ) {
             Text(
                 element.text ?: "",
@@ -435,7 +437,7 @@ private fun MosaikButton(
     } else {
         Button(
             onClick = treeElement::clicked,
-            modifier = newModifier,
+            modifier = buttonModifier,
             colors = when (element.style) {
                 Button.ButtonStyle.PRIMARY -> ButtonDefaults.buttonColors(
                     primaryLabelColor,
