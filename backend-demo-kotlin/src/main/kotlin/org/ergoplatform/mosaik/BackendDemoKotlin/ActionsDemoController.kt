@@ -70,6 +70,7 @@ class ActionsDemoController {
                 button("Show a dialog with two options") {
                     onClickAction(showDialog("This is your dialog") {
                         negativeButtonText = "Cancel"
+                        onPositiveButtonClicked = showDialog("OK was clicked").id
                     })
                 }
 
@@ -78,7 +79,7 @@ class ActionsDemoController {
                 button("Run ErgoPay request") {
                     onClickAction(
                         invokeErgoPay(
-                            "ergopay://useanyergopayurlhere/withparams",
+                            "ergopay://ergopay-example.herokuapp.com/roundTrip/#P2PK_ADDRESS#",
                             showDialog("You can define an action when ErgoPay request was confirmed by the user")
                         )
                     )

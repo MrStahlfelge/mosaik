@@ -84,7 +84,7 @@ abstract class MosaikRuntime(
             // show user, do not log an error
             showError(e)
         } catch (e: ChangeViewContentException) {
-            errorRaised(e)
+            raiseError(e)
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
@@ -128,7 +128,7 @@ abstract class MosaikRuntime(
 
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error running Mosaik backend request", t)
-                errorRaised(t)
+                raiseError(t)
             }
 
             viewTree.uiLocked = false
@@ -188,7 +188,7 @@ abstract class MosaikRuntime(
                 navigatedTo(UrlHistoryEntry(loadAppResponse.appUrl, referrer), mosaikApp.manifest)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error loading Mosaik app", t)
-                errorRaised(t)
+                raiseError(t)
             }
 
             viewTree.uiLocked = false
@@ -220,7 +220,7 @@ abstract class MosaikRuntime(
     /**
      * an error that is shown to user and reported to the error report url
      */
-    private fun errorRaised(t: Throwable) {
+    open fun raiseError(t: Throwable) {
         // TODO report error to error report url
         showError(t)
     }
