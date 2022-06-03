@@ -128,6 +128,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (propertyName.equals("onClickAction")) {
             return "onClick";
         }
+        if (propertyName.equals("onValueChangedAction") && value instanceof InputElement) {
+            return "onValueChanged";
+        }
         if (propertyName.equals("requestUrl") && value instanceof LazyLoadBox) {
             return "url";
         }
