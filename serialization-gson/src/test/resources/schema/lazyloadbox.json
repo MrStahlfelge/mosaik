@@ -33,7 +33,7 @@
       "type": "string"
     },
     "errorView": {
-      "$ref": "viewcontent.json"
+      "$ref": "viewelement.json"
     }
   },
   "required": [

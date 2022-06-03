@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 @Since(0)
 public class LazyLoadBox extends Box {
     private String requestUrl;
-    private ViewContent errorView;
+    private ViewElement errorView;
 
     @Nonnull
     public String getRequestUrl() {
@@ -34,11 +34,11 @@ public class LazyLoadBox extends Box {
     }
 
     @Nullable
-    public ViewContent getErrorView() {
+    public ViewElement getErrorView() {
         return errorView;
     }
 
-    public void setErrorView(ViewContent errorView) {
+    public void setErrorView(ViewElement errorView) {
         this.errorView = errorView;
     }
 

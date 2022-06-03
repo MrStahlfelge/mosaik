@@ -31,7 +31,7 @@ fun <G : ViewGroup> G.card(
 fun <G : ViewGroup> G.lazyLoadBox(
     url: String,
     padding: Padding? = null,
-    init: (@MosaikDsl Box).() -> Unit = {}
+    init: (@MosaikDsl LazyLoadBox).() -> Unit = {}
 ): LazyLoadBox =
     viewElement(LazyLoadBox().apply {
         this.requestUrl = url

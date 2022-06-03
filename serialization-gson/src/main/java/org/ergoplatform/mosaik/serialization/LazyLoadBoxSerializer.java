@@ -39,7 +39,7 @@ public class LazyLoadBoxSerializer implements JsonSerializer<LazyLoadBox>, JsonD
         BoxSerializer.deserializeCommon(context, box, jsonObject);
 
         box.setRequestUrl(jsonObject.get(KEY_URL).getAsString());
-        box.setErrorView(context.<ViewContent>deserialize(jsonObject.getAsJsonObject(KEY_ERROR_VIEW), ViewContent.class));
+        box.setErrorView(context.<ViewElement>deserialize(jsonObject.getAsJsonObject(KEY_ERROR_VIEW), ViewElement.class));
 
         return box;
     }

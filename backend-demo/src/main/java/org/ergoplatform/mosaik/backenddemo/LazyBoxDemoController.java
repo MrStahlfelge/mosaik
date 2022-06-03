@@ -57,7 +57,7 @@ public class LazyBoxDemoController {
         errorView.setIconType(IconType.ERROR);
         errorView.setTintColor(ForegroundColor.PRIMARY);
 
-        lazyBox.setErrorView(new ViewContent(errorView));
+        lazyBox.setErrorView(errorView);
 
         Box loadBoxPadding = new Box();
         loadBoxPadding.setPadding(Padding.DEFAULT);

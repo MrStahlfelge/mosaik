@@ -84,7 +84,7 @@ public class MosaikSerializerTest extends TestCase {
                     // add needed properties
                     if (element instanceof LazyLoadBox) {
                         ((LazyLoadBox) element).setRequestUrl("...");
-                        ((LazyLoadBox) element).setErrorView(new ViewContent(new Box()));
+                        ((LazyLoadBox) element).setErrorView(new Box());
                     } else if (element instanceof TokenLabel) {
                         ((TokenLabel) element).setTokenId("tokenid");
                     } else if (element instanceof Image) {
