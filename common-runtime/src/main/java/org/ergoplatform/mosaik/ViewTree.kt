@@ -333,7 +333,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     /**
      * returns map (id, value) for valid values
      */
-    val currentValidValues: Map<String, Any?> get() = valueMap.mapValues { it.value.inputValue }
+    val currentValidValues: Map<String, Any?> get() = valueMap.mapValues { if (it.value.valid) it.value.inputValue else null }
 
     data class CheckedValue(val inputValue: Any?, val valid: Boolean)
 }
