@@ -112,6 +112,34 @@ object ViewElementsDemoLayoutView {
                             }
 
                         }
+
+                        box(Padding.DEFAULT)
+
+                        label(
+                            "Use rows with weights to layout tables:"
+                        )
+                        box(Padding.HALF_DEFAULT)
+
+                        row {
+                            layout(weight = 1) {
+                                label("Column 1", textAlignment = HAlignment.END)
+                            }
+                            // some margin between columns
+                            box(Padding.HALF_DEFAULT)
+                            layout(weight = 1) {
+                                label("Column 2", LabelStyle.BODY1BOLD)
+                            }
+                        }
+                        row {
+                            layout(weight = 1) {
+                                label("A1", textAlignment = HAlignment.END)
+                            }
+                            // some margin between columns
+                            box(Padding.HALF_DEFAULT)
+                            layout(weight = 1) {
+                                label("A2", LabelStyle.BODY1BOLD)
+                            }
+                        }
                     }
 
                 }

@@ -98,7 +98,7 @@ fun Column.layout(
 
 @MosaikDsl
 fun Row.layout(
-    vAlignment: VAlignment,
+    vAlignment: VAlignment = VAlignment.CENTER,
     weight: Int = 0,
     init: (@MosaikDsl ViewGroup).() -> Unit
 ) {
@@ -112,7 +112,7 @@ fun Row.layout(
 
 @MosaikDsl
 fun Box.layout(
-    hAlignment: HAlignment,
+    hAlignment: HAlignment = HAlignment.CENTER,
     vAlignment: VAlignment,
     init: (@MosaikDsl ViewGroup).() -> Unit
 ) {
