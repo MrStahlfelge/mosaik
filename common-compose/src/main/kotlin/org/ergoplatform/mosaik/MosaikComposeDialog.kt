@@ -1,11 +1,11 @@
 package org.ergoplatform.mosaik
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -19,19 +19,20 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
     val dialogState = dialog.flow.collectAsState()
-    // TODO use correct colors, min width
+
     dialogState.value?.let { mosaikDialog ->
         AlertDialog(
             onDismissRequest = { dialog.dismiss() },
             text = {
-                Text(mosaikDialog.message)
+                Text(mosaikDialog.message, Modifier.widthIn(300.dp))
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         dialog.dismiss()
                         mosaikDialog.positiveButtonClicked?.run()
-                    }
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                 ) {
                     Text(mosaikDialog.positiveButtonText)
                 }
@@ -42,7 +43,8 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                         onClick = {
                             dialog.dismiss()
                             mosaikDialog.negativeButtonClicked?.run()
-                        }
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                     ) {
                         Text(buttonText)
                     }
