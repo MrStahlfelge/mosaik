@@ -25,6 +25,7 @@ import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
@@ -139,6 +140,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "Image":
                 clazz = Image.class;
+                break;
+            case "HorizontalRule":
+                clazz = HorizontalRule.class;
                 break;
             default:
                 throw new JsonParseException("View Element with name " + elementName + " not known.");

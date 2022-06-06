@@ -205,6 +205,28 @@ object ViewElementsDemoLayoutView {
                     }
 
                 }
+                card(Padding.DEFAULT) {
+
+                    column(Padding.NONE) {
+
+                        column(Padding.DEFAULT) {
+                            label("Horizontal rule", style = LabelStyle.HEADLINE2)
+
+                            label(
+                                "Use the horizontal rule as a separator when needed."
+                            )
+                        }
+
+                        hr(Padding.TWICE)
+
+                        column(Padding.DEFAULT) {
+                            label(
+                                "This is another section."
+                            )
+                        }
+                    }
+
+                }
 
             }
 

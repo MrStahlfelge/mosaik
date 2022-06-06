@@ -6,6 +6,8 @@ import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField
 import org.ergoplatform.mosaik.model.ui.input.TextInputField
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
+import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule
+import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.Button
 import org.ergoplatform.mosaik.model.ui.text.Label
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
@@ -34,6 +36,15 @@ fun <G : ViewGroup> G.button(
     viewElement(Button().apply {
         this.text = text
         style?.let { this.style = style }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.hr(
+    verticalPadding: Padding? = null,
+    init: (@MosaikDsl HorizontalRule).() -> Unit = {}
+): HorizontalRule =
+    viewElement(HorizontalRule().apply {
+        verticalPadding?.let { this.setvPadding(verticalPadding) }
     }, init)
 
 @MosaikDsl

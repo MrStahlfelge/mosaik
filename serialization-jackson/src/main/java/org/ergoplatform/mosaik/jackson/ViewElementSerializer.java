@@ -13,6 +13,7 @@ import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
+import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.LinearLayout;
 import org.ergoplatform.mosaik.model.ui.layout.Padding;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
@@ -186,7 +187,10 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (propertyName.equals(KEY_PADDING) && (value instanceof Box && ((Box) value).getPadding() == Padding.NONE || value instanceof LinearLayout<?> && ((LinearLayout<?>) value).getPadding() == Padding.NONE)) {
             return null;
         }
-        if (propertyName.equals("packed") && value instanceof Row && ((Row) value).isPacked() == false) {
+        if (propertyName.equals("packed") && value instanceof Row && !((Row) value).isPacked()) {
+            return null;
+        }
+        if (propertyName.equals("vPadding") && value instanceof HorizontalRule && ((HorizontalRule) value).getvPadding() == Padding.DEFAULT) {
             return null;
         }
 

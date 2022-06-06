@@ -146,10 +146,23 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is ErgoAddressChooseButton -> {
             MosaikAddressChooseButton(treeElement, newModifier)
         }
+        is HorizontalRule -> {
+            MosaikHorizontalRule(treeElement, newModifier)
+        }
         else -> {
             Text("Unsupported view element: ${element.javaClass.simpleName}", newModifier)
         }
     }
+}
+
+@Composable
+fun MosaikHorizontalRule(treeElement: TreeElement, newModifier: Modifier) {
+    val element = treeElement.element as HorizontalRule
+
+    Divider(
+        newModifier.padding(vertical = element.getvPadding().toCompose()),
+        color = secondaryLabelColor
+    )
 }
 
 @Composable

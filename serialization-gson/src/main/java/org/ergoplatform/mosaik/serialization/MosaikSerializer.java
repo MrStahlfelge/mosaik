@@ -24,6 +24,7 @@ import org.ergoplatform.mosaik.model.ui.input.TextInputField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.Label;
@@ -120,6 +121,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
         gsonBuilder.registerTypeAdapter(Image.class, new ImageSerializer());
+        gsonBuilder.registerTypeAdapter(HorizontalRule.class, new HorizontalRuleSerializer());
 
         if (prettyPrint) {
             gsonBuilder.setPrettyPrinting();

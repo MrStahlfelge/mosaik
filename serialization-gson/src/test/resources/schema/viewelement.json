@@ -41,6 +41,9 @@
       "$ref": "icon.json"
     },
     {
+      "$ref": "horizontalrule.json"
+    },
+    {
       "$ref": "image.json"
     },
     {
