@@ -26,6 +26,7 @@ import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
+import org.ergoplatform.mosaik.model.actions.TokenInformationAction
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -164,6 +165,10 @@ fun main() {
                         "",
                         "Enter an Ergo address here.\nYes, this is ugly but only for debugging. :-)"
                     )
+                }
+
+                override fun runTokenInformationAction(action: TokenInformationAction) {
+                    openBrowser("https://explorer.ergoplatform.com/en/token/${action.tokenId}")
                 }
             }
 

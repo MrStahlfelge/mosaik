@@ -78,6 +78,11 @@ abstract class MosaikRuntime(
                 is ErgoPayAction -> {
                     runErgoPayAction(action)
                 }
+                is TokenInformationAction -> {
+                    runTokenInformationAction(action)
+                }
+                // TODO ErgoAuthAction
+                // TODO QrCodeAction
                 else -> runUnknownAction(action)
             }
         } catch (e: InvalidValuesException) {
@@ -90,10 +95,12 @@ abstract class MosaikRuntime(
         }
     }
 
+    abstract fun runTokenInformationAction(action: TokenInformationAction)
+
     abstract fun runErgoPayAction(action: ErgoPayAction)
 
     open fun runUnknownAction(action: Action) {
-        TODO("Action type ${action.javaClass.simpleName} not yet implemented")
+        throw UnsupportedOperationException("Action type ${action.javaClass.simpleName} not yet implemented")
     }
 
     open fun runNavigateAction(action: NavigateAction) {
@@ -116,15 +123,13 @@ abstract class MosaikRuntime(
                         appUrl
                     )
                 val appVersion = fetchActionResponse.appVersion
-                val newAction = fetchActionResponse.action
+                val newAction =
+                    if (appVersion != appManifest!!.appVersion) ReloadAction()
+                    else fetchActionResponse.action
 
-                if (appVersion != appManifest!!.appVersion) {
-                    // TODO reload app
-                    throw IllegalStateException("Appversion changed while running app.")
-                } else
-                    withContext(Dispatchers.Main) {
-                        runAction(newAction)
-                    }
+                withContext(Dispatchers.Main) {
+                    runAction(newAction)
+                }
 
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error running Mosaik backend request", t)
@@ -271,7 +276,10 @@ abstract class MosaikRuntime(
      * are automatically updated by this in the view.
      */
     fun setValue(valueId: String, newValue: Any?) {
-        viewTree.findElementById(valueId)?.valueChanged(newValue)
+        viewTree.findElementById(valueId)?.let { element ->
+            if (element.hasValue)
+                element.valueChanged(newValue)
+        }
     }
 }
 

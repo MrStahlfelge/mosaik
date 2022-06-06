@@ -41,6 +41,16 @@ fun ViewContent.openBrowser(
 }
 
 @MosaikDsl
+fun ViewContent.showTokenInformation(
+    tokenId: String,
+    actionId: String? = null,
+    init: (@MosaikDsl TokenInformationAction).() -> Unit = {}
+): TokenInformationAction {
+    val tokenInformationAction = TokenInformationAction(tokenId)
+    return addAction(tokenInformationAction, actionId, init)
+}
+
+@MosaikDsl
 fun ViewContent.navigateToApp(
     url: String,
     id: String? = null,
