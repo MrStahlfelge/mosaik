@@ -40,6 +40,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.input.DropDownList
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
@@ -133,6 +134,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         }
         is TextField<*> -> {
             MosaikTextField(treeElement, newModifier)
+        }
+        is DropDownList -> {
+            MosaikDropDownList(treeElement, newModifier)
         }
         is LoadingIndicator -> {
             MosaikLoadingIndicator(treeElement, newModifier)

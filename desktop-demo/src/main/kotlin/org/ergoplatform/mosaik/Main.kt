@@ -155,6 +155,7 @@ fun main() {
                 override fun formatString(string: StringConstant, values: String?): String {
                     return when (string) {
                         StringConstant.ChooseAddress -> "Choose an address..."
+                        StringConstant.PleaseChoose -> "Please choose an option"
                     }
                 }
 

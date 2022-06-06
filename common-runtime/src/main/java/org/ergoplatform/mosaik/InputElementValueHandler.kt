@@ -12,13 +12,17 @@ abstract class InputElementValueHandler<T> {
     open fun getAsString(currentValue: Any?): String = currentValue?.toString() ?: ""
 
     companion object {
-        fun getForElement(element: ViewElement, mosaikRuntime: MosaikRuntime): InputElementValueHandler<*>? =
+        fun getForElement(
+            element: ViewElement,
+            mosaikRuntime: MosaikRuntime
+        ): InputElementValueHandler<*>? =
             when (element) {
                 is StringTextField -> StringInputHandler(element)
                 is ErgAmountInputField -> DecimalInputHandler(element, scaleErg)
                 is DecimalInputField -> DecimalInputHandler(element, element.scale)
                 is LongTextField -> IntegerInputHandler(element)
                 is ErgoAddressChooseButton -> ErgoAddressInputHandler(element, mosaikRuntime)
+                is DropDownList -> DropDownListInputHandler(element, mosaikRuntime)
                 is InputElement<*> -> OtherInputHandler(element)
                 else -> null
             }
@@ -68,13 +72,35 @@ class DecimalInputHandler(private val element: LongTextField, val scale: Int) :
         get() = KeyboardType.NumberDecimal
 }
 
-open class OtherInputHandler(private val element: InputElement<*>) : InputElementValueHandler<Any>() {
+open class OtherInputHandler(private val element: InputElement<*>) :
+    InputElementValueHandler<Any>() {
     override fun isValueValid(value: Any?): Boolean {
         return if (element is OptionalInputElement<*>) !element.isMandatory || value != null else true
     }
 
     override fun valueFromStringInput(value: String?): Any? {
         return value
+    }
+
+    override val keyboardType: KeyboardType
+        get() = KeyboardType.Text
+}
+
+class DropDownListInputHandler(
+    private val element: DropDownList,
+    private val mosaikRuntime: MosaikRuntime
+) : InputElementValueHandler<String>() {
+    override fun isValueValid(value: Any?): Boolean {
+        return !element.isMandatory || element.entries.containsKey(value)
+    }
+
+    override fun valueFromStringInput(value: String?): String? {
+        return value
+    }
+
+    override fun getAsString(currentValue: Any?): String {
+        return element.entries[currentValue]
+            ?: mosaikRuntime.formatString(StringConstant.PleaseChoose)
     }
 
     override val keyboardType: KeyboardType

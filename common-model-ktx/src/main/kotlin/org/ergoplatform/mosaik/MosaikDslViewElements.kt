@@ -1,10 +1,7 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.*
-import org.ergoplatform.mosaik.model.ui.input.DecimalInputField
-import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
-import org.ergoplatform.mosaik.model.ui.input.IntegerInputField
-import org.ergoplatform.mosaik.model.ui.input.TextInputField
+import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule
 import org.ergoplatform.mosaik.model.ui.layout.Padding
@@ -110,6 +107,19 @@ fun <G : ViewGroup> G.decimalInputField(
         this.scale = scale
         placeholder?.let { this.placeholder = placeholder }
         initialRawValue?.let { this.value = initialRawValue }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.dropDownList(
+    id: String,
+    entries: Map<String, String>,
+    initialValue: String? = null,
+    init: (@MosaikDsl DropDownList).() -> Unit = {}
+): DropDownList =
+    viewElement(DropDownList().apply {
+        this.id = id
+        this.entries = entries
+        this.value = initialValue
     }, init)
 
 @MosaikDsl

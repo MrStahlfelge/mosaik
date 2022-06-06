@@ -76,7 +76,11 @@ object ViewElementsDemoInputView {
 
                     row {
                         layout(VAlignment.CENTER, weight = 1) {
-                            decimalInputField("decimalinput1", 2, "Numbers from 0.01 to 2 allowed") {
+                            decimalInputField(
+                                "decimalinput1",
+                                2,
+                                "Numbers from 0.01 to 2 allowed"
+                            ) {
                                 maxValue = 200
                                 minValue = 1
                             }
@@ -100,6 +104,24 @@ object ViewElementsDemoInputView {
                     box(Padding.DEFAULT)
 
                     label("(Not implemented yet)")
+                }
+            }
+
+            card(Padding.DEFAULT) {
+                column(Padding.DEFAULT) {
+                    label("DropDownList", style = LabelStyle.HEADLINE2)
+
+                    label(
+                        "An drop down list for the user to choose an item from."
+                    )
+
+                    dropDownList(
+                        "dropDownList", mapOf(
+                            "1" to "First item",
+                            "2" to "Second item",
+                            "3" to "Third item",
+                        ), "2"
+                    )
                 }
             }
 

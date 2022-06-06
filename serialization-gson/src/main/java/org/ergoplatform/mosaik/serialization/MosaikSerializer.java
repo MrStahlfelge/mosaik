@@ -17,6 +17,7 @@ import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
+import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
@@ -122,6 +123,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
         gsonBuilder.registerTypeAdapter(Image.class, new ImageSerializer());
         gsonBuilder.registerTypeAdapter(HorizontalRule.class, new HorizontalRuleSerializer());
+        gsonBuilder.registerTypeAdapter(DropDownList.class, new DropDownListSerializer());
 
         if (prettyPrint) {
             gsonBuilder.setPrettyPrinting();

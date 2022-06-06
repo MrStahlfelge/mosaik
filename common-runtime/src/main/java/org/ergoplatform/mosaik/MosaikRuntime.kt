@@ -295,4 +295,5 @@ data class UrlHistoryEntry(val url: String, val referrer: String?)
 
 enum class StringConstant {
     ChooseAddress,
+    PleaseChoose,
 }

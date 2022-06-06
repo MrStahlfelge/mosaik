@@ -16,6 +16,7 @@ import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
+import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
@@ -143,6 +144,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "HorizontalRule":
                 clazz = HorizontalRule.class;
+                break;
+            case "DropDownList":
+                clazz = DropDownList.class;
                 break;
             default:
                 throw new JsonParseException("View Element with name " + elementName + " not known.");

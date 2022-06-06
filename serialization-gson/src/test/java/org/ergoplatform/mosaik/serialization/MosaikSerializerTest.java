@@ -23,6 +23,7 @@ import org.ergoplatform.mosaik.model.actions.UrlAction;
 import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
@@ -89,6 +90,8 @@ public class MosaikSerializerTest extends TestCase {
                         ((TokenLabel) element).setTokenId("tokenid");
                     } else if (element instanceof Image) {
                         ((Image) element).setUrl("url");
+                    } else if (element instanceof DropDownList) {
+                        ((DropDownList) element).getEntries().put("id", "text");
                     }
 
                     // add actions from queue
