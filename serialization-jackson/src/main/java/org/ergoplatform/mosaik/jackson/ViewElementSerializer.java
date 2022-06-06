@@ -180,6 +180,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (propertyName.equals("enabled") && value instanceof InputElement && ((InputElement<?>) value).isEnabled()) {
             return null;
         }
+        if (propertyName.equals("readOnly") && value instanceof TextField<?> && !((TextField<?>) value).isReadOnly()) {
+            return null;
+        }
         if (propertyName.equals(KEY_PADDING) && (value instanceof Box && ((Box) value).getPadding() == Padding.NONE || value instanceof LinearLayout<?> && ((LinearLayout<?>) value).getPadding() == Padding.NONE)) {
             return null;
         }

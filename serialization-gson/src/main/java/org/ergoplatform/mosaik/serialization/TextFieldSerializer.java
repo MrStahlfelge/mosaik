@@ -22,6 +22,7 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
     public static final String KEY_VALUE = "value";
     public static final String KEY_PLACEHOLDER = "placeholder";
     public static final String KEY_ENABLED = "enabled";
+    public static final String KEY_READONLY = "readOnly";
     public static final String KEY_END_ICON = "endIcon";
     public static final String KEY_ON_END_ICON_CLICKED = "onEndIconClicked";
     public static final String KEY_ON_VALUE_CHANGED = "onValueChanged";
@@ -53,6 +54,9 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (!src.isEnabled()) {
             jsonObject.add(KEY_ENABLED, context.serialize(src.isEnabled()));
+        }
+        if (src.isReadOnly()) {
+            jsonObject.add(KEY_READONLY, context.serialize(src.isReadOnly()));
         }
         if (src.getEndIcon() != null) {
             jsonObject.add(KEY_END_ICON, context.serialize(src.getEndIcon()));
@@ -105,6 +109,9 @@ public class TextFieldSerializer<U, T extends TextField<U>> implements JsonSeria
         }
         if (jsonObject.has(KEY_ENABLED)) {
             textInputField.setEnabled(jsonObject.get(KEY_ENABLED).getAsBoolean());
+        }
+        if (jsonObject.has(KEY_READONLY)) {
+            textInputField.setReadOnly(jsonObject.get(KEY_READONLY).getAsBoolean());
         }
         if (jsonObject.has(KEY_END_ICON)) {
             textInputField.setEndIcon(context.<IconType>deserialize(jsonObject.get(KEY_END_ICON), IconType.class));

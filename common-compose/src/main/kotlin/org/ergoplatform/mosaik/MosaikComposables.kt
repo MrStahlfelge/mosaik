@@ -365,6 +365,7 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                         TextField.ImeActionType.GO -> ImeAction.Go
                     }
                 ),
+                readOnly = element.isReadOnly,
                 label = { element.placeholder?.let { Text(it) } },
                 trailingIcon = {
                     element.endIcon?.getImageVector()?.let { iv ->

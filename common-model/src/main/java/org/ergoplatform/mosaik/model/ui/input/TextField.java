@@ -31,6 +31,7 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
     private String onValueChangedAction;
     private ImeActionType imeActionType = ImeActionType.NEXT;
     private boolean enabled = true;
+    private boolean readOnly = false;
 
     @Nullable
     public IconType getEndIcon() {
@@ -125,6 +126,14 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
         this.imeActionType = imeActionType;
     }
 
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -141,12 +150,12 @@ public abstract class TextField<T> extends ViewElement implements InputElement<T
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TextField<?> textField = (TextField<?>) o;
-        return getMinValue() == textField.getMinValue() && getMaxValue() == textField.getMaxValue() && isEnabled() == textField.isEnabled() && endIconType == textField.endIconType && Objects.equals(getOnEndIconClicked(), textField.getOnEndIconClicked()) && Objects.equals(getOnImeAction(), textField.getOnImeAction()) && Objects.equals(getErrorMessage(), textField.getErrorMessage()) && Objects.equals(getPlaceholder(), textField.getPlaceholder()) && Objects.equals(getValue(), textField.getValue()) && Objects.equals(getOnValueChangedAction(), textField.getOnValueChangedAction()) && getImeActionType() == textField.getImeActionType();
+        return getMinValue() == textField.getMinValue() && getMaxValue() == textField.getMaxValue() && isEnabled() == textField.isEnabled() && isReadOnly() == textField.isReadOnly() && endIconType == textField.endIconType && Objects.equals(getOnEndIconClicked(), textField.getOnEndIconClicked()) && Objects.equals(getOnImeAction(), textField.getOnImeAction()) && Objects.equals(getErrorMessage(), textField.getErrorMessage()) && Objects.equals(getPlaceholder(), textField.getPlaceholder()) && Objects.equals(getValue(), textField.getValue()) && Objects.equals(getOnValueChangedAction(), textField.getOnValueChangedAction()) && getImeActionType() == textField.getImeActionType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), endIconType, getOnEndIconClicked(), getOnImeAction(), getErrorMessage(), getPlaceholder(), getValue(), getMinValue(), getMaxValue(), getOnValueChangedAction(), getImeActionType(), isEnabled());
+        return Objects.hash(super.hashCode(), endIconType, getOnEndIconClicked(), getOnImeAction(), getErrorMessage(), getPlaceholder(), getValue(), getMinValue(), getMaxValue(), getOnValueChangedAction(), getImeActionType(), isEnabled(), isReadOnly());
     }
 
     public enum ImeActionType {
