@@ -24,7 +24,17 @@ abstract class MosaikRuntime(
 
     abstract fun convertErgToFiat(nanoErg: Long): String?
 
+    /**
+     * optional callback to be informed when a MosaikApp is loaded. This is called on fist load
+     * as well as every new app loaded via [NavigateAction]
+     */
     var appLoaded: ((MosaikManifest) -> Unit)? = null
+
+    /**
+     * delay in milliseconds to wait after a user's input into a text field before
+     * InputElement.onValueChangedAction is launched.
+     */
+    var textFieldOnValueChangedActionDelay: Long = 1000
 
     /**
      * Show error to user. Can be called on background thread

@@ -284,10 +284,10 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 notifyValuesChanged()
                 MosaikLogger.logInfo("Value $id changed to $newValue")
                 getAction((treeElement.element as? InputElement<*>)?.onValueChangedAction)?.let { action ->
-                    if (treeElement.element is TextField<*>) {
+                    if (treeElement.element is TextField<*> && mosaikRuntime.textFieldOnValueChangedActionDelay > 0) {
                         // delay value change so that not every key stroke fires the event
                         registerJobFor(treeElement) { coroutine ->
-                            delay(1000)
+                            delay(mosaikRuntime.textFieldOnValueChangedActionDelay)
                             if (coroutine.isActive) {
                                 mosaikRuntime.runAction(action)
                             }
