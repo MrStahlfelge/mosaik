@@ -184,6 +184,23 @@ fun main() {
 
         runtime.appLoaded = { manifestState.value = it }
         runtime.loadMosaikApp("")
+
+        MosaikComposeConfig.DropDownMenu = { expanded,
+                                             dismiss,
+                                             modifier,
+                                             content ->
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = dismiss,
+                modifier = modifier,
+                content = content,
+            )
+        }
+
+        MosaikComposeConfig.DropDownItem = { onClick, content ->
+            DropdownMenuItem(onClick = onClick, content = content)
+        }
+
         val viewTree = runtime.viewTree
 
         var lastChangeFromUser = false

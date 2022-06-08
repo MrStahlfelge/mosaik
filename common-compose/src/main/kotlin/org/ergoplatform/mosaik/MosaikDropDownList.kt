@@ -63,16 +63,13 @@ fun MosaikDropDownList(treeElement: TreeElement, modifier: Modifier) {
             )
         )
 
-        // Create a drop-down menu with list of cities,
-        // when clicked, set the Text Field text as the city selected
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+        MosaikComposeConfig.DropDownMenu(
+            expanded,
+            { expanded = false },
+            Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
         ) {
             element.entries.forEach { (key, value) ->
-                DropdownMenuItem(onClick = {
+                MosaikComposeConfig.DropDownItem({
                     //selectedItem = key
                     expanded = false
                     treeElement.changeValueFromInput(key)
