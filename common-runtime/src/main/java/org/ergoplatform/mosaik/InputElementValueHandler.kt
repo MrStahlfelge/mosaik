@@ -21,7 +21,7 @@ abstract class InputElementValueHandler<T> {
                 is ErgAmountInputField -> DecimalInputHandler(element, scaleErg)
                 is DecimalInputField -> DecimalInputHandler(element, element.scale)
                 is LongTextField -> IntegerInputHandler(element)
-                is ErgoAddressChooseButton -> ErgoAddressInputHandler(element, mosaikRuntime)
+                is ErgoAddressChooseButton -> ErgoAddressChooserInputHandler(element, mosaikRuntime)
                 is DropDownList -> DropDownListInputHandler(element, mosaikRuntime)
                 is InputElement<*> -> OtherInputHandler(element)
                 else -> null
