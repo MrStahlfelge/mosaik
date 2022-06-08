@@ -28,6 +28,7 @@ import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
+import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
@@ -117,7 +118,8 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(ErgAmountInputField.class, new TextFieldSerializer<>(Long.class, ErgAmountInputField.class));
         gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class, new OptionalInputSerializer<>(String.class, ErgoAddressChooseButton.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
-        gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer());
+        gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer<>(String.class, Label.class));
+        gsonBuilder.registerTypeAdapter(ErgAmountLabel.class, new LabelSerializer<>(Long.class, ErgAmountLabel.class));
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());
         gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());

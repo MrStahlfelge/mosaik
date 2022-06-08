@@ -6,6 +6,7 @@ import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.Button
+import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel
 import org.ergoplatform.mosaik.model.ui.text.Label
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
@@ -22,6 +23,27 @@ fun <G : ViewGroup> G.label(
         style?.let { this.style = style }
         textAlignment?.let { this.textAlignment = textAlignment }
         textColor?.let { this.textColor = textColor }
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.ergAmount(
+    nanoErg: Long,
+    style: LabelStyle? = null,
+    textAlignment: HAlignment? = null,
+    textColor: ForegroundColor? = null,
+    maxDecimals: Int = 4,
+    withCurrency: Boolean = true,
+    trimTrailingZero: Boolean = false,
+    init: (@MosaikDsl ErgAmountLabel).() -> Unit = {}
+): ErgAmountLabel =
+    viewElement(ErgAmountLabel().apply {
+        this.text = nanoErg
+        style?.let { this.style = style }
+        textAlignment?.let { this.textAlignment = textAlignment }
+        textColor?.let { this.textColor = textColor }
+        this.maxDecimals = maxDecimals
+        this.isWithCurrencySymbol = withCurrency
+        this.isTrimTrailingZero = trimTrailingZero
     }, init)
 
 @MosaikDsl

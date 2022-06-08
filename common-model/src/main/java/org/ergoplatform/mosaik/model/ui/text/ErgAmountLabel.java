@@ -1,12 +1,15 @@
 package org.ergoplatform.mosaik.model.ui.text;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 /**
  * Shows nanoERG amount formatted
  */
+@Since(0)
 public class ErgAmountLabel extends StyleableTextLabel<Long> {
-    private boolean withCurrencySymbol = false;
+    private boolean withCurrencySymbol = true;
     private int maxDecimals = 4;
     private boolean trimTrailingZero = false;
 

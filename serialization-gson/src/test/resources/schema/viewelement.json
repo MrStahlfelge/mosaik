@@ -35,6 +35,9 @@
       "$ref": "label.json"
     },
     {
+      "$ref": "ergamountlabel.json"
+    },
+    {
       "$ref": "loadingindicator.json"
     },
     {

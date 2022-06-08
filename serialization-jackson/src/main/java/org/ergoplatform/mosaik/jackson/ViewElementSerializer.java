@@ -19,7 +19,8 @@ import org.ergoplatform.mosaik.model.ui.layout.Padding;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.layout.VAlignment;
 import org.ergoplatform.mosaik.model.ui.text.Button;
-import org.ergoplatform.mosaik.model.ui.text.Label;
+import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
+import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel;
 import org.ergoplatform.mosaik.model.ui.text.TruncationType;
 
 import java.beans.IntrospectionException;
@@ -146,12 +147,20 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
                 return null;
             }
         }
-        if (value instanceof Label) {
-            if (propertyName.equals("maxLines") && ((Label) value).getMaxLines() == 0 ||
-                    propertyName.equals("textAlignment") && ((Label) value).getTextAlignment() == HAlignment.START ||
-                    propertyName.equals("textColor") && ((Label) value).getTextColor() == ForegroundColor.DEFAULT ||
-                    propertyName.equals("truncationType") && ((Label) value).getTruncationType() == TruncationType.END
+        if (value instanceof StyleableTextLabel) {
+            StyleableTextLabel<?> label = (StyleableTextLabel<?>) value;
+            if (propertyName.equals("maxLines") && label.getMaxLines() == 0 ||
+                    propertyName.equals("textAlignment") && label.getTextAlignment() == HAlignment.START ||
+                    propertyName.equals("textColor") && label.getTextColor() == ForegroundColor.DEFAULT ||
+                    propertyName.equals("truncationType") && label.getTruncationType() == TruncationType.END
             )
+                return null;
+        }
+        if (value instanceof ErgAmountLabel) {
+            ErgAmountLabel label = (ErgAmountLabel) value;
+            if (propertyName.equals("maxDecimals") && label.getMaxDecimals() == 4 ||
+                    propertyName.equals("trimTrailingZero") && !label.isTrimTrailingZero() ||
+                    propertyName.equals("withCurrencySymbol") && label.isWithCurrencySymbol())
                 return null;
         }
         if (value instanceof Button) {

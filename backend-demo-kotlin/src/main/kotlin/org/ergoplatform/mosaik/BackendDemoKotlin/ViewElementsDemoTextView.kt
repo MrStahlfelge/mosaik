@@ -75,7 +75,9 @@ object ViewElementsDemoTextView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    ergAmount(1000L * 1000 * 1000)
+                    ergAmount(1000L * 1000 * 1000, trimTrailingZero = true, withCurrency = false)
+                    ergAmount(1000L * 1000 * 1000 + 1000000, maxDecimals = 6, withCurrency = false)
                 }
             }
 
