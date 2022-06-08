@@ -22,6 +22,8 @@ abstract class MosaikRuntime(
 
     abstract fun openBrowser(url: String)
 
+    abstract fun convertErgToFiat(nanoErg: Long): String?
+
     var appLoaded: ((MosaikManifest) -> Unit)? = null
 
     /**

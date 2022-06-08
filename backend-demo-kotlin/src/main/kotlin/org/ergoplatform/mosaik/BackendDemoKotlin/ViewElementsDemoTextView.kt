@@ -94,7 +94,8 @@ object ViewElementsDemoTextView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    fiatAmount(1000L * 1000L * 1000L)
+                    fiatAmount(1000L * 1000L * 1000L, fallbackToErg = true)
                 }
             }
 

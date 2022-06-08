@@ -1,11 +1,17 @@
 package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel
+import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel
 import org.ergoplatform.mosaik.model.ui.text.Label
 import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel
 
 object LabelFormatter {
-    fun getFormattedText(element: StyleableTextLabel<*>): String {
+
+    /**
+     * returns formatted text to show to the user. If null is returned, no element should be
+     * shown at all
+     */
+    fun getFormattedText(element: StyleableTextLabel<*>, treeElement: TreeElement): String? {
         return when (element) {
 
             is Label -> element.text ?: ""
@@ -20,6 +26,19 @@ object LabelFormatter {
                     "$ergAmountString $ergoCurrencyText"
                 else
                     ergAmountString
+            }
+
+            is FiatAmountLabel -> {
+                val fiatString =
+                    treeElement.viewTree.mosaikRuntime.convertErgToFiat(element.text ?: 0)
+
+                return if (fiatString == null && element.isFallbackToErg)
+                    ErgoAmount(element.text ?: 0).toStringRoundToDecimals(
+                        4,
+                        false
+                    ) + " $ergoCurrencyText"
+                else
+                    fiatString
             }
 
             else -> element.text.toString()

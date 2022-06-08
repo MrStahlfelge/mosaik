@@ -5,10 +5,7 @@ import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule
 import org.ergoplatform.mosaik.model.ui.layout.Padding
-import org.ergoplatform.mosaik.model.ui.text.Button
-import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel
-import org.ergoplatform.mosaik.model.ui.text.Label
-import org.ergoplatform.mosaik.model.ui.text.LabelStyle
+import org.ergoplatform.mosaik.model.ui.text.*
 
 @MosaikDsl
 fun <G : ViewGroup> G.label(
@@ -44,6 +41,23 @@ fun <G : ViewGroup> G.ergAmount(
         this.maxDecimals = maxDecimals
         this.isWithCurrencySymbol = withCurrency
         this.isTrimTrailingZero = trimTrailingZero
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.fiatAmount(
+    nanoErg: Long,
+    style: LabelStyle? = null,
+    textAlignment: HAlignment? = null,
+    textColor: ForegroundColor? = null,
+    fallbackToErg: Boolean = false,
+    init: (@MosaikDsl FiatAmountLabel).() -> Unit = {}
+): FiatAmountLabel =
+    viewElement(FiatAmountLabel().apply {
+        this.text = nanoErg
+        style?.let { this.style = style }
+        textAlignment?.let { this.textAlignment = textAlignment }
+        textColor?.let { this.textColor = textColor }
+        this.isFallbackToErg = fallbackToErg
     }, init)
 
 @MosaikDsl

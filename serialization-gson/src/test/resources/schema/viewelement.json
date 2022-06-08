@@ -38,6 +38,9 @@
       "$ref": "ergamountlabel.json"
     },
     {
+      "$ref": "fiatamountlabel.json"
+    },
+    {
       "$ref": "loadingindicator.json"
     },
     {

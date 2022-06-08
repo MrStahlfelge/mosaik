@@ -487,44 +487,46 @@ private fun MosaikLabel(
     newModifier: Modifier
 ) {
     val element = treeElement.element as StyleableTextLabel<*>
-    val text = LabelFormatter.getFormattedText(element)
+    val text = LabelFormatter.getFormattedText(element, treeElement)
 
-    if (element.truncationType == TruncationType.MIDDLE && element.maxLines == 1)
-        MiddleEllipsisText(
-            text,
-            newModifier,
-            textAlign = (when (element.textAlignment) {
-                HAlignment.START -> TextAlign.Start
-                HAlignment.CENTER -> TextAlign.Center
-                HAlignment.END -> TextAlign.End
-                HAlignment.JUSTIFY -> TextAlign.Justify
-            }),
-            style = labelStyle(element.style),
-            color = foregroundColor(element.textColor)
-        )
-    else {
-        // TODO truncationType Start https://stackoverflow.com/a/69084973/7487013
-        remember(element.truncationType) {
-            if (element.truncationType == TruncationType.START)
-                MosaikLogger.logWarning("TruncationType START not supported by this implementation")
-            else if (element.truncationType == TruncationType.MIDDLE)
-                MosaikLogger.logWarning("TruncationType MIDDLE only supported with maxLines 1 by this implementation")
+    if (text != null) {
+        if (element.truncationType == TruncationType.MIDDLE && element.maxLines == 1)
+            MiddleEllipsisText(
+                text,
+                newModifier,
+                textAlign = (when (element.textAlignment) {
+                    HAlignment.START -> TextAlign.Start
+                    HAlignment.CENTER -> TextAlign.Center
+                    HAlignment.END -> TextAlign.End
+                    HAlignment.JUSTIFY -> TextAlign.Justify
+                }),
+                style = labelStyle(element.style),
+                color = foregroundColor(element.textColor)
+            )
+        else {
+            // TODO truncationType Start https://stackoverflow.com/a/69084973/7487013
+            remember(element.truncationType) {
+                if (element.truncationType == TruncationType.START)
+                    MosaikLogger.logWarning("TruncationType START not supported by this implementation")
+                else if (element.truncationType == TruncationType.MIDDLE)
+                    MosaikLogger.logWarning("TruncationType MIDDLE only supported with maxLines 1 by this implementation")
+            }
+
+            Text(
+                text,
+                newModifier,
+                maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
+                textAlign = (when (element.textAlignment) {
+                    HAlignment.START -> TextAlign.Start
+                    HAlignment.CENTER -> TextAlign.Center
+                    HAlignment.END -> TextAlign.End
+                    HAlignment.JUSTIFY -> TextAlign.Justify
+                }),
+                overflow = TextOverflow.Ellipsis,
+                style = labelStyle(element.style),
+                color = foregroundColor(element.textColor)
+            )
         }
-
-        Text(
-            text,
-            newModifier,
-            maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
-            textAlign = (when (element.textAlignment) {
-                HAlignment.START -> TextAlign.Start
-                HAlignment.CENTER -> TextAlign.Center
-                HAlignment.END -> TextAlign.End
-                HAlignment.JUSTIFY -> TextAlign.Justify
-            }),
-            overflow = TextOverflow.Ellipsis,
-            style = labelStyle(element.style),
-            color = foregroundColor(element.textColor)
-        )
     }
 }
 

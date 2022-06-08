@@ -108,6 +108,10 @@ class ViewTreeTest : TestCase() {
 
                 }
 
+                override fun convertErgToFiat(nanoErg: Long): String? {
+                    return null
+                }
+
                 override fun runTokenInformationAction(action: TokenInformationAction) {
 
                 }

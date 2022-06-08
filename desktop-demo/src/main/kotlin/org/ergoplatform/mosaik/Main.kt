@@ -31,6 +31,8 @@ import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.net.URI
 import java.util.*
 
@@ -137,6 +139,13 @@ fun main() {
                             )
                         }
                     }
+                }
+
+                override fun convertErgToFiat(nanoErg: Long): String? {
+                    return "$" + BigDecimal(ErgoAmount(nanoErg).toDouble() * 2.5).setScale(
+                        2,
+                        RoundingMode.HALF_UP
+                    ).toPlainString()
                 }
 
                 override fun isErgoAddressValid(ergoAddress: String): Boolean {

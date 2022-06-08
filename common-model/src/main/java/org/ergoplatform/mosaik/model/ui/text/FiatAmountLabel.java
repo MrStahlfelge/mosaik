@@ -1,10 +1,13 @@
 package org.ergoplatform.mosaik.model.ui.text;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 /**
  * Shows nanoERG amount in user's currency, formatted
  */
+@Since(0)
 public class FiatAmountLabel extends StyleableTextLabel<Long> {
     private boolean fallbackToErg = false;
 

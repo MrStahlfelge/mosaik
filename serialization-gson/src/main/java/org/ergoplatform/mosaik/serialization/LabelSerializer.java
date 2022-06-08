@@ -12,6 +12,7 @@ import org.ergoplatform.mosaik.model.ui.ForegroundColor;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
+import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel;
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
 import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel;
 import org.ergoplatform.mosaik.model.ui.text.TruncationType;
@@ -31,6 +32,9 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
     public static final String KEY_MAX_DECIMALS = "maxDecimals";
     public static final String KEY_TRIM_TRAILING_ZERO = "trimTrailingZero";
     public static final String KEY_SHOW_CURRENCY = "withCurrencySymbol";
+
+    // FiatAmountLabel
+    public static final String KEY_FALLBACK_ERG = "fallbackToErg";
 
     private final Class<U> valueClass;
     private final Class<T> labelClass;
@@ -69,6 +73,12 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
             }
             if (!ergAmountLabel.isWithCurrencySymbol()) {
                 jsonObject.add(KEY_SHOW_CURRENCY, context.serialize(ergAmountLabel.isWithCurrencySymbol()));
+            }
+        }
+        if (src instanceof FiatAmountLabel) {
+            FiatAmountLabel fiatAmountLabel = (FiatAmountLabel) src;
+            if (fiatAmountLabel.isFallbackToErg()) {
+                jsonObject.add(KEY_FALLBACK_ERG, context.serialize(fiatAmountLabel.isFallbackToErg()));
             }
         }
 
@@ -116,6 +126,13 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
             }
             if (jsonObject.has(KEY_SHOW_CURRENCY)) {
                 ergAmountLabel.setWithCurrencySymbol(jsonObject.get(KEY_SHOW_CURRENCY).getAsBoolean());
+            }
+        }
+
+        if (label instanceof FiatAmountLabel) {
+            FiatAmountLabel fiatAmountLabel = (FiatAmountLabel) label;
+            if (jsonObject.has(KEY_FALLBACK_ERG)) {
+                fiatAmountLabel.setFallbackToErg(jsonObject.get(KEY_FALLBACK_ERG).getAsBoolean());
             }
         }
 
