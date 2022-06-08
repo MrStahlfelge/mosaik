@@ -44,10 +44,7 @@ import org.ergoplatform.mosaik.model.ui.input.DropDownList
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
-import org.ergoplatform.mosaik.model.ui.text.Button
-import org.ergoplatform.mosaik.model.ui.text.Label
-import org.ergoplatform.mosaik.model.ui.text.LabelStyle
-import org.ergoplatform.mosaik.model.ui.text.TruncationType
+import org.ergoplatform.mosaik.model.ui.text.*
 
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
@@ -120,7 +117,7 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
             // this also deals with LazyLoadBox
             MosaikBox(newModifier, treeElement)
         }
-        is Label -> {
+        is StyleableTextLabel<*> -> {
             MosaikLabel(treeElement, newModifier)
         }
         is Column -> {
@@ -489,11 +486,12 @@ private fun MosaikLabel(
     treeElement: TreeElement,
     newModifier: Modifier
 ) {
-    val element = treeElement.element as Label
+    val element = treeElement.element as StyleableTextLabel<*>
+    val text = LabelFormatter.getFormattedText(element)
 
     if (element.truncationType == TruncationType.MIDDLE && element.maxLines == 1)
         MiddleEllipsisText(
-            element.text ?: "",
+            text,
             newModifier,
             textAlign = (when (element.textAlignment) {
                 HAlignment.START -> TextAlign.Start
@@ -514,7 +512,7 @@ private fun MosaikLabel(
         }
 
         Text(
-            element.text ?: "",
+            text,
             newModifier,
             maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
             textAlign = (when (element.textAlignment) {
