@@ -17,6 +17,7 @@ abstract class InputElementValueHandler<T> {
             mosaikRuntime: MosaikRuntime
         ): InputElementValueHandler<*>? =
             when (element) {
+                is ErgAddressInputField -> ErgAddressTextInputHandler(element, mosaikRuntime)
                 is StringTextField -> StringInputHandler(element)
                 is ErgAmountInputField -> DecimalInputHandler(element, scaleErg)
                 is DecimalInputField -> DecimalInputHandler(element, element.scale)
@@ -43,8 +44,26 @@ class StringInputHandler(private val element: StringTextField) :
     override val keyboardType: KeyboardType
         get() = when (element) {
             is PasswordInputField -> KeyboardType.Password
-            else -> KeyboardType.Password
+            else -> KeyboardType.Text
         }
+}
+
+class ErgAddressTextInputHandler(
+    private val element: ErgAddressInputField,
+    private val runtime: MosaikRuntime
+) : InputElementValueHandler<String>() {
+    override fun isValueValid(value: Any?): Boolean {
+        val addressString = (value as? String)
+
+        return if (addressString == null) element.minValue <= 0
+        else runtime.isErgoAddressValid(addressString)
+    }
+
+    override fun valueFromStringInput(value: String?): String? {
+        return value?.let { if (runtime.isErgoAddressValid(value)) value else null }
+    }
+
+    override val keyboardType: KeyboardType get() = KeyboardType.Text
 }
 
 class IntegerInputHandler(private val element: LongTextField) : InputElementValueHandler<Long>() {

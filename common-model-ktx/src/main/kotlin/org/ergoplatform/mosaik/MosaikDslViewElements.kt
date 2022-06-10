@@ -131,6 +131,23 @@ fun <G : ViewGroup> G.passwordInputField(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.ergAddressInputField(
+    id: String,
+    placeholder: String? = null,
+    initialValue: String? = null,
+    mandatory: Boolean = false,
+    init: (@MosaikDsl ErgAddressInputField).() -> Unit = {}
+): ErgAddressInputField =
+    viewElement(ErgAddressInputField().apply {
+        this.id = id
+        placeholder?.let { this.placeholder = placeholder }
+        initialValue?.let { this.value = initialValue }
+        if (mandatory) {
+            minValue = 1
+        }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.integerInputField(
     id: String,
     placeholder: String? = null,

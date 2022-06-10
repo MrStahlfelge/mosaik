@@ -51,6 +51,13 @@ object ViewElementsDemoInputView {
                     passwordInputField("passwordinput", "Enter password here (min 8 chars)") {
                         minValue = 8
                     }
+
+                    box(Padding.DEFAULT)
+
+                    label("Text field to enter ergo addresses. Mosaik executors might show labels for known addresses. " +
+                            "Min value of 0 is considered that an optional address can be entered.")
+
+                    ergAddressInputField("ergaddressinput", "Enter ergo address here", mandatory = true)
                 }
             }
 

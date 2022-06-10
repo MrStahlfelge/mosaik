@@ -20,6 +20,9 @@
       "$ref": "passwordinputfield.json"
     },
     {
+      "$ref": "ergaddressinputfield.json"
+    },
+    {
       "$ref": "dropdownlist.json"
     },
     {

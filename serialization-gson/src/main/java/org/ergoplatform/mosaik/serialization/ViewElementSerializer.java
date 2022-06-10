@@ -17,6 +17,7 @@ import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
 import org.ergoplatform.mosaik.model.ui.input.DropDownList;
+import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
@@ -111,6 +112,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "PasswordInputField":
                 clazz = PasswordInputField.class;
+                break;
+            case "ErgAddressInputField":
+                clazz = ErgAddressInputField.class;
                 break;
             case "IntegerInputField":
                 clazz = IntegerInputField.class;
