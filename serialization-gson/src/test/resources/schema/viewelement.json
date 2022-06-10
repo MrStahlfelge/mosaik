@@ -35,6 +35,9 @@
       "$ref": "ergamountinputfield.json"
     },
     {
+      "$ref": "fiatorergamountinputfield.json"
+    },
+    {
       "$ref": "button.json"
     },
     {

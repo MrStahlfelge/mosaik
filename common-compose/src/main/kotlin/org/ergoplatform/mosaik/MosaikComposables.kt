@@ -304,20 +304,57 @@ fun MosaikErgAmountInputLayout(treeElement: TreeElement, modifier: Modifier) {
     val fiatAmountAvailable = mosaikRuntime.convertErgToFiat(0) != null
 
     if (fiatAmountAvailable) {
-        var nanoErg by remember { mutableStateOf(treeElement.currentValue as Long?) }
+        val fiatOrErgTextInputHandler =
+            treeElement.inputValueHandler as FiatOrErgTextInputHandler
+
+        var secondLabelState by remember {
+            mutableStateOf(
+                Pair(
+                    treeElement.currentValue as Long?,
+                    fiatOrErgTextInputHandler.inputIsFiat
+                )
+            )
+        }
+        val textFieldState = getTextFieldStateForElement(treeElement)
 
         Column(modifier) {
-            MosaikTextField(treeElement, Modifier) { changedValue ->
-                nanoErg = changedValue as Long?
+            MosaikTextField(treeElement, Modifier, textFieldState) { changedValue ->
+                secondLabelState =
+                    Pair(changedValue as Long?, fiatOrErgTextInputHandler.inputIsFiat)
             }
 
-            Text(
-                nanoErg?.let { mosaikRuntime.convertErgToFiat(it) } ?: "",
-                Modifier.align(Alignment.End).padding(horizontal = 4.dp),
-                textAlign = TextAlign.End,
-                style = labelStyle(LabelStyle.BODY1),
-                color = foregroundColor(ForegroundColor.SECONDARY)
-            )
+            val canChangeInputMode = fiatOrErgTextInputHandler.canChangeInputMode()
+            Row((if (canChangeInputMode) Modifier.clickable {
+                fiatOrErgTextInputHandler.switchInputAmountMode()
+                textFieldState.value = TextFieldValue(treeElement.currentValueAsString)
+                secondLabelState =
+                    Pair(treeElement.currentValue as Long?, fiatOrErgTextInputHandler.inputIsFiat)
+            } else Modifier).align(Alignment.End).padding(horizontal = 4.dp)) {
+
+                // when the input mode is switchable, we always show 0.00 amount for better
+                // clickability and to show which input type is active.
+                // if it is not switchable, nothing is shown for blank amounts
+                val nanoErgsToShow =
+                    if (fiatOrErgTextInputHandler.canChangeInputMode()) secondLabelState.first
+                        ?: 0 else secondLabelState.first
+
+                Text(
+                    nanoErgsToShow?.let { fiatOrErgTextInputHandler.getSecondLabelString(it) }
+                        ?: "",
+                    textAlign = TextAlign.End,
+                    style = labelStyle(LabelStyle.BODY1),
+                    color = foregroundColor(ForegroundColor.SECONDARY)
+                )
+
+                if (canChangeInputMode) {
+                    Icon(
+                        IconType.SWITCH.getImageVector(),
+                        null,
+                        Modifier.padding(start = 4.dp),
+                        tint = foregroundColor(ForegroundColor.SECONDARY)
+                    )
+                }
+            }
         }
     } else {
         MosaikTextField(treeElement, modifier)
@@ -329,21 +366,11 @@ fun MosaikErgAmountInputLayout(treeElement: TreeElement, modifier: Modifier) {
 fun MosaikTextField(
     treeElement: TreeElement,
     modifier: Modifier,
+    textFieldState: MutableState<TextFieldValue> = getTextFieldStateForElement(treeElement),
     valueChangeCallback: ((Any?) -> Unit)? = null
 ) {
     val element = treeElement.element as TextField<*>
 
-    // keep everything the user entered, as long as the [ViewTree] is not changed
-    val textFieldState =
-        remember(treeElement.createdAtContentVersion) {
-            val currentValue = treeElement.currentValueAsString
-            mutableStateOf(
-                TextFieldValue(
-                    currentValue,
-                    selection = TextRange(0, currentValue.length)
-                )
-            )
-        }
     val errorState = remember(treeElement.createdAtContentVersion) { mutableStateOf(false) }
 
     Column(modifier.fillMaxWidth()) {
@@ -448,6 +475,19 @@ fun MosaikTextField(
         }
     }
 }
+
+@Composable
+private fun getTextFieldStateForElement(treeElement: TreeElement) =
+    // keep everything the user entered, as long as the [ViewTree] is not changed
+    remember(treeElement.createdAtContentVersion) {
+        val currentValue = treeElement.currentValueAsString
+        mutableStateOf(
+            TextFieldValue(
+                currentValue,
+                selection = TextRange(0, currentValue.length)
+            )
+        )
+    }
 
 @Composable
 private fun MosaikButton(

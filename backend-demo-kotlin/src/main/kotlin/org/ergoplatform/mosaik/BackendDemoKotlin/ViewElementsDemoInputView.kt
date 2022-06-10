@@ -45,8 +45,10 @@ object ViewElementsDemoInputView {
 
                     box(Padding.DEFAULT)
 
-                    label("PasswordInputField is the same from backend's view, but will show " +
-                            "different on the UI and will use a keyboard that does not make suggestions.")
+                    label(
+                        "PasswordInputField is the same from backend's view, but will show " +
+                                "different on the UI and will use a keyboard that does not make suggestions."
+                    )
 
                     passwordInputField("passwordinput", "Enter password here (min 8 chars)") {
                         minValue = 8
@@ -54,10 +56,16 @@ object ViewElementsDemoInputView {
 
                     box(Padding.DEFAULT)
 
-                    label("Text field to enter ergo addresses. Mosaik executors might show labels for known addresses. " +
-                            "Min value of 0 is considered that an optional address can be entered.")
+                    label(
+                        "Text field to enter ergo addresses. Mosaik executors might show labels for known addresses. " +
+                                "Min value of 0 is considered that an optional address can be entered."
+                    )
 
-                    ergAddressInputField("ergaddressinput", "Enter ergo address here", mandatory = true)
+                    ergAddressInputField(
+                        "ergaddressinput",
+                        "Enter ergo address here",
+                        mandatory = true
+                    )
                 }
             }
 
@@ -112,11 +120,20 @@ object ViewElementsDemoInputView {
                     label("ErgAmountInputField has a fixed scale of 9 and shows a fiat comparison amount, when available.")
                     ergAmountInputField("ergAmountInput", "ERG amount") {
                         minValue = 1000L * 1000L * 1000L
+                        value = minValue
                     }
 
                     box(Padding.DEFAULT)
 
-                    label("FiatOrErgAmount (Not implemented yet)")
+                    label(
+                        "FiatOrErgAmountInputField is like ErgAmountInputField, but users can input amounts in their " +
+                                "preferred fiat currency and it gets automatically converted into nanoERG."
+                    )
+                    ergAmountInputField("fiatOrErgAmountInput", "Fiat or ERG amount", canUseFiatInput = true) {
+                        minValue = 1000L * 1000L * 1000L
+                        value = minValue
+                    }
+
                 }
             }
 

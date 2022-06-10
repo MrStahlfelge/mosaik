@@ -180,9 +180,10 @@ fun <G : ViewGroup> G.ergAmountInputField(
     id: String,
     placeholder: String? = null,
     initialValue: Long? = null,
+    canUseFiatInput: Boolean = false,
     init: (@MosaikDsl ErgAmountInputField).() -> Unit = {}
 ): ErgAmountInputField =
-    viewElement(ErgAmountInputField().apply {
+    viewElement((if (canUseFiatInput) FiatOrErgAmountInputField() else ErgAmountInputField()).apply {
         this.id = id
         placeholder?.let { this.placeholder = placeholder }
         initialValue?.let { this.value = initialValue }

@@ -20,6 +20,7 @@ import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton;
+import org.ergoplatform.mosaik.model.ui.input.FiatOrErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.PasswordInputField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
@@ -115,6 +116,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "ErgAddressInputField":
                 clazz = ErgAddressInputField.class;
+                break;
+            case "FiatOrErgAmountInputField":
+                clazz = FiatOrErgAmountInputField.class;
                 break;
             case "IntegerInputField":
                 clazz = IntegerInputField.class;

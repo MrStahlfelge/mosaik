@@ -34,7 +34,7 @@ class TreeElement(
             viewTree.getCurrentValue(this)?.inputValue
         } else null
 
-    private val inputValueHandler: InputElementValueHandler<*>? =
+    val inputValueHandler: InputElementValueHandler<*>? =
         InputElementValueHandler.getForElement(element, viewTree.mosaikRuntime)
 
     val getResourceBytes get() = viewTree.getResourceBytes(this)

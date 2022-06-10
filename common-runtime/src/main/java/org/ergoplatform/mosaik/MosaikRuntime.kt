@@ -25,7 +25,9 @@ abstract class MosaikRuntime(
     /**
      * return fiat amount, if available. null if no fiat amount is available
      */
-    abstract fun convertErgToFiat(nanoErg: Long): String?
+    abstract fun convertErgToFiat(nanoErg: Long, withCurrency: Boolean = true): String?
+
+    abstract fun parseFiatInput(fiatInput: String): Long?
 
     /**
      * optional callback to be informed when a MosaikApp is loaded. This is called on fist load

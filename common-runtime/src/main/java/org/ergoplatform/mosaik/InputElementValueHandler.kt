@@ -2,8 +2,10 @@ package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.input.*
+import java.math.RoundingMode
 
 const val scaleErg = 9
+const val scaleformatShortErg = 4
 
 abstract class InputElementValueHandler<T> {
     abstract val keyboardType: KeyboardType
@@ -19,7 +21,7 @@ abstract class InputElementValueHandler<T> {
             when (element) {
                 is ErgAddressInputField -> ErgAddressTextInputHandler(element, mosaikRuntime)
                 is StringTextField -> StringInputHandler(element)
-                is ErgAmountInputField -> DecimalInputHandler(element, scaleErg)
+                is ErgAmountInputField -> FiatOrErgTextInputHandler(element, mosaikRuntime)
                 is DecimalInputField -> DecimalInputHandler(element, element.scale)
                 is LongTextField -> IntegerInputHandler(element)
                 is ErgoAddressChooseButton -> ErgoAddressChooserInputHandler(element, mosaikRuntime)
@@ -79,7 +81,7 @@ class IntegerInputHandler(private val element: LongTextField) : InputElementValu
         get() = KeyboardType.Number
 }
 
-class DecimalInputHandler(private val element: LongTextField, private val scale: Int) :
+open class DecimalInputHandler(private val element: LongTextField, private val scale: Int) :
     InputElementValueHandler<Long>() {
     override fun isValueValid(value: Any?): Boolean {
         return value is Long && value >= element.minValue && value <= element.maxValue
@@ -95,6 +97,51 @@ class DecimalInputHandler(private val element: LongTextField, private val scale:
 
     override fun getAsString(currentValue: Any?): String {
         return (currentValue as Long?)?.toBigDecimal()?.movePointLeft(scale)?.toPlainString() ?: ""
+    }
+}
+
+class FiatOrErgTextInputHandler(
+    private val element: LongTextField,
+    private val mosaikRuntime: MosaikRuntime,
+) : DecimalInputHandler(element, scaleErg) {
+
+    var inputIsFiat = false // TODO init from global runtime flag
+        private set
+
+    fun switchInputAmountMode() {
+        // TODO set global runtime flag
+        inputIsFiat = if (canChangeInputMode())
+            !inputIsFiat
+        else
+            false
+    }
+
+    fun canChangeInputMode() =
+        element is FiatOrErgAmountInputField && mosaikRuntime.convertErgToFiat(0) != null
+
+    override fun valueFromStringInput(value: String?): Long? {
+        return if (inputIsFiat)
+            value?.let { mosaikRuntime.parseFiatInput(value) }
+        else
+            super.valueFromStringInput(value)
+    }
+
+    override fun getAsString(currentValue: Any?): String {
+        return if (inputIsFiat) currentValue?.let {
+            mosaikRuntime.convertErgToFiat(
+                currentValue as Long,
+                withCurrency = false
+            )
+        } ?: "" else super.getAsString(currentValue)
+    }
+
+    fun getSecondLabelString(nanoErg: Long): String? {
+        return if (inputIsFiat)
+            (nanoErg.toBigDecimal().movePointLeft(scaleErg)
+                .setScale(scaleformatShortErg, RoundingMode.HALF_UP).toPlainString() ?: "") +
+                    " $ergoCurrencyText"
+        else
+            mosaikRuntime.convertErgToFiat(nanoErg)
     }
 }
 

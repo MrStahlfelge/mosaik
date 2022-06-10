@@ -141,11 +141,30 @@ fun main() {
                     }
                 }
 
-                override fun convertErgToFiat(nanoErg: Long): String? {
-                    return "$" + BigDecimal(ErgoAmount(nanoErg).toDouble() * 2.5).setScale(
+                val fiatRate = 2.5
+
+                override fun convertErgToFiat(
+                    nanoErg: Long,
+                    withCurrency: Boolean
+                ): String? {
+                    return (if (withCurrency) "$" else "") +
+                            BigDecimal(ErgoAmount(nanoErg).toDouble() * fiatRate).setScale(
                         2,
                         RoundingMode.HALF_UP
                     ).toPlainString()
+                }
+
+                override fun parseFiatInput(fiatInput: String): Long? {
+                    return try {
+                        BigDecimal(fiatInput).divide(
+                            fiatRate.toBigDecimal(),
+                            scaleErg,
+                            RoundingMode.HALF_UP
+                        ).setScale(scaleErg, RoundingMode.HALF_UP)
+                            .movePointRight(scaleErg).longValueExact()
+                    } catch (t: Throwable) {
+                        null
+                    }
                 }
 
                 override fun isErgoAddressValid(ergoAddress: String): Boolean {

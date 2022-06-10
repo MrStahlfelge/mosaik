@@ -108,8 +108,12 @@ class ViewTreeTest : TestCase() {
 
                 }
 
-                override fun convertErgToFiat(nanoErg: Long): String? {
+                override fun convertErgToFiat(nanoErg: Long, withCurrency: Boolean): String? {
                     return null
+                }
+
+                override fun parseFiatInput(fiatInput: String): Long {
+                    return 0
                 }
 
                 override fun runTokenInformationAction(action: TokenInformationAction) {
