@@ -109,7 +109,13 @@ object ViewElementsDemoInputView {
 
                     box(Padding.DEFAULT)
 
-                    label("ErgAmount (Not implemented yet)")
+                    label("ErgAmountInputField has a fixed scale of 9 and shows a fiat comparison amount, when available.")
+                    ergAmountInputField("ergAmountInput", "ERG amount") {
+                        minValue = 1000L * 1000L * 1000L
+                    }
+
+                    box(Padding.DEFAULT)
+
                     label("FiatOrErgAmount (Not implemented yet)")
                 }
             }

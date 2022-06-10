@@ -98,6 +98,9 @@ class TreeElement(
 
     val keyboardType get() = inputValueHandler!!.keyboardType
 
+    /**
+     * returns if value is valid
+     */
     fun changeValueFromInput(newValue: String?): Boolean {
         return try {
             val nativeValue = inputValueHandler!!.valueFromStringInput(newValue)
@@ -107,6 +110,9 @@ class TreeElement(
         }
     }
 
+    /**
+     * returns if value is valid
+     */
     fun valueChanged(newValue: Any?, isInvalid: Boolean = false): Boolean {
         val isValid = if (isInvalid) false else isValueValid(newValue)
         viewTree.onItemValueChanged(this, newValue, isValid)

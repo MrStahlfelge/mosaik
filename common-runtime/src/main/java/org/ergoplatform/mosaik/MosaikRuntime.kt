@@ -22,6 +22,9 @@ abstract class MosaikRuntime(
 
     abstract fun openBrowser(url: String)
 
+    /**
+     * return fiat amount, if available. null if no fiat amount is available
+     */
     abstract fun convertErgToFiat(nanoErg: Long): String?
 
     /**

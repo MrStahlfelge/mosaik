@@ -39,10 +39,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
-import org.ergoplatform.mosaik.model.ui.input.DropDownList
-import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
-import org.ergoplatform.mosaik.model.ui.input.PasswordInputField
-import org.ergoplatform.mosaik.model.ui.input.TextField
+import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.*
 
@@ -128,6 +125,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         }
         is Button -> {
             MosaikButton(treeElement, newModifier)
+        }
+        is ErgAmountInputField -> {
+            MosaikErgAmountInputLayout(treeElement, newModifier)
         }
         is TextField<*> -> {
             MosaikTextField(treeElement, newModifier)
@@ -298,9 +298,39 @@ fun MosaikLoadingIndicator(treeElement: TreeElement, modifier: Modifier) {
     )
 }
 
+@Composable
+fun MosaikErgAmountInputLayout(treeElement: TreeElement, modifier: Modifier) {
+    val mosaikRuntime = treeElement.viewTree.mosaikRuntime
+    val fiatAmountAvailable = mosaikRuntime.convertErgToFiat(0) != null
+
+    if (fiatAmountAvailable) {
+        var nanoErg by remember { mutableStateOf(treeElement.currentValue as Long?) }
+
+        Column(modifier) {
+            MosaikTextField(treeElement, Modifier) { changedValue ->
+                nanoErg = changedValue as Long?
+            }
+
+            Text(
+                nanoErg?.let { mosaikRuntime.convertErgToFiat(it) } ?: "",
+                Modifier.align(Alignment.End).padding(horizontal = 4.dp),
+                textAlign = TextAlign.End,
+                style = labelStyle(LabelStyle.BODY1),
+                color = foregroundColor(ForegroundColor.SECONDARY)
+            )
+        }
+    } else {
+        MosaikTextField(treeElement, modifier)
+    }
+}
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
+fun MosaikTextField(
+    treeElement: TreeElement,
+    modifier: Modifier,
+    valueChangeCallback: ((Any?) -> Unit)? = null
+) {
     val element = treeElement.element as TextField<*>
 
     // keep everything the user entered, as long as the [ViewTree] is not changed
@@ -329,6 +359,7 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                     if (textFieldState.value.text != it.text) {
                         errorState.value =
                             !treeElement.changeValueFromInput(it.text.ifEmpty { null })
+                        valueChangeCallback?.invoke(treeElement.currentValue)
                     }
                     textFieldState.value = it
                 },

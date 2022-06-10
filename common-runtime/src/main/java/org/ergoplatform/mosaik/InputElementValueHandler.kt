@@ -79,7 +79,7 @@ class IntegerInputHandler(private val element: LongTextField) : InputElementValu
         get() = KeyboardType.Number
 }
 
-class DecimalInputHandler(private val element: LongTextField, val scale: Int) :
+class DecimalInputHandler(private val element: LongTextField, private val scale: Int) :
     InputElementValueHandler<Long>() {
     override fun isValueValid(value: Any?): Boolean {
         return value is Long && value >= element.minValue && value <= element.maxValue
@@ -92,6 +92,10 @@ class DecimalInputHandler(private val element: LongTextField, val scale: Int) :
 
     override val keyboardType: KeyboardType
         get() = KeyboardType.NumberDecimal
+
+    override fun getAsString(currentValue: Any?): String {
+        return (currentValue as Long?)?.toBigDecimal()?.movePointLeft(scale)?.toPlainString() ?: ""
+    }
 }
 
 open class OtherInputHandler(private val element: InputElement<*>) :

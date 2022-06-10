@@ -176,6 +176,19 @@ fun <G : ViewGroup> G.decimalInputField(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.ergAmountInputField(
+    id: String,
+    placeholder: String? = null,
+    initialValue: Long? = null,
+    init: (@MosaikDsl ErgAmountInputField).() -> Unit = {}
+): ErgAmountInputField =
+    viewElement(ErgAmountInputField().apply {
+        this.id = id
+        placeholder?.let { this.placeholder = placeholder }
+        initialValue?.let { this.value = initialValue }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.dropDownList(
     id: String,
     entries: Map<String, String>,

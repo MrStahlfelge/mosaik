@@ -32,6 +32,9 @@
       "$ref": "decimalinputfield.json"
     },
     {
+      "$ref": "ergamountinputfield.json"
+    },
+    {
       "$ref": "button.json"
     },
     {
