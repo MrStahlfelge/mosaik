@@ -168,7 +168,7 @@ object ViewElementsDemoInputView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    ergoWalletChooser("walletAddresses")
                 }
             }
 

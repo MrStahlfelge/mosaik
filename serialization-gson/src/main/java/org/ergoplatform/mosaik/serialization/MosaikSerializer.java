@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.ergoplatform.mosaik.model.FetchActionResponse;
 import org.ergoplatform.mosaik.model.MosaikApp;
@@ -25,6 +26,7 @@ import org.ergoplatform.mosaik.model.ui.input.FiatOrErgAmountInputField;
 import org.ergoplatform.mosaik.model.ui.input.IntegerInputField;
 import org.ergoplatform.mosaik.model.ui.input.PasswordInputField;
 import org.ergoplatform.mosaik.model.ui.input.TextInputField;
+import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
@@ -38,6 +40,7 @@ import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -123,7 +126,12 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(IntegerInputField.class, new TextFieldSerializer<>(Long.class, IntegerInputField.class));
         gsonBuilder.registerTypeAdapter(DecimalInputField.class, new TextFieldSerializer<>(Long.class, DecimalInputField.class));
         gsonBuilder.registerTypeAdapter(ErgAmountInputField.class, new TextFieldSerializer<>(Long.class, ErgAmountInputField.class));
-        gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class, new OptionalInputSerializer<>(String.class, ErgoAddressChooseButton.class));
+        gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class,
+                new OptionalInputSerializer<>(new TypeToken<String>() {
+                }.getType(), ErgoAddressChooseButton.class));
+        gsonBuilder.registerTypeAdapter(WalletChooseButton.class,
+                new OptionalInputSerializer<>(new TypeToken<List<String>>() {
+                }.getType(), WalletChooseButton.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
         gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer<>(String.class, Label.class));
         gsonBuilder.registerTypeAdapter(ErgAmountLabel.class, new LabelSerializer<>(Long.class, ErgAmountLabel.class));

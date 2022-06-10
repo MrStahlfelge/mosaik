@@ -1,6 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.input;
 
-import org.ergoplatform.mosaik.model.actions.Action;
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
  * <p>
  * {@link #getValue()} might contain a list of wallet addresses or a single address.
  */
+@Since(0)
 public class WalletChooseButton extends ViewElement implements OptionalInputElement<List<String>> {
     @Nullable
     private List<String> addresses;

@@ -20,11 +20,11 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
     public static final String KEY_VALUE = "value";
     public static final String KEY_MANDATORY = "mandatory";
     public static final String KEY_ON_VALUE_CHANGED = "onValueChanged";
-    private final Class<U> valueClazz;
+    private final Type valueClazz;
     private final Class<T> inputValueElementClass;
 
-    public OptionalInputSerializer(Class<U> valueClazz, Class<T> inputValueElementClass) {
-        this.valueClazz = valueClazz;
+    public OptionalInputSerializer(Type valueType, Class<T> inputValueElementClass) {
+        this.valueClazz = valueType;
         this.inputValueElementClass = inputValueElementClass;
     }
 

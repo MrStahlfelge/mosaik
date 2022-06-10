@@ -212,6 +212,15 @@ fun <G : ViewGroup> G.ergoAddressChooser(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.ergoWalletChooser(
+    id: String,
+    init: (@MosaikDsl WalletChooseButton).() -> Unit = {}
+): WalletChooseButton =
+    viewElement(WalletChooseButton().apply {
+        this.id = id
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.loadingIndicator(
     size: LoadingIndicator.Size? = null,
     init: (@MosaikDsl LoadingIndicator).() -> Unit = {}
