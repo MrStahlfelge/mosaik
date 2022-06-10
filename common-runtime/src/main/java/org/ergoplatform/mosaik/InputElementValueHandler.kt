@@ -2,6 +2,7 @@ package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.input.*
+import java.math.BigDecimal
 import java.math.RoundingMode
 
 const val scaleErg = 9
@@ -105,24 +106,36 @@ class FiatOrErgTextInputHandler(
     private val mosaikRuntime: MosaikRuntime,
 ) : DecimalInputHandler(element, scaleErg) {
 
-    var inputIsFiat = false // TODO init from global runtime flag
+    var inputIsFiat = mosaikRuntime.preferFiatInput && canChangeInputMode()
         private set
 
     fun switchInputAmountMode() {
-        // TODO set global runtime flag
-        inputIsFiat = if (canChangeInputMode())
+        inputIsFiat = if (canChangeInputMode()) {
+            mosaikRuntime.preferFiatInput = !inputIsFiat
             !inputIsFiat
-        else
+        } else
             false
     }
 
     fun canChangeInputMode() =
-        element is FiatOrErgAmountInputField && mosaikRuntime.convertErgToFiat(0) != null
+        element is FiatOrErgAmountInputField && mosaikRuntime.fiatRate != null
 
     override fun valueFromStringInput(value: String?): Long? {
-        return if (inputIsFiat)
-            value?.let { mosaikRuntime.parseFiatInput(value) }
-        else
+        return if (inputIsFiat) {
+            val fiatRate = mosaikRuntime.fiatRate
+            if (value == null || fiatRate == null)
+                null
+            else
+                try {
+                    BigDecimal(value).divide(
+                        fiatRate.toBigDecimal(),
+                        scaleErg,
+                        RoundingMode.HALF_UP
+                    ).movePointRight(scaleErg).longValueExact()
+                } catch (t: Throwable) {
+                    null
+                }
+        } else
             super.valueFromStringInput(value)
     }
 

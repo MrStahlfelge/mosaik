@@ -301,7 +301,7 @@ fun MosaikLoadingIndicator(treeElement: TreeElement, modifier: Modifier) {
 @Composable
 fun MosaikErgAmountInputLayout(treeElement: TreeElement, modifier: Modifier) {
     val mosaikRuntime = treeElement.viewTree.mosaikRuntime
-    val fiatAmountAvailable = mosaikRuntime.convertErgToFiat(0) != null
+    val fiatAmountAvailable = mosaikRuntime.fiatRate != null
 
     if (fiatAmountAvailable) {
         val fiatOrErgTextInputHandler =

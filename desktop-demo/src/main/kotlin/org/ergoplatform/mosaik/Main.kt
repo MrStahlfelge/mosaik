@@ -141,7 +141,7 @@ fun main() {
                     }
                 }
 
-                val fiatRate = 2.5
+                override val fiatRate = 2.5
 
                 override fun convertErgToFiat(
                     nanoErg: Long,
@@ -154,18 +154,7 @@ fun main() {
                     ).toPlainString()
                 }
 
-                override fun parseFiatInput(fiatInput: String): Long? {
-                    return try {
-                        BigDecimal(fiatInput).divide(
-                            fiatRate.toBigDecimal(),
-                            scaleErg,
-                            RoundingMode.HALF_UP
-                        ).setScale(scaleErg, RoundingMode.HALF_UP)
-                            .movePointRight(scaleErg).longValueExact()
-                    } catch (t: Throwable) {
-                        null
-                    }
-                }
+                override var preferFiatInput: Boolean = true
 
                 override fun isErgoAddressValid(ergoAddress: String): Boolean {
                     // this is just for the desktop demo...

@@ -112,9 +112,12 @@ class ViewTreeTest : TestCase() {
                     return null
                 }
 
-                override fun parseFiatInput(fiatInput: String): Long {
-                    return 0
-                }
+                override val fiatRate: Double?
+                    get() = null
+
+                override var preferFiatInput: Boolean
+                    get() = false
+                    set(value) {}
 
                 override fun runTokenInformationAction(action: TokenInformationAction) {
 
