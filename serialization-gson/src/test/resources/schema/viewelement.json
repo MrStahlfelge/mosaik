@@ -17,6 +17,9 @@
       "$ref": "textinputfield.json"
     },
     {
+      "$ref": "passwordinputfield.json"
+    },
+    {
       "$ref": "dropdownlist.json"
     },
     {

@@ -121,7 +121,7 @@ object ViewElementsDemoTextView {
 
                     label(
                         "Styleable as the normal label, this label can show an Ergo network " +
-                                "address. In contrast to the normal label, it is provi share/copy " +
+                                "address. In contrast to the normal label, it is providing a share/copy " +
                                 "and address book functionality (in case application supports it)."
                     )
 

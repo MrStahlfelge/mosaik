@@ -118,6 +118,19 @@ fun <G : ViewGroup> G.textInputField(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.passwordInputField(
+    id: String,
+    placeholder: String? = null,
+    initialValue: String? = null,
+    init: (@MosaikDsl PasswordInputField).() -> Unit = {}
+): PasswordInputField =
+    viewElement(PasswordInputField().apply {
+        this.id = id
+        placeholder?.let { this.placeholder = placeholder }
+        initialValue?.let { this.value = initialValue }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.integerInputField(
     id: String,
     placeholder: String? = null,

@@ -21,9 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,6 +41,7 @@ import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.DropDownList
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
+import org.ergoplatform.mosaik.model.ui.input.PasswordInputField
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.*
@@ -345,6 +345,8 @@ fun MosaikTextField(treeElement: TreeElement, modifier: Modifier) {
                 isError = errorState.value,
                 maxLines = 1,
                 singleLine = true,
+                visualTransformation = if (element is PasswordInputField)
+                    PasswordVisualTransformation() else VisualTransformation.None,
                 keyboardActions = KeyboardActions(
                     onDone = element.onImeAction?.let { action ->
                         {

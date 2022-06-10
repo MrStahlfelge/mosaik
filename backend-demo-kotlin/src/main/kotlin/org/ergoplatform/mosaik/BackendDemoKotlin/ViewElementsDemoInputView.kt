@@ -42,6 +42,15 @@ object ViewElementsDemoInputView {
                         endIcon = IconType.INFO
                         maxValue = 10
                     }
+
+                    box(Padding.DEFAULT)
+
+                    label("PasswordInputField is the same from backend's view, but will show " +
+                            "different on the UI and will use a keyboard that does not make suggestions.")
+
+                    passwordInputField("passwordinput", "Enter password here (min 8 chars)") {
+                        minValue = 8
+                    }
                 }
             }
 
@@ -90,20 +99,11 @@ object ViewElementsDemoInputView {
                             }
                         }
                     }
-                }
-            }
-
-            card(Padding.DEFAULT) {
-                column(Padding.DEFAULT) {
-                    label("Other input fields", style = LabelStyle.HEADLINE2)
-
-                    label(
-                        "Input fields for EMail, Password, Decimal, ErgAmount, FiatOrErgAmount"
-                    )
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    label("ErgAmount (Not implemented yet)")
+                    label("FiatOrErgAmount (Not implemented yet)")
                 }
             }
 

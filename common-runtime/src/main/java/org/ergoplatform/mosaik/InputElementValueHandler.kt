@@ -41,7 +41,10 @@ class StringInputHandler(private val element: StringTextField) :
     }
 
     override val keyboardType: KeyboardType
-        get() = KeyboardType.Text // TODO might be password or email
+        get() = when (element) {
+            is PasswordInputField -> KeyboardType.Password
+            else -> KeyboardType.Password
+        }
 }
 
 class IntegerInputHandler(private val element: LongTextField) : InputElementValueHandler<Long>() {
