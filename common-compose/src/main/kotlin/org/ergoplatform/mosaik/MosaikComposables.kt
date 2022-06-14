@@ -689,14 +689,23 @@ private fun MosaikColumn(
     treeElement: TreeElement,
 ) {
     val element = treeElement.element as Column
+    val childrenWithWeightAndAlignment: List<Triple<TreeElement, Int, HAlignment>> =
+        treeElement.children.map { childElement ->
+            Triple(
+                childElement,
+                element.getChildWeight(childElement.element),
+                element.getChildAlignment(childElement.element)
+            )
+        }
+    val weightSum = childrenWithWeightAndAlignment.sumOf { it.second }
 
-    // do not use height(IntrinsicSize.min) here: can cause clipping on last element
-    Column(modifier) {
-        treeElement.children.forEach { childElement ->
+    // height(IntrinsicSize.Min) can cause clipping on last element, but it is mandatory if
+    // weights are used. To get both working as good as possible, set it only when needed
+    val columnModifier = if (weightSum > 0) modifier.height(IntrinsicSize.Min) else modifier
+
+    Column(columnModifier) {
+        childrenWithWeightAndAlignment.forEach { (childElement, weight, hAlignment) ->
             key(childElement.idOrUuid) {
-                val weight = element.getChildWeight(childElement.element)
-                val hAlignment = element.getChildAlignment(childElement.element)
-
                 MosaikTreeElement(
                     childElement,
                     when (hAlignment) {
