@@ -690,7 +690,8 @@ private fun MosaikColumn(
 ) {
     val element = treeElement.element as Column
 
-    Column(modifier.height(IntrinsicSize.Min)) {
+    // do not use height(IntrinsicSize.min) here: can cause clipping on last element
+    Column(modifier) {
         treeElement.children.forEach { childElement ->
             key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)
