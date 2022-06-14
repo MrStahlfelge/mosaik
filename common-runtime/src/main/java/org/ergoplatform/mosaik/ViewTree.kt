@@ -9,6 +9,7 @@ import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 import org.ergoplatform.mosaik.model.ui.input.TextField
+import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 /**
@@ -258,6 +259,9 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
         when (element.element) {
             is ErgoAddressChooseButton -> {
                 element.id?.let { mosaikRuntime.showErgoAddressChooser(it) }
+            }
+            is WalletChooseButton -> {
+                element.id?.let { mosaikRuntime.showErgoWalletChooser(it) }
             }
             else -> runActionFromUserInteraction(element.element.onClickAction)
         }

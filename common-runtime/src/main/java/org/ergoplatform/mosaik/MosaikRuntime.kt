@@ -282,6 +282,11 @@ abstract class MosaikRuntime(
      */
     abstract fun getErgoAddressLabel(ergoAddress: String): String?
 
+    /**
+     * return wallet label, if available
+     */
+    abstract fun getErgoWalletLabel(firstAddress: String): String?
+
     abstract fun formatString(string: StringConstant, values: String? = null): String
 
     /**
@@ -289,6 +294,12 @@ abstract class MosaikRuntime(
      * [setValue] with the new address.
      */
     abstract fun showErgoAddressChooser(valueId: String)
+
+    /**
+     * open a chooser for an ergo wallet. If the user sets a new value, this should call
+     * [setValue] with the new address.
+     */
+    abstract fun showErgoWalletChooser(valueId: String)
 
     /**
      * set the value for a value element in the current tree. Please note that not all elements
@@ -314,5 +325,6 @@ data class UrlHistoryEntry(val url: String, val referrer: String?)
 
 enum class StringConstant {
     ChooseAddress,
+    ChooseWallet,
     PleaseChoose,
 }

@@ -145,7 +145,10 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
             MosaikImage(treeElement, newModifier)
         }
         is ErgoAddressChooseButton -> {
-            MosaikAddressChooseButton(treeElement, newModifier)
+            MosaikValueChooseButton(treeElement, newModifier)
+        }
+        is WalletChooseButton -> {
+            MosaikValueChooseButton(treeElement, newModifier)
         }
         is HorizontalRule -> {
             MosaikHorizontalRule(treeElement, newModifier)
@@ -167,23 +170,23 @@ fun MosaikHorizontalRule(treeElement: TreeElement, newModifier: Modifier) {
 }
 
 @Composable
-fun MosaikAddressChooseButton(treeElement: TreeElement, newModifier: Modifier) {
-    val element = treeElement.element as ErgoAddressChooseButton
+fun MosaikValueChooseButton(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element
 
     val valueState = treeElement.viewTree.valueState.collectAsState()
 
-    // remember this to not fire up searching for the wallet when not needed
+    // remember this to not fire up any logic (db access etc) to retrieve the label
     val buttonLabel =
         remember(valueState.value.second[element.id]?.inputValue) { treeElement.currentValueAsString }
 
     Button(
         onClick = treeElement::clicked,
-        modifier = newModifier.width(96.dp * 3),
+        modifier = modifier.width(96.dp * 3),
         colors = ButtonDefaults.buttonColors(
             primaryLabelColor,
             primaryButtonTextColor
         ),
-        enabled = element.isEnabled
+        enabled = (element as? InputElement<*>)?.isEnabled ?: true
     ) {
         Text(
             buttonLabel,

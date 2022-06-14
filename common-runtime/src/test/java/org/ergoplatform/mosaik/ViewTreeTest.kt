@@ -135,11 +135,19 @@ class ViewTreeTest : TestCase() {
                     return null
                 }
 
+                override fun getErgoWalletLabel(firstAddress: String): String? {
+                    return null
+                }
+
                 override fun formatString(string: StringConstant, values: String?): String {
                     return string.toString()
                 }
 
                 override fun showErgoAddressChooser(valueId: String) {
+
+                }
+
+                override fun showErgoWalletChooser(valueId: String) {
 
                 }
             }

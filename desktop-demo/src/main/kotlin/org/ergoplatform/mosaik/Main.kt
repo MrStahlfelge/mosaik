@@ -169,10 +169,14 @@ fun main() {
                     else null
                 }
 
+                override fun getErgoWalletLabel(firstAddress: String): String? =
+                    getErgoAddressLabel(firstAddress)
+
                 override fun formatString(string: StringConstant, values: String?): String {
                     return when (string) {
                         StringConstant.ChooseAddress -> "Choose an address..."
                         StringConstant.PleaseChoose -> "Please choose an option"
+                        StringConstant.ChooseWallet -> "Choose a wallet..."
                     }
                 }
 
@@ -182,6 +186,15 @@ fun main() {
                         "Address chooser",
                         "",
                         "Enter an Ergo address here.\nYes, this is ugly but only for debugging. :-)"
+                    )
+                }
+
+                override fun showErgoWalletChooser(valueId: String) {
+                    TextInputDialog.showInputDialog(
+                        { addresses -> setValue(valueId, addresses?.split(',')) },
+                        "Wallet chooser",
+                        "",
+                        "Enter a list of Ergo addresses (comma separated) here.\nYes, this is ugly but only for debugging. :-)"
                     )
                 }
 
