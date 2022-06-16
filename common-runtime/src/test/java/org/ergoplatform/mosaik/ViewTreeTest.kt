@@ -4,6 +4,7 @@ import junit.framework.TestCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.*
+import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction
 import org.ergoplatform.mosaik.model.ui.layout.Box
@@ -108,6 +109,10 @@ class ViewTreeTest : TestCase() {
 
                 }
 
+                override fun scanQrCode(actionId: String) {
+
+                }
+
                 override fun convertErgToFiat(nanoErg: Long, withCurrency: Boolean): String? {
                     return null
                 }
@@ -144,6 +149,10 @@ class ViewTreeTest : TestCase() {
                 }
 
                 override fun showErgoAddressChooser(valueId: String) {
+
+                }
+
+                override fun runErgoAuthAction(action: ErgoAuthAction) {
 
                 }
 

@@ -2,6 +2,7 @@ package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
+import org.ergoplatform.mosaik.model.ui.IconType
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.web.bind.annotation.GetMapping
@@ -87,10 +88,30 @@ class ActionsDemoController {
 
                 box(Padding.HALF_DEFAULT)
 
+                button("Run ErgoAuth request") {
+                    onClickAction(
+                        invokeErgoAuth(
+                            "ergoauth://ergopay-example.herokuapp.com/ergoauth/3WvxRdGA2Ce3otzqtc7jUb61H67NiugArk9mTCxKwMQjrKgsjwwj",
+                            showDialog("You can define an action when ErgoAuth request was completed by the user")
+                        )
+                    )
+                }
+
+                box(Padding.HALF_DEFAULT)
+
                 button("Open SigUSD token information") {
                     onClickAction(
                         showTokenInformation("03faf2cb329f2e90d6d23b58d91bbb6c046aa143261cc21f52fbe2824bfcbf04")
                     )
+                }
+
+                box(Padding.HALF_DEFAULT)
+
+                textInputField("qrCodeScanner", "Scan a QR code") {
+                    endIcon = IconType.QR_SCAN
+                    onEndIconClicked = scanQrCode(mosaikView {
+                        view = this@textInputField
+                    }).id
                 }
 
             }

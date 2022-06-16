@@ -51,6 +51,17 @@ fun ViewContent.showTokenInformation(
 }
 
 @MosaikDsl
+fun ViewContent.scanQrCode(
+    newContent: ViewContent,
+    id: String? = null,
+    init: (@MosaikDsl QrCodeAction).() -> Unit = {}
+): QrCodeAction {
+    val qrCodeAction = QrCodeAction()
+    qrCodeAction.newContent = newContent
+    return addAction(qrCodeAction, id, init)
+}
+
+@MosaikDsl
 fun ViewContent.navigateToApp(
     url: String,
     id: String? = null,
@@ -83,9 +94,36 @@ fun invokeErgoPay(
 }
 
 private fun buildErgoPayAction(url: String): ErgoPayAction {
-    val browserAction = ErgoPayAction()
-    browserAction.url = url
-    return browserAction
+    val ergoPayAction = ErgoPayAction()
+    ergoPayAction.url = url
+    return ergoPayAction
+}
+
+private fun buildErgoAuthAction(url: String): ErgoAuthAction {
+    val ergoAuthAction = ErgoAuthAction()
+    ergoAuthAction.url = url
+    return ergoAuthAction
+}
+
+@MosaikDsl
+fun ViewContent.invokeErgoAuth(
+    url: String,
+    onFinishedAction: Action,
+    id: String? = null,
+    init: (@MosaikDsl ErgoAuthAction).() -> Unit = {}
+): ErgoAuthAction {
+    return addAction(buildErgoAuthAction(url).apply {
+        onFinished = onFinishedAction.id
+    }, id, init)
+}
+
+@MosaikDsl
+fun invokeErgoAuth(
+    url: String,
+    id: String? = null,
+    init: (@MosaikDsl ErgoAuthAction).() -> Unit = {}
+): ErgoAuthAction {
+    return initAction(buildErgoAuthAction(url), id, init)
 }
 
 @MosaikDsl

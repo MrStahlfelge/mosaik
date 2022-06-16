@@ -1,0 +1,21 @@
+{
+  "title": "QrCodeAction",
+  "description": "Scans a QR code and replaces a {@link org.ergoplatform.mosaik.model.ui.ViewElement} of\n * the current view with a given\n * {@link org.ergoplatform.mosaik.model.ui.input.InputElement}",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "QrCodeAction"
+    },
+    "id": {
+      "type": "string"
+    },
+    "newContent": {
+      "$ref": "viewcontent.json"
+    },
+    "required": [
+      "type",
+      "id",
+      "newContent"
+    ]
+  }
+}

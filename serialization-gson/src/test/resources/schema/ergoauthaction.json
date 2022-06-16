@@ -1,0 +1,24 @@
+{
+  "title": "ErgoAuthAction",
+  "description": "Action containing an ErgoAuth URL that will make the wallet app switch to ErgoAuth.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "ErgoAuthAction"
+    },
+    "url": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "onFinished": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "url"
+  ]
+}

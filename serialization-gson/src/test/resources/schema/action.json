@@ -5,6 +5,9 @@
       "$ref": "ergopayaction.json"
     },
     {
+      "$ref": "ergoauthaction.json"
+    },
+    {
       "$ref": "backendrequestaction.json"
     },
     {
@@ -21,6 +24,9 @@
     },
     {
       "$ref": "reloadaction.json"
+    },
+    {
+      "$ref": "qrcodeaction.json"
     },
     {
       "$ref": "changesiteaction.json"

@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.*
+import org.ergoplatform.mosaik.model.ui.input.InputElement
 import java.util.*
 
 abstract class MosaikRuntime(
@@ -21,6 +22,21 @@ abstract class MosaikRuntime(
     abstract fun pasteToClipboard(text: String)
 
     abstract fun openBrowser(url: String)
+
+    abstract fun scanQrCode(actionId: String)
+
+    fun qrCodeScanned(actionId: String, scannedValue: String) {
+        val action = viewTree.getAction(actionId) as? QrCodeAction
+
+        action?.let {
+            val newParent = action.newContent.view
+            if (newParent is InputElement<*>) {
+                newParent.value = scannedValue
+            }
+            runChangeSiteAction(action)
+
+        }
+    }
 
     /**
      * return fiat amount, if available. null if no fiat amount is available
@@ -73,6 +89,9 @@ abstract class MosaikRuntime(
         MosaikLogger.logDebug("Running action ${action.id}...")
         try {
             when (action) {
+                is QrCodeAction -> {
+                    scanQrCode(action.id)
+                }
                 is ChangeSiteAction -> {
                     runChangeSiteAction(action)
                 }
@@ -100,8 +119,9 @@ abstract class MosaikRuntime(
                 is TokenInformationAction -> {
                     runTokenInformationAction(action)
                 }
-                // TODO ErgoAuthAction
-                // TODO QrCodeAction
+                is ErgoAuthAction -> {
+                    runErgoAuthAction(action)
+                }
                 else -> runUnknownAction(action)
             }
         } catch (e: InvalidValuesException) {
@@ -117,6 +137,8 @@ abstract class MosaikRuntime(
     abstract fun runTokenInformationAction(action: TokenInformationAction)
 
     abstract fun runErgoPayAction(action: ErgoPayAction)
+
+    abstract fun runErgoAuthAction(action: ErgoAuthAction)
 
     open fun runUnknownAction(action: Action) {
         throw UnsupportedOperationException("Action type ${action.javaClass.simpleName} not yet implemented")

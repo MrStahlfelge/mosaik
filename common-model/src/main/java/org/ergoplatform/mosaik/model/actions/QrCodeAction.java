@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.actions;
 
+import org.ergoplatform.mosaik.model.Since;
+
 /**
  * Scans a QR code and replaces a {@link org.ergoplatform.mosaik.model.ui.ViewElement} of
  * the current view with a given
@@ -8,6 +10,7 @@ package org.ergoplatform.mosaik.model.actions;
  * a {@link org.ergoplatform.mosaik.model.ui.input.InputElement}, its value is set to the scanned
  * value.
  */
+@Since(0)
 public class QrCodeAction extends ChangeSiteAction {
 
 }

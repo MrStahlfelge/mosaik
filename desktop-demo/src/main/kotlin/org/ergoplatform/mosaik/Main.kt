@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
+import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
 import org.ergoplatform.mosaik.model.actions.TokenInformationAction
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
@@ -105,6 +106,18 @@ fun main() {
                     showDialog(
                         MosaikDialog(
                             "An ErgoPay action should be run:\n${action.url}",
+                            "Ok, was done!",
+                            "Cancel",
+                            { action.onFinished?.let { runAction(it) } },
+                            null
+                        )
+                    )
+                }
+
+                override fun runErgoAuthAction(action: ErgoAuthAction) {
+                    showDialog(
+                        MosaikDialog(
+                            "An ErgoAuth action should be run:\n${action.url}",
                             "Ok, was done!",
                             "Cancel",
                             { action.onFinished?.let { runAction(it) } },
@@ -195,6 +208,17 @@ fun main() {
                         "Wallet chooser",
                         "",
                         "Enter a list of Ergo addresses (comma separated) here.\nYes, this is ugly but only for debugging. :-)"
+                    )
+                }
+
+                override fun scanQrCode(actionId: String) {
+                    TextInputDialog.showInputDialog(
+                        { scannedText ->
+                            scannedText?.let { qrCodeScanned(actionId, scannedText) }
+                        },
+                        "QR code scanner",
+                        "",
+                        "Enter the QR code contents here, no real scan for debugging purpose"
                     )
                 }
 
