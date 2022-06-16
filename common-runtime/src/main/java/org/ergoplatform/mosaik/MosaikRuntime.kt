@@ -40,8 +40,10 @@ abstract class MosaikRuntime(
 
     /**
      * return fiat amount, if available. null if no fiat amount is available
+     * @param formatted if true, fiat value is formatted according to user's locale and with
+     * currency; if false, it will be used as an input amount (English decimal, no currency)
      */
-    abstract fun convertErgToFiat(nanoErg: Long, withCurrency: Boolean = true): String?
+    abstract fun convertErgToFiat(nanoErg: Long, formatted: Boolean = true): String?
 
     abstract val fiatRate: Double?
 

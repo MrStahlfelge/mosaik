@@ -144,7 +144,7 @@ class FiatOrErgTextInputHandler(
         return if (inputIsFiat) currentValue?.let {
             mosaikRuntime.convertErgToFiat(
                 currentValue as Long,
-                withCurrency = false
+                formatted = false
             )
         } ?: "" else super.getAsString(currentValue)
     }
