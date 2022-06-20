@@ -113,7 +113,7 @@ abstract class MosaikRuntime(
                     runNavigateAction(action)
                 }
                 is ReloadAction -> {
-                    loadMosaikApp(appUrl!!)
+                    reloadCurrentApp()
                 }
                 is ErgoPayAction -> {
                     runErgoPayAction(action)
@@ -134,6 +134,10 @@ abstract class MosaikRuntime(
         } catch (t: Throwable) {
             MosaikLogger.logError("Error running ${action.javaClass.simpleName}", t)
         }
+    }
+
+    private fun reloadCurrentApp() {
+        loadMosaikApp(appUrl!!)
     }
 
     abstract fun runTokenInformationAction(action: TokenInformationAction)
@@ -167,7 +171,7 @@ abstract class MosaikRuntime(
                     )
                 val appVersion = fetchActionResponse.appVersion
                 val newAction =
-                    if (appVersion != appManifest!!.appVersion) ReloadAction()
+                    if (appVersion != appManifest!!.appVersion) ReloadAction().apply { id = "" }
                     else fetchActionResponse.action
 
                 withContext(Dispatchers.Main) {
@@ -333,6 +337,21 @@ abstract class MosaikRuntime(
         viewTree.findElementById(valueId)?.let { element ->
             if (element.hasValue)
                 element.valueChanged(newValue)
+        }
+    }
+
+    /**
+     * checks if the view tree is still valid or if its lifetime is expired. If it is expired,
+     * the app is reloaded.
+     * Executing apps should call this method on certain occasions, for example when coming
+     * from background to foreground, but make sure that the user is not disturbed while interacting
+     * with the app
+     */
+    fun checkViewTreeValidity() {
+        val viewTreeLifeTime = appManifest?.cacheLifetime ?: 0
+        if (viewTreeLifeTime > 0 && System.currentTimeMillis() - viewTree.lastViewTreeChangeMs > viewTreeLifeTime * 1000L) {
+            MosaikLogger.logDebug("Viewtree expired, reloading app")
+            reloadCurrentApp()
         }
     }
 }

@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.MosaikManifest
@@ -249,6 +247,15 @@ fun main() {
         val viewTree = runtime.viewTree
 
         var lastChangeFromUser = false
+
+        GlobalScope.launch {
+            // we check view tree validity every 30 seconds. this is very aggressive, but good
+            // for debugging :-)
+            while (isActive) {
+                delay(30000L)
+                runtime.checkViewTreeValidity()
+            }
+        }
 
         Window(
             onCloseRequest = ::exitApplication,

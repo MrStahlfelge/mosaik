@@ -51,7 +51,8 @@ public class MosaikManifest {
     public final CanvasDimension targetCanvasDimension;
 
     /**
-     * Cache life time (in seconds) determines how long a viewtree is valid after it was loaded.
+     * Cache life time (in seconds) determines how long a viewtree is valid after it was loaded
+     * or altered.
      * Users can leave an application or forget it in background. If the cache lifetime expires,
      * the view tree will be reloaded from the apps base URL.
      * Min 30 seconds. Set 0 for infinite cache life time. The executing application might

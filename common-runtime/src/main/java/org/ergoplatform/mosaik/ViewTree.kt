@@ -31,6 +31,9 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      */
     private var changingViewTree = false
 
+    var lastViewTreeChangeMs: Long = 0
+        private set
+
     /**
      * flow that emits when viewtree is changed
      */
@@ -114,6 +117,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
                 addIdsJobsAndValues(newTreeElement)
             }
             changingViewTree = false
+            lastViewTreeChangeMs = System.currentTimeMillis()
             notifyViewTreeChanged()
         }
     }
