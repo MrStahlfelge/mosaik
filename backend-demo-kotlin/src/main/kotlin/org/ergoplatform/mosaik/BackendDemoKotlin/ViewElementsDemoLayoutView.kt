@@ -193,10 +193,10 @@ object ViewElementsDemoLayoutView {
                             "Layout elements can be used as the root of the view tree. " +
                                     "There is a slightly different rendering behaviour based on the " +
                                     "type of the tree root: If it is a Column, this root Column is " +
-                                    "verically packed, aligned at the top and scrollable. This " +
+                                    "vertically packed, aligned at the top and scrollable. This " +
                                     "is demonstrated by the whole screen you see here. " +
-                                    "Other elements will be sized to the full screen size and " +
-                                    "not scrolled."
+                                    "Other elements (box, card, etc.) will be sized to the full screen size and " +
+                                    "are not scrollable."
                         )
 
                         button("Show a Card as tree root") {
