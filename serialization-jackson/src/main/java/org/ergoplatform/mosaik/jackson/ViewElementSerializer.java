@@ -130,6 +130,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (propertyName.equals("onClickAction")) {
             return "onClick";
         }
+        if (propertyName.equals("onLongPressAction")) {
+            return "onLongPress";
+        }
         if (propertyName.equals("onValueChangedAction") && value instanceof InputElement) {
             return "onValueChanged";
         }

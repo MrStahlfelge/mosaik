@@ -181,7 +181,7 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
             element.setOnClickAction(json.get(KEY_CLICK).getAsString());
         }
         if (json.has(KEY_LONG_PRESS)) {
-            element.setOnLongPressAction(json.get(KEY_CLICK).getAsString());
+            element.setOnLongPressAction(json.get(KEY_LONG_PRESS).getAsString());
         }
     }
 }
