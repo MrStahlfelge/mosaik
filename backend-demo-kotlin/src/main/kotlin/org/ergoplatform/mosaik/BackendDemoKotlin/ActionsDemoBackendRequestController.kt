@@ -7,12 +7,10 @@ import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
+@CrossOrigin
 class ActionsDemoBackendRequestController {
     val textInputId = "textinput"
 

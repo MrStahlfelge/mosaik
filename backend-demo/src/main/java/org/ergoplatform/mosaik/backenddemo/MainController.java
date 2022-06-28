@@ -17,6 +17,7 @@ import org.ergoplatform.mosaik.model.ui.layout.VAlignment;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +27,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@CrossOrigin
 public class MainController {
 
     @GetMapping("/")

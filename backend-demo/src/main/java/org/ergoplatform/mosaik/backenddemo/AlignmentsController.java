@@ -9,6 +9,7 @@ import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@CrossOrigin
 public class AlignmentsController {
     @GetMapping("/alignments")
     public MosaikApp loadAlignmentsDemoApp(@RequestHeader Map<String, String> headers) {

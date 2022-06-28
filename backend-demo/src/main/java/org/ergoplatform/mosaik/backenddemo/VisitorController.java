@@ -14,6 +14,7 @@ import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@CrossOrigin
 public class VisitorController {
 
     @Autowired
