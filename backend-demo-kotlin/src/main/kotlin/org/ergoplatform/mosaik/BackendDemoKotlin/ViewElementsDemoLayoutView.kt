@@ -172,10 +172,12 @@ object ViewElementsDemoLayoutView {
 
                         box(Padding.HALF_DEFAULT)
 
-                        column {
-                            HAlignment.values().forEach { alignment ->
-                                layout(alignment) {
-                                    button("Alignment ${alignment.name}")
+                        layout(HAlignment.JUSTIFY) {
+                            column {
+                                HAlignment.values().forEach { alignment ->
+                                    layout(alignment) {
+                                        button("Alignment ${alignment.name}")
+                                    }
                                 }
                             }
                         }
