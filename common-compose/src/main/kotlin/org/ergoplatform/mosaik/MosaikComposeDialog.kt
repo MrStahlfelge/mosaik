@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
 /**
  * MosaikComposeDialog is an optional component when message dialogs should be handled by
@@ -24,7 +25,12 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
         AlertDialog(
             onDismissRequest = { dialog.dismiss() },
             text = {
-                Text(mosaikDialog.message, Modifier.widthIn(300.dp))
+                Text(
+                    mosaikDialog.message,
+                    Modifier.widthIn(300.dp),
+                    style = labelStyle(LabelStyle.BODY1),
+                    color = MosaikStyleConfig.defaultLabelColor
+                )
             },
             confirmButton = {
                 TextButton(
@@ -34,7 +40,10 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                 ) {
-                    Text(mosaikDialog.positiveButtonText)
+                    Text(
+                        mosaikDialog.positiveButtonText,
+                        style = labelStyle(LabelStyle.BODY1),
+                    )
                 }
             },
             dismissButton = {
@@ -46,7 +55,10 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                     ) {
-                        Text(buttonText)
+                        Text(
+                            buttonText,
+                            style = labelStyle(LabelStyle.BODY1),
+                        )
                     }
                 }
             }
