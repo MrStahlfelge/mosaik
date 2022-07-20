@@ -82,7 +82,11 @@ open class OkHttpBackendConnector(
             serializer.valuesMapToJson(values),
             Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
         )
-        return serializer.fetchActionResponseFromJson(json)
+        return try {
+            serializer.fetchActionResponseFromJson(json)
+        } catch (t: Throwable) {
+            throw IllegalArgumentException("Could not parse FetchActionResonse:\n${t.message}", t)
+        }
     }
 
     override fun fetchLazyContent(
