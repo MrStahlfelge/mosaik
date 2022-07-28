@@ -1,0 +1,21 @@
+{
+  "title": "CopyClipboardAction",
+  "description": "Copies text into the system clipboard",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "CopyClipboardAction"
+    },
+    "id": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "text"
+  ]
+}

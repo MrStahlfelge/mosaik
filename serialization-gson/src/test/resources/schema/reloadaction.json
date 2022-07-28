@@ -1,0 +1,17 @@
+{
+  "title": "ReloadAction",
+  "description": "Reloads the app when called",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "ReloadAction"
+    },
+    "id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id"
+  ]
+}

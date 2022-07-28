@@ -1,0 +1,57 @@
+{
+  "title": "IntegerInputField",
+  "description": "Text field to enter general text",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "IntegerInputField"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "error": {
+      "description": "Shows an error message on the text field if not null",
+      "type": "string"
+    },
+    "value": {
+      "type": "long"
+    },
+    "minValue": {
+      "type": "long"
+    },
+    "maxValue": {
+      "type": "long"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "endIcon": {
+      "$ref": "icontype.json"
+    },
+    "onEndIconClicked": {
+      "type": "string"
+    },
+    "onValueChanged": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

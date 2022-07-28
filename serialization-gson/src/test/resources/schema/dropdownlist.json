@@ -1,0 +1,40 @@
+{
+  "title": "DropDownList",
+  "description": "A dropdown list element where user can select an option from entries key/text map",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "DropDownList"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "value": {
+      "type": "string"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "onValueChanged": {
+      "type": "string"
+    },
+    "entries": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

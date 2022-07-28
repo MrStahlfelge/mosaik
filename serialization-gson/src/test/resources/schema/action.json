@@ -1,0 +1,35 @@
+{
+  "title": "Action",
+  "oneOf": [
+    {
+      "$ref": "ergopayaction.json"
+    },
+    {
+      "$ref": "ergoauthaction.json"
+    },
+    {
+      "$ref": "backendrequestaction.json"
+    },
+    {
+      "$ref": "navigateaction.json"
+    },
+    {
+      "$ref": "dialogaction.json"
+    },
+    {
+      "$ref": "browseraction.json"
+    },
+    {
+      "$ref": "copyclipboardaction.json"
+    },
+    {
+      "$ref": "reloadaction.json"
+    },
+    {
+      "$ref": "qrcodeaction.json"
+    },
+    {
+      "$ref": "changesiteaction.json"
+    }
+  ]
+}

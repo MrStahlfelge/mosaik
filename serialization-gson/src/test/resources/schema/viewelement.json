@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mosaik",
+  "title": "ViewElement",
+  "description": "ViewElement in a view tree",
+  "oneOf": [
+    {
+      "$ref": "column.json"
+    },
+    {
+      "$ref": "row.json"
+    },
+    {
+      "$ref": "tokenlabel.json"
+    },
+    {
+      "$ref": "textinputfield.json"
+    },
+    {
+      "$ref": "passwordinputfield.json"
+    },
+    {
+      "$ref": "ergaddressinputfield.json"
+    },
+    {
+      "$ref": "dropdownlist.json"
+    },
+    {
+      "$ref": "integerinputfield.json"
+    },
+    {
+      "$ref": "decimalinputfield.json"
+    },
+    {
+      "$ref": "ergamountinputfield.json"
+    },
+    {
+      "$ref": "fiatorergamountinputfield.json"
+    },
+    {
+      "$ref": "button.json"
+    },
+    {
+      "$ref": "ergoaddresschoosebutton.json"
+    },
+    {
+      "$ref": "walletchoosebutton.json"
+    },
+    {
+      "$ref": "label.json"
+    },
+    {
+      "$ref": "ergamountlabel.json"
+    },
+    {
+      "$ref": "fiatamountlabel.json"
+    },
+    {
+      "$ref": "loadingindicator.json"
+    },
+    {
+      "$ref": "lazyloadbox.json"
+    },
+    {
+      "$ref": "icon.json"
+    },
+    {
+      "$ref": "horizontalrule.json"
+    },
+    {
+      "$ref": "image.json"
+    },
+    {
+      "$ref": "card.json"
+    },
+    {
+      "$ref": "box.json"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "HorizontalRule",
+  "description": "Shows a horizontal rule/divider/seperator",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "HorizontalRule"
+    },
+    "vPadding": {
+      "description": "Vertical padding",
+      "type": "string"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

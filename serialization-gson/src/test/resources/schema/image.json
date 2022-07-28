@@ -1,0 +1,42 @@
+{
+  "title": "Image",
+  "description": "Shows an image",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "Image"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "url": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string",
+      "enum": [
+        "SMALL",
+        "MEDIUM",
+        "LARGE"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "url",
+    "size"
+  ]
+}
