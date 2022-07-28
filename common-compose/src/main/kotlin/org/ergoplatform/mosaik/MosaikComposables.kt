@@ -55,9 +55,11 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
             // the view root should be scrollable if it is a column, otherwise it will fill
             // the max height
             val scrollable = viewTreeRoot.element is Column
+            val scrollState = rememberScrollState()
             val sizeModifier =
-                if (scrollable) {
-                    val scrollState = rememberScrollState()
+                if (scrollable && MosaikComposeConfig.VerticalScrollbar != null) {
+                    Modifier.fillMaxWidth().verticalScroll(scrollState)
+                } else if (scrollable) {
                     Modifier.fillMaxWidth()
                         .drawVerticalScrollbar(scrollState)
                         .verticalScroll(scrollState)
@@ -77,6 +79,8 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
                         )
                 )
             }
+
+            MosaikComposeConfig.VerticalScrollbar?.invoke(this, scrollState)
         }
         if (locked) {
             Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.1f)))

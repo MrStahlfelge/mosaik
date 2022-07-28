@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
@@ -43,4 +45,6 @@ object MosaikComposeConfig {
         onClick: () -> Unit,
         content: @Composable RowScope.() -> Unit
     ) -> Unit
+
+    var VerticalScrollbar: @Composable (BoxScope.(ScrollState) -> Unit)? = null
 }

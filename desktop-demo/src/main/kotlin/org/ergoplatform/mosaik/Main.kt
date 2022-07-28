@@ -1,11 +1,14 @@
 package org.ergoplatform.mosaik
 
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -156,9 +159,9 @@ fun main() {
 
                 override fun convertErgToFiat(
                     nanoErg: Long,
-                    withCurrency: Boolean
+                    formatted: Boolean
                 ): String? {
-                    return (if (withCurrency) "$" else "") +
+                    return (if (formatted) "$" else "") +
                             BigDecimal(ErgoAmount(nanoErg).toDouble() * fiatRate).setScale(
                         2,
                         RoundingMode.HALF_UP
@@ -244,6 +247,14 @@ fun main() {
             DropdownMenuItem(onClick = onClick, content = content)
         }
 
+        MosaikComposeConfig.VerticalScrollbar = { scrollState ->
+            VerticalScrollbar(
+                modifier = Modifier.align(Alignment.CenterEnd)
+                    .fillMaxHeight(),
+                adapter = rememberScrollbarAdapter(scrollState)
+            )
+        }
+
         val viewTree = runtime.viewTree
 
         var lastChangeFromUser = false
@@ -297,7 +308,7 @@ fun main() {
                                 MosaikComposeDialog(dialogHandler)
                             }
 
-                            Column(Modifier.weight(1.0f).fillMaxSize()) {
+                            Column(Modifier.weight(1.0f).fillMaxSize().padding(start = 2.dp)) {
                                 MosaikStateInfo(
                                     viewTree,
                                     textState,
