@@ -8,12 +8,14 @@ import org.ergoplatform.mosaik.model.ui.LoadingIndicator
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.core.io.ClassPathResource
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 @RestController
+@CrossOrigin
 class ErrorDemoController {
     @GetMapping("/errors")
     fun viewElementsApp(request: HttpServletRequest) =
