@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
@@ -21,7 +22,7 @@ import org.ergoplatform.mosaik.model.ui.input.DropDownList
 fun MosaikDropDownList(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as DropDownList
 
-    Column(modifier.fillMaxWidth()) {
+    Column(modifier.width(IntrinsicSize.Max)) {
         // Declaring a boolean value to store
         // the expanded state of the Text Field
         var expanded by remember { mutableStateOf(false) }
