@@ -155,17 +155,19 @@ fun main() {
                     }
                 }
 
-                override val fiatRate = 2.5
+                override val fiatRate: Double? = 2.5
 
                 override fun convertErgToFiat(
                     nanoErg: Long,
                     formatted: Boolean
                 ): String? {
-                    return (if (formatted) "$" else "") +
-                            BigDecimal(ErgoAmount(nanoErg).toDouble() * fiatRate).setScale(
-                        2,
-                        RoundingMode.HALF_UP
-                    ).toPlainString()
+
+                    return if (fiatRate == null) null else
+                        (if (formatted) "$" else "") +
+                                BigDecimal(ErgoAmount(nanoErg).toDouble() * fiatRate).setScale(
+                                    2,
+                                    RoundingMode.HALF_UP
+                                ).toPlainString()
                 }
 
                 override var preferFiatInput: Boolean = true
