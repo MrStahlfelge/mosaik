@@ -1,9 +1,10 @@
 # Mosaik plugin library
 
-[Tutorial part 1 - Concept](https://docs.google.com/document/d/1utZnD0BVKTzp7TLn8pmgvfoMcDBU9YIw9lyMzKce5AU/edit?usp=sharing)
-[Tutorial part 2 - A simple UI](https://docs.google.com/document/d/1_O7ZEVfkGxqyviNNXJEazynpzkuIkN5ue4xr1i-VmWQ/edit?usp=sharing)
-[Tutorial part 3 - Processing data](https://docs.google.com/document/d/1R_ubi3RQKEebrXW5Obe-3dklUKRRpGGXsg03Hh4pgFo/edit?usp=sharing)
-[Tutorial part 4 - A complete app](https://docs.google.com/document/d/1HjSIwI3cS70qyEv7zWtv5Rrc24JQtOh1H48uGquqZ3U/edit?usp=sharing)
+Hands on Tutorial: Developing for Mosaik
+* [Part 1 - Concept](https://docs.google.com/document/d/1utZnD0BVKTzp7TLn8pmgvfoMcDBU9YIw9lyMzKce5AU/edit?usp=sharing)
+* [Part 2 - A simple UI](https://docs.google.com/document/d/1_O7ZEVfkGxqyviNNXJEazynpzkuIkN5ue4xr1i-VmWQ/edit?usp=sharing)
+* [Part 3 - Processing data](https://docs.google.com/document/d/1R_ubi3RQKEebrXW5Obe-3dklUKRRpGGXsg03Hh4pgFo/edit?usp=sharing)
+* [Part 4 - A complete app](https://docs.google.com/document/d/1HjSIwI3cS70qyEv7zWtv5Rrc24JQtOh1H48uGquqZ3U/edit?usp=sharing)
 
 [Overview doc](https://docs.google.com/document/d/1Pc4DLChaKyGbMnY4gu92mcBEDfeNiBCQ5hq9lJUssGg/edit?usp=sharing)
 
