@@ -143,7 +143,7 @@ object ViewElementsDemoInputView {
                     label("DropDownList", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "An drop down list for the user to choose an item from."
+                        "A drop down list for the user to choose an item from."
                     )
 
                     dropDownList(
