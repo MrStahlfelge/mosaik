@@ -7,7 +7,13 @@ import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.layout.*
 
 @MosaikDsl
-fun ViewContent.box(init: (@MosaikDsl Box).() -> Unit): Box = viewElement(Box(), init)
+fun ViewContent.box(
+    padding: Padding? = null,
+    init: (@MosaikDsl Box).() -> Unit
+): Box =
+    viewElement(Box().apply {
+        padding?.let { this.padding = padding }
+    }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.box(padding: Padding? = null, init: (@MosaikDsl Box).() -> Unit = {}): Box =
@@ -16,7 +22,12 @@ fun <G : ViewGroup> G.box(padding: Padding? = null, init: (@MosaikDsl Box).() ->
     }, init)
 
 @MosaikDsl
-fun ViewContent.card(init: (@MosaikDsl Card).() -> Unit): Card = viewElement(Card(), init)
+fun ViewContent.card(
+    outerPadding: Padding? = null,
+    init: (@MosaikDsl Card).() -> Unit
+): Card = viewElement(Card().apply {
+    outerPadding?.let { padding = outerPadding }
+}, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.card(
@@ -57,8 +68,13 @@ fun <G : ViewGroup> G.column(
     }, init)
 
 @MosaikDsl
-fun ViewContent.row(init: (@MosaikDsl Row).() -> Unit): Row =
-    viewElement(Row(), init)
+fun ViewContent.row(
+    padding: Padding? = null,
+    init: (@MosaikDsl Row).() -> Unit
+): Row =
+    viewElement(Row().apply {
+        padding?.let { this.padding = padding }
+    }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.row(
