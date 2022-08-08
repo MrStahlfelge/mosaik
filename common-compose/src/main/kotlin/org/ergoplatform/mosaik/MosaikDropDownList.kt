@@ -75,7 +75,7 @@ fun MosaikDropDownList(treeElement: TreeElement, modifier: Modifier) {
                     expanded = false
                     treeElement.changeValueFromInput(key)
                 }) {
-                    Text(text = value)
+                    Text(text = value, color = MosaikStyleConfig.defaultLabelColor)
                 }
             }
         }
