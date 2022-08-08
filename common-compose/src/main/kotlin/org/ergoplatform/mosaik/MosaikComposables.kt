@@ -68,7 +68,7 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
             Box(sizeModifier) {
                 MosaikTreeElement(
                     viewTreeRoot,
-                    Modifier.alpha(if (locked) .3f else 1f).padding(Padding.DEFAULT.toCompose())
+                    Modifier.alpha(if (locked) .3f else 1f)
                         .align(Alignment.Center).widthIn(
                             max = when (viewTree.targetCanvasDimension) {
                                 // https://developer.android.com/guide/topics/large-screens/support-different-screen-sizes
