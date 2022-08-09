@@ -105,7 +105,7 @@ class ViewElementsDemoController {
     fun lazyLoadBoxView() = mosaikView {
         Thread.sleep(5000)
 
-        box {
+        box(Padding.NONE) {
             label("This took long to load")
         }
     }

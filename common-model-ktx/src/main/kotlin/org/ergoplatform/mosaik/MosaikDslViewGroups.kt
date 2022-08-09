@@ -8,7 +8,7 @@ import org.ergoplatform.mosaik.model.ui.layout.*
 
 @MosaikDsl
 fun ViewContent.box(
-    padding: Padding? = null,
+    padding: Padding? = Padding.DEFAULT,
     init: (@MosaikDsl Box).() -> Unit
 ): Box =
     viewElement(Box().apply {
@@ -23,7 +23,7 @@ fun <G : ViewGroup> G.box(padding: Padding? = null, init: (@MosaikDsl Box).() ->
 
 @MosaikDsl
 fun ViewContent.card(
-    outerPadding: Padding? = null,
+    outerPadding: Padding? = Padding.DEFAULT,
     init: (@MosaikDsl Card).() -> Unit
 ): Card = viewElement(Card().apply {
     outerPadding?.let { padding = outerPadding }
@@ -51,7 +51,7 @@ fun <G : ViewGroup> G.lazyLoadBox(
 
 @MosaikDsl
 fun ViewContent.column(
-    padding: Padding? = null,
+    padding: Padding? = Padding.DEFAULT,
     init: (@MosaikDsl Column).() -> Unit
 ): Column =
     viewElement(Column().apply {
@@ -69,7 +69,7 @@ fun <G : ViewGroup> G.column(
 
 @MosaikDsl
 fun ViewContent.row(
-    padding: Padding? = null,
+    padding: Padding? = Padding.DEFAULT,
     init: (@MosaikDsl Row).() -> Unit
 ): Row =
     viewElement(Row().apply {

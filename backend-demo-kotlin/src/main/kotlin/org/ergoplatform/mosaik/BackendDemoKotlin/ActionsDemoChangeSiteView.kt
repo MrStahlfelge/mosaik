@@ -40,7 +40,7 @@ object ActionsDemoChangeSiteView {
                     val buttonText = "Click to replace the icon above"
                     button(buttonText) {
                         onClickAction(changeView(mosaikView {
-                            column(Padding.DEFAULT) {
+                            column {
                                 id = iconId
                                 icon(
                                     IconType.WALLET,
