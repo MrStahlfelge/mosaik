@@ -22,10 +22,14 @@ open class OkHttpBackendConnector(
         .writeTimeout(timeoutSeconds, TimeUnit.SECONDS).build()
 
     override fun loadMosaikApp(url: String, referrer: String?): MosaikBackendConnector.AppLoaded {
-        val (contentType, json) = fetchHttpGetStringSync(
-            url,
-            Headers.of(serializer.contextHeadersMap(getContextFor(url), referrer))
-        )
+        val (contentType, json) = try {
+            fetchHttpGetStringSync(
+                url,
+                Headers.of(serializer.contextHeadersMap(getContextFor(url), referrer))
+            )
+        } catch (ioe: IOException) {
+            throw ConnectionException(ioe)
+        }
         if (contentType?.lowercase()?.startsWith("text/html") == true) {
             // we could have a website here, check for <link rel="mosaik" tag>
             // this is poor man's xml parser, but on Android real XML parsing is a hard task
@@ -77,11 +81,15 @@ open class OkHttpBackendConnector(
         referrer: String?
     ): FetchActionResponse {
         val httpUrl = makeAbsoluteUrl(baseUrl, url)
-        val json = httpPostStringSync(
-            httpUrl,
-            serializer.valuesMapToJson(values),
-            Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
-        )
+        val json = try {
+            httpPostStringSync(
+                httpUrl,
+                serializer.valuesMapToJson(values),
+                Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
+            )
+        } catch (ioe: IOException) {
+            throw ConnectionException(ioe)
+        }
         return try {
             serializer.fetchActionResponseFromJson(json)
         } catch (t: Throwable) {
