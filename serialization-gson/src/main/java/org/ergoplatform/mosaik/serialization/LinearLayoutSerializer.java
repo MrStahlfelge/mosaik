@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
 
     public static final String KEY_PADDING = "padding";
+    public static final String KEY_SPACING = "spacing";
     public static final String KEY_WEIGHT = "weight";
     public static final String KEY_ALIGNMENT = "align";
     public static final String KEY_CHILDREN = "children";
@@ -30,6 +31,9 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
 
         if (src.getPadding() != Padding.NONE) {
             jsonObject.add(KEY_PADDING, context.serialize(src.getPadding()));
+        }
+        if (src.getSpacing() != Padding.NONE) {
+            jsonObject.add(KEY_SPACING, context.serialize(src.getSpacing()));
         }
         if (src instanceof Row && ((Row) src).isPacked()) {
             jsonObject.add(KEY_PACKED, context.serialize(((Row) src).isPacked()));
@@ -59,6 +63,9 @@ public class LinearLayoutSerializer implements JsonSerializer<LinearLayout<?>> {
                                              JsonDeserializationContext context) {
         if (json.has(KEY_PADDING)) {
             layout.setPadding(context.<Padding>deserialize(json.get(KEY_PADDING), Padding.class));
+        }
+        if (json.has(KEY_SPACING)) {
+            layout.setSpacing(context.<Padding>deserialize(json.get(KEY_SPACING), Padding.class));
         }
         if (json.has(KEY_PACKED) && layout instanceof Row) {
             ((Row) layout).setPacked(json.get(KEY_PACKED).getAsBoolean());

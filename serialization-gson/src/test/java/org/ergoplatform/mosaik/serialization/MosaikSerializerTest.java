@@ -27,6 +27,7 @@ import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
+import org.ergoplatform.mosaik.model.ui.layout.Padding;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
 import org.junit.Assert;
 import org.reflections.Reflections;
@@ -112,6 +113,7 @@ public class MosaikSerializerTest extends TestCase {
         }
 
         column.addChild(new Box(), HAlignment.END, 2);
+        column.setSpacing(Padding.DEFAULT);
 
         MosaikApp content = new MosaikApp();
         content.setView(column);

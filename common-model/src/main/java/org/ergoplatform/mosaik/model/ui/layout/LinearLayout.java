@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 public abstract class LinearLayout<CSA> extends ViewElement implements LayoutElement {
     @Nonnull
     private Padding padding = Padding.NONE;
+    @Nonnull
+    private Padding spacing = Padding.NONE;
     private final List<ViewElement> children = new ArrayList<>();
     private final List<CSA> childAlignment = new ArrayList<>();
     private final List<Integer> childWeight = new ArrayList<>();
@@ -28,6 +30,22 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     public void setPadding(@Nonnull Padding padding) {
         Objects.requireNonNull(padding);
         this.padding = padding;
+    }
+
+    /**
+     * @return spacing, gap to be shown between child elements
+     */
+    @Nonnull
+    public Padding getSpacing() {
+        return spacing;
+    }
+
+    /**
+     * @param spacing spacing/gap to be shown between child elements
+     */
+    public void setSpacing(@Nonnull Padding spacing) {
+        Objects.requireNonNull(spacing);
+        this.spacing = spacing;
     }
 
     @Nonnull
@@ -85,11 +103,11 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         LinearLayout<?> that = (LinearLayout<?>) o;
-        return getPadding() == that.getPadding() && getChildren().equals(that.getChildren()) && childAlignment.equals(that.childAlignment) && childWeight.equals(that.childWeight);
+        return getPadding() == that.getPadding() && getSpacing() == that.getSpacing() && getChildren().equals(that.getChildren()) && childAlignment.equals(that.childAlignment) && childWeight.equals(that.childWeight);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getPadding(), getChildren(), childAlignment, childWeight);
+        return Objects.hash(super.hashCode(), getPadding(), getSpacing(), getChildren(), childAlignment, childWeight);
     }
 }

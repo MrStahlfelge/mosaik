@@ -26,43 +26,31 @@ class ViewElementsDemoController {
             // add the reload app action so that we can use it in the views by naming its ID
             reloadApp(RELOAD_APP_ACTION_ID)
 
-            column {
+            column(spacing = Padding.DEFAULT) {
 
                 label("View Elements Overview", LabelStyle.HEADLINE2)
-
-                box(Padding.DEFAULT)
 
                 label(
                     "Click or tap a button to see an overview for the available view elements " +
                             "per group. Also check out the document linked on the GitHub repo!"
                 )
 
-                box(Padding.HALF_DEFAULT)
-
                 label("Open GitHub repo", LabelStyle.BODY1LINK) {
                     onClickAction(openBrowser("https://github.com/MrStahlfelge/mosaik"))
                     textColor = ForegroundColor.PRIMARY
                 }
 
-                box(Padding.HALF_DEFAULT)
-
                 button("Layout elements") {
                     onClickAction(backendRequest("layoutview", layoutViewRequestId))
                 }
-
-                box(Padding.HALF_DEFAULT)
 
                 button("Text elements") {
                     onClickAction(backendRequest("textelementview"))
                 }
 
-                box(Padding.HALF_DEFAULT)
-
                 button("Input elements") {
                     onClickAction(backendRequest("inputelementview"))
                 }
-
-                box(Padding.HALF_DEFAULT)
 
                 button("Other elements") {
                     onClickAction(backendRequest("otherelementview"))

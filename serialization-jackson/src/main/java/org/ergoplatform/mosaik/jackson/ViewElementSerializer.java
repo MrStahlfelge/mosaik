@@ -32,6 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 public class ViewElementSerializer extends StdSerializer<ViewElement> {
     public static final String TYPE_ELEMENT_NAME = "type";
     public static final String KEY_PADDING = "padding";
+    public static final String KEY_SPACING = "spacing";
     public static final String KEY_WEIGHT = "weight";
     public static final String KEY_ALIGNMENT = "align";
     public static final String KEY_H_ALIGN = "hAlign";
@@ -197,6 +198,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
             return null;
         }
         if (propertyName.equals(KEY_PADDING) && (value instanceof Box && ((Box) value).getPadding() == Padding.NONE || value instanceof LinearLayout<?> && ((LinearLayout<?>) value).getPadding() == Padding.NONE)) {
+            return null;
+        }
+        if (propertyName.equals(KEY_SPACING) && (value instanceof LinearLayout<?> && ((LinearLayout<?>) value).getSpacing() == Padding.NONE)) {
             return null;
         }
         if (propertyName.equals("packed") && value instanceof Row && !((Row) value).isPacked()) {

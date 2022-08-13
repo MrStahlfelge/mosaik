@@ -668,7 +668,7 @@ private fun MosaikRow(
     val rowModifier = if (element.isPacked) modifier.width(IntrinsicSize.Min) else modifier
 
     Row(rowModifier) {
-        treeElement.children.forEach { childElement ->
+        treeElement.children.forEachIndexed { index, childElement ->
             key(childElement.idOrUuid) {
                 val weight = element.getChildWeight(childElement.element)
                 MosaikTreeElement(
@@ -679,7 +679,10 @@ private fun MosaikRow(
                             VAlignment.CENTER -> Alignment.CenterVertically
                             VAlignment.BOTTOM -> Alignment.Bottom
                         }
-                    ).then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+                    ).then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier).then(
+                        if (index > 0 && element.spacing != Padding.NONE) Modifier.padding(start = element.spacing.toCompose())
+                        else Modifier
+                    )
 
                 )
             }
@@ -708,7 +711,7 @@ private fun MosaikColumn(
     val columnModifier = if (weightSum > 0) modifier.height(IntrinsicSize.Min) else modifier
 
     Column(columnModifier) {
-        childrenWithWeightAndAlignment.forEach { (childElement, weight, hAlignment) ->
+        childrenWithWeightAndAlignment.forEachIndexed { index, (childElement, weight, hAlignment) ->
             key(childElement.idOrUuid) {
                 MosaikTreeElement(
                     childElement,
@@ -717,7 +720,10 @@ private fun MosaikColumn(
                         HAlignment.CENTER -> Modifier.align(Alignment.CenterHorizontally)
                         HAlignment.END -> Modifier.align(Alignment.End)
                         HAlignment.JUSTIFY -> Modifier.fillMaxWidth()
-                    }.then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier)
+                    }.then(if (weight > 0) Modifier.weight(weight.toFloat()) else Modifier).then(
+                        if (index > 0 && element.spacing != Padding.NONE) Modifier.padding(top = element.spacing.toCompose())
+                        else Modifier
+                    )
                 )
             }
         }

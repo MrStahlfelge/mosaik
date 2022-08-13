@@ -52,38 +52,46 @@ fun <G : ViewGroup> G.lazyLoadBox(
 @MosaikDsl
 fun ViewContent.column(
     padding: Padding? = Padding.DEFAULT,
+    spacing: Padding? = null,
     init: (@MosaikDsl Column).() -> Unit
 ): Column =
     viewElement(Column().apply {
         padding?.let { this.padding = padding }
+        spacing?.let { this.spacing = spacing }
     }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.column(
     padding: Padding? = null,
+    spacing: Padding? = null,
     init: (@MosaikDsl Column).() -> Unit
 ): Column =
     viewElement(Column().apply {
         padding?.let { this.padding = padding }
+        spacing?.let { this.spacing = spacing }
     }, init)
 
 @MosaikDsl
 fun ViewContent.row(
     padding: Padding? = Padding.DEFAULT,
+    spacing: Padding? = null,
     init: (@MosaikDsl Row).() -> Unit
 ): Row =
     viewElement(Row().apply {
         padding?.let { this.padding = padding }
+        spacing?.let { this.spacing = spacing }
     }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.row(
     padding: Padding? = null,
+    spacing: Padding? = null,
     packed: Boolean? = false,
     init: (@MosaikDsl Row).() -> Unit
 ): Row =
     viewElement(Row().apply {
         padding?.let { this.padding = padding }
+        spacing?.let { this.spacing = spacing }
         packed?.let { this.isPacked = packed }
     }, init)
 
