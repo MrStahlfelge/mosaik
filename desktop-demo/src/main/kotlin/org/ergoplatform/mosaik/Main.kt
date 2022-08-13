@@ -174,7 +174,8 @@ fun main() {
 
                 override fun isErgoAddressValid(ergoAddress: String): Boolean {
                     // this is just for the desktop demo...
-                    return ergoAddress.startsWith('9') || ergoAddress.startsWith('3')
+                    return (ergoAddress.startsWith('9') || ergoAddress.startsWith('3')) &&
+                            ergoAddress.matches(Regex("^[A-HJ-NP-Za-km-z1-9]*\$"))
                 }
 
                 override fun getErgoAddressLabel(ergoAddress: String): String? {

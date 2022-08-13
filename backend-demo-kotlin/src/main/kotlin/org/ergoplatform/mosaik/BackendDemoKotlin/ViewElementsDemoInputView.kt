@@ -59,7 +59,7 @@ object ViewElementsDemoInputView {
                     label(
                         "ErgAddressInputField is a text field to enter ergo addresses. Mosaik executors " +
                                 "might show labels for known addresses. " +
-                                "Min value of 0 is considered that an optional address can be entered."
+                                "Min value of 0 means that the address is optional to enter."
                     )
 
                     ergAddressInputField(
