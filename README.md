@@ -1,10 +1,11 @@
 # Mosaik plugin library
 
 Hands on Tutorial: Developing for Mosaik
-* [Part 1 - Concept](https://docs.google.com/document/d/1utZnD0BVKTzp7TLn8pmgvfoMcDBU9YIw9lyMzKce5AU/edit?usp=sharing)
-* [Part 2 - A simple UI](https://docs.google.com/document/d/1_O7ZEVfkGxqyviNNXJEazynpzkuIkN5ue4xr1i-VmWQ/edit?usp=sharing)
-* [Part 3 - Processing data](https://docs.google.com/document/d/1R_ubi3RQKEebrXW5Obe-3dklUKRRpGGXsg03Hh4pgFo/edit?usp=sharing)
+* [Part 1 - Concept](https://docs.ergoplatform.com/dev/stack/mosaik/intro/)
+* [Part 2 - A simple UI](https://docs.ergoplatform.com/dev/stack/mosaik/tutorial2/)
+* [Part 3 - Processing data](https://docs.ergoplatform.com/dev/stack/mosaik/tutorial3/)
 * [Part 4 - A complete app](https://docs.google.com/document/d/1HjSIwI3cS70qyEv7zWtv5Rrc24JQtOh1H48uGquqZ3U/edit?usp=sharing)
+* [Part 5 - Deploying on the web](https://docs.google.com/document/d/16PDmtHiMk28sMjHLf3PVeWmzb6C_gvj2ThEF6iCp6bY/edit?usp=sharing)
 
 [Overview doc](https://docs.google.com/document/d/1Pc4DLChaKyGbMnY4gu92mcBEDfeNiBCQ5hq9lJUssGg/edit?usp=sharing)
 
