@@ -11,6 +11,7 @@ import com.google.gson.JsonSerializer;
 
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
+import org.ergoplatform.mosaik.model.ui.input.StyleableInputButton;
 
 import java.lang.reflect.Type;
 
@@ -20,6 +21,7 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
     public static final String KEY_VALUE = "value";
     public static final String KEY_MANDATORY = "mandatory";
     public static final String KEY_ON_VALUE_CHANGED = "onValueChanged";
+    public static final String KEY_STYLE = "style";
     private final Type valueClazz;
     private final Class<T> inputValueElementClass;
 
@@ -49,6 +51,9 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
         }
         if (src.getValue() != null) {
             jsonObject.add(KEY_VALUE, context.serialize(src.getValue()));
+        }
+        if (src instanceof StyleableInputButton && ((StyleableInputButton) src).getStyle() != StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY) {
+            jsonObject.add(KEY_STYLE, context.serialize(((StyleableInputButton) src).getStyle()));
         }
     }
 
@@ -81,6 +86,10 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
         }
         if (jsonObject.has(KEY_ON_VALUE_CHANGED)) {
             valueElement.setOnValueChangedAction(jsonObject.get(KEY_ON_VALUE_CHANGED).getAsString());
+        }
+        if (valueElement instanceof StyleableInputButton && jsonObject.has(KEY_STYLE)) {
+            ((StyleableInputButton) valueElement).setStyle(context.<StyleableInputButton.InputButtonStyle>deserialize(
+                    jsonObject.get(KEY_STYLE), StyleableInputButton.InputButtonStyle.class));
         }
     }
 }

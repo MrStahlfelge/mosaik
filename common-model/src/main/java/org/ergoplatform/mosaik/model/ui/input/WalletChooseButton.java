@@ -6,6 +6,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -14,13 +15,15 @@ import javax.annotation.Nullable;
  * {@link #getValue()} might contain a list of wallet addresses or a single address.
  */
 @Since(0)
-public class WalletChooseButton extends ViewElement implements OptionalInputElement<List<String>> {
+public class WalletChooseButton extends ViewElement implements StyleableInputButton<List<String>> {
     @Nullable
     private List<String> addresses;
     @Nullable
     private String onValueChangedAction;
     private boolean enabled = true;
     private boolean mandatory = true;
+    @Nonnull
+    private StyleableInputButton.InputButtonStyle style = StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY;
 
     @Nullable
     @Override
@@ -64,6 +67,20 @@ public class WalletChooseButton extends ViewElement implements OptionalInputElem
         this.mandatory = mandatory;
     }
 
+    @Nonnull
+    @Override
+    @Since(1)
+    public StyleableInputButton.InputButtonStyle getStyle() {
+        return style;
+    }
+
+    @Override
+    @Since(1)
+    public void setStyle(@Nonnull StyleableInputButton.InputButtonStyle style) {
+        Objects.requireNonNull(style);
+        this.style = style;
+    }
+
     @Override
     public void setOnClickAction(@Nullable String action) {
         throw new IllegalArgumentException("OnClickAction can't be set for" +
@@ -76,11 +93,12 @@ public class WalletChooseButton extends ViewElement implements OptionalInputElem
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WalletChooseButton that = (WalletChooseButton) o;
-        return isMandatory() == that.isMandatory() && isEnabled() == that.isEnabled() && Objects.equals(addresses, that.addresses) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction());
+        return isMandatory() == that.isMandatory() && isEnabled() == that.isEnabled() && Objects.equals(addresses, that.addresses) && Objects.equals(getOnValueChangedAction(), that.getOnValueChangedAction()) && Objects.equals(getStyle(), that.getStyle());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), addresses, getOnValueChangedAction(), isEnabled(), isMandatory());
+        return Objects.hash(super.hashCode(), addresses, getOnValueChangedAction(), isEnabled(), isMandatory(), getStyle());
     }
+
 }

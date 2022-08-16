@@ -151,11 +151,8 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Image -> {
             MosaikImage(treeElement, newModifier)
         }
-        is ErgoAddressChooseButton -> {
-            MosaikValueChooseButton(treeElement, newModifier)
-        }
-        is WalletChooseButton -> {
-            MosaikValueChooseButton(treeElement, newModifier)
+        is StyleableInputButton<*> -> {
+            MosaikInputButton(treeElement, newModifier)
         }
         is HorizontalRule -> {
             MosaikHorizontalRule(treeElement, newModifier)
@@ -177,28 +174,45 @@ fun MosaikHorizontalRule(treeElement: TreeElement, newModifier: Modifier) {
 }
 
 @Composable
-fun MosaikValueChooseButton(treeElement: TreeElement, modifier: Modifier) {
-    val element = treeElement.element
+fun MosaikInputButton(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as StyleableInputButton<*>
 
     val valueState = treeElement.viewTree.valueState.collectAsState()
 
-    // remember this to not fire up any logic (db access etc) to retrieve the label
-    val buttonLabel =
-        remember(valueState.value.second[element.id]?.inputValue) { treeElement.currentValueAsString }
+    when (element.style) {
+        StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY,
+        StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY -> {
+            // remember this to not fire up any logic (db access etc) to retrieve the label
+            val buttonLabel =
+                remember(valueState.value.second[treeElement.element.id]?.inputValue) { treeElement.currentValueAsString }
 
-    Button(
-        onClick = treeElement::clicked,
-        modifier = modifier.width(96.dp * 3),
-        colors = ButtonDefaults.buttonColors(
-            primaryLabelColor,
-            primaryButtonTextColor
-        ),
-        enabled = (element as? InputElement<*>)?.isEnabled ?: true
-    ) {
-        Text(
-            buttonLabel,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+            Button(
+                onClick = treeElement::clicked,
+                modifier = modifier.width(96.dp * 3),
+                colors = when (element.style) {
+                    StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY -> Button.ButtonStyle.PRIMARY
+                    StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY -> Button.ButtonStyle.SECONDARY
+                    else -> throw IllegalStateException("Unreachable")
+                }.toButtonColors(),
+                enabled = element.isEnabled
+            ) {
+                Text(
+                    buttonLabel,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+        StyleableInputButton.InputButtonStyle.ICON_PRIMARY,
+        StyleableInputButton.InputButtonStyle.ICON_SECONDARY -> Icon(
+            IconType.WALLET.getImageVector(),
+            null,
+            modifier.size(48.dp),
+            tint = foregroundColor(
+                if (!element.isEnabled) ForegroundColor.SECONDARY
+                else if (element.style == StyleableInputButton.InputButtonStyle.ICON_PRIMARY) ForegroundColor.PRIMARY
+                else ForegroundColor.DEFAULT
+            )
         )
     }
 }
@@ -536,17 +550,7 @@ private fun MosaikButton(
         Button(
             onClick = treeElement::clicked,
             modifier = buttonModifier,
-            colors = when (element.style) {
-                Button.ButtonStyle.PRIMARY -> ButtonDefaults.buttonColors(
-                    primaryLabelColor,
-                    primaryButtonTextColor
-                )
-                Button.ButtonStyle.SECONDARY -> ButtonDefaults.buttonColors(
-                    secondaryButtonColor,
-                    secondaryButtonTextColor
-                )
-                Button.ButtonStyle.TEXT -> throw UnsupportedOperationException("Unreachable code")
-            },
+            colors = element.style.toButtonColors(),
             enabled = element.isEnabled
         ) {
             Text(
@@ -563,6 +567,20 @@ private fun MosaikButton(
         }
     }
 }
+
+@Composable
+private fun Button.ButtonStyle.toButtonColors() =
+    when (this) {
+        Button.ButtonStyle.PRIMARY -> ButtonDefaults.buttonColors(
+            primaryLabelColor,
+            primaryButtonTextColor
+        )
+        Button.ButtonStyle.SECONDARY -> ButtonDefaults.buttonColors(
+            secondaryButtonColor,
+            secondaryButtonTextColor
+        )
+        Button.ButtonStyle.TEXT -> throw UnsupportedOperationException("Unreachable code")
+    }
 
 @Composable
 private fun MosaikCheckboxLabel(

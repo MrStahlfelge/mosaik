@@ -10,6 +10,7 @@ import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.InputElement;
 import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
+import org.ergoplatform.mosaik.model.ui.input.StyleableInputButton;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
@@ -193,6 +194,10 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         }
         if (value instanceof OptionalInputElement && propertyName.equals("mandatory")
                 && ((OptionalInputElement<?>) value).isMandatory()) {
+            return null;
+        }
+        if (value instanceof StyleableInputButton && propertyName.equals("style")
+                && ((StyleableInputButton) value).getStyle() == StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY) {
             return null;
         }
 

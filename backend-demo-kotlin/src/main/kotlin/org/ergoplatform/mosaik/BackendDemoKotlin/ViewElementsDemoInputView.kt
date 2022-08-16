@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik.BackendDemoKotlin
 import org.ergoplatform.mosaik.*
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.IconType
+import org.ergoplatform.mosaik.model.ui.input.StyleableInputButton
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.layout.VAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
@@ -176,7 +177,7 @@ object ViewElementsDemoInputView {
                     label("WalletChooseButton", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "A button type element (styleable the same way) that let the user " +
+                        "A button type element (in different styles) that let the user " +
                                 "choose one of his wallets. " +
                                 "The element's value might contain a list of wallet addresses or " +
                                 "a single address."
@@ -185,6 +186,7 @@ object ViewElementsDemoInputView {
                     box(Padding.DEFAULT)
 
                     ergoWalletChooser("walletAddresses")
+                    ergoWalletChooser("walletAddresses2", style = StyleableInputButton.InputButtonStyle.ICON_SECONDARY)
                 }
             }
 
@@ -193,13 +195,14 @@ object ViewElementsDemoInputView {
                     label("AddressChooseButton", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "A button type element (styleable the same way) that let the user " +
+                        "A button type element (styleable as WalletChooseButton) that let the user " +
                                 "choose a single wallet address."
                     )
 
                     box(Padding.DEFAULT)
 
                     ergoAddressChooser("ergoAddress")
+                    ergoAddressChooser("ergoAddress2", style = StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY)
                 }
             }
 

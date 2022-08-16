@@ -241,19 +241,23 @@ fun <G : ViewGroup> G.dropDownList(
 @MosaikDsl
 fun <G : ViewGroup> G.ergoAddressChooser(
     id: String,
+    style: StyleableInputButton.InputButtonStyle? = null,
     init: (@MosaikDsl ErgoAddressChooseButton).() -> Unit = {}
 ): ErgoAddressChooseButton =
     viewElement(ErgoAddressChooseButton().apply {
         this.id = id
+        style?.let { this.style = style }
     }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.ergoWalletChooser(
     id: String,
+    style: StyleableInputButton.InputButtonStyle? = null,
     init: (@MosaikDsl WalletChooseButton).() -> Unit = {}
 ): WalletChooseButton =
     viewElement(WalletChooseButton().apply {
         this.id = id
+        style?.let { this.style = style }
     }, init)
 
 @MosaikDsl
