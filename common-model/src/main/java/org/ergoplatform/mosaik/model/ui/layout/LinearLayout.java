@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik.model.ui.layout;
 
+import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     @Nonnull
     private Padding padding = Padding.NONE;
     @Nonnull
+    @Since(1)
     private Padding spacing = Padding.NONE;
     private final List<ViewElement> children = new ArrayList<>();
     private final List<CSA> childAlignment = new ArrayList<>();

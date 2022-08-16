@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 /**
  * Label showing a checkbox/switch. A value of null means the box is neither checked nor not checked
  */
-@Since(0)
+@Since(1)
 public class CheckboxLabel extends Label implements OptionalInputElement<Boolean> {
     @Nullable
     private Boolean value;

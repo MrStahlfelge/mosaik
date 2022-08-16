@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
  * app is executed with.
  */
 public class MosaikContext {
-    public static final int LIBRARY_MOSAIK_VERSION = 0;
+    public static final int LIBRARY_MOSAIK_VERSION = 1;
 
     public final int mosaikVersion;
 
