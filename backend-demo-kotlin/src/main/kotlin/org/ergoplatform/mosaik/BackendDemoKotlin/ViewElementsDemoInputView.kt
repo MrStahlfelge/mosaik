@@ -158,6 +158,21 @@ object ViewElementsDemoInputView {
 
             card(Padding.DEFAULT) {
                 column(Padding.DEFAULT) {
+                    label("CheckboxLabel", style = LabelStyle.HEADLINE2)
+
+                    label(
+                        "A label with a checkbox the user can select."
+                    )
+
+                    checkboxLabel(
+                        "checkboxLabel",
+                        "Check this to confirm something",
+                    )
+                }
+            }
+
+            card(Padding.DEFAULT) {
+                column(Padding.DEFAULT) {
                     label("WalletChooseButton", style = LabelStyle.HEADLINE2)
 
                     label(

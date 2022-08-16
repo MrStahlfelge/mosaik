@@ -41,7 +41,10 @@ import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.*
-import org.ergoplatform.mosaik.model.ui.text.*
+import org.ergoplatform.mosaik.model.ui.text.Button
+import org.ergoplatform.mosaik.model.ui.text.LabelStyle
+import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel
+import org.ergoplatform.mosaik.model.ui.text.TruncationType
 
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
@@ -118,6 +121,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
             // this also deals with LazyLoadBox
             MosaikBox(newModifier, treeElement)
         }
+
+        is CheckboxLabel -> MosaikCheckboxLabel(treeElement, newModifier)
+
         is StyleableTextLabel<*> -> {
             MosaikLabel(treeElement, newModifier)
         }
@@ -558,6 +564,41 @@ private fun MosaikButton(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+    }
+}
+
+@Composable
+private fun MosaikCheckboxLabel(
+    treeElement: TreeElement,
+    newModifier: Modifier
+) {
+    val element = treeElement.element as CheckboxLabel
+    val state = remember(treeElement.createdAtContentVersion) {
+        mutableStateOf(treeElement.currentValue as Boolean?)
+    }
+    val clickModifier = if (element.isEnabled) {
+        Modifier.clickable {
+            state.value = !(state.value ?: false)
+            treeElement.valueChanged(state.value)
+        }
+    } else Modifier
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = newModifier
+            .then(clickModifier)
+            .padding(4.dp)
+    ) {
+        Checkbox(
+            checked = state.value ?: false,
+            onCheckedChange = null,
+            enabled = element.isEnabled,
+            colors = CheckboxDefaults.colors(checkedColor = primaryLabelColor)
+        )
+
+        Spacer(Modifier.size(8.dp))
+
+        MosaikLabel(treeElement, Modifier)
     }
 }
 

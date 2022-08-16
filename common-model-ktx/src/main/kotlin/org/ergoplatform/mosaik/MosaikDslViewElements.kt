@@ -176,6 +176,25 @@ fun <G : ViewGroup> G.decimalInputField(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.checkboxLabel(
+    id: String,
+    text: String,
+    initialValue: Boolean? = false,
+    style: LabelStyle? = null,
+    textAlignment: HAlignment? = null,
+    textColor: ForegroundColor? = null,
+    init: (@MosaikDsl CheckboxLabel).() -> Unit = {}
+): Label =
+    viewElement(CheckboxLabel().apply {
+        this.id = id
+        this.text = text
+        this.value = initialValue
+        style?.let { this.style = style }
+        textAlignment?.let { this.textAlignment = textAlignment }
+        textColor?.let { this.textColor = textColor }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.ergAmountInputField(
     id: String,
     placeholder: String? = null,

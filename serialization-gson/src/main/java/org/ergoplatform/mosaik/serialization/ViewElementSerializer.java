@@ -15,6 +15,7 @@ import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ui.input.CheckboxLabel;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
 import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField;
@@ -158,6 +159,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "DropDownList":
                 clazz = DropDownList.class;
+                break;
+            case "CheckboxLabel":
+                clazz = CheckboxLabel.class;
                 break;
             default:
                 throw new JsonParseException("View Element with name " + elementName + " not known.");

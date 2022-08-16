@@ -50,6 +50,9 @@
       "$ref": "label.json"
     },
     {
+      "$ref": "checkboxlabel.json"
+    },
+    {
       "$ref": "ergamountlabel.json"
     },
     {

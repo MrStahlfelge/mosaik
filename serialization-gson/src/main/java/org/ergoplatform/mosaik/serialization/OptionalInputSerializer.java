@@ -32,6 +32,12 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
     public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = context.serialize(src, ViewElement.class).getAsJsonObject();
 
+        serializeOptionalInputFields(src, context, jsonObject);
+
+        return jsonObject;
+    }
+
+    protected void serializeOptionalInputFields(T src, JsonSerializationContext context, JsonObject jsonObject) {
         if (!src.isEnabled()) {
             jsonObject.add(KEY_ENABLED, context.serialize(src.isEnabled()));
         }
@@ -44,8 +50,6 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
         if (src.getValue() != null) {
             jsonObject.add(KEY_VALUE, context.serialize(src.getValue()));
         }
-
-        return jsonObject;
     }
 
     @Override
@@ -60,6 +64,12 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
 
         ViewElementSerializer.deserializeCommon(jsonObject, valueElement, context);
 
+        deserializeOptionalInputFields(context, valueElement, jsonObject);
+
+        return valueElement;
+    }
+
+    protected void deserializeOptionalInputFields(JsonDeserializationContext context, T valueElement, JsonObject jsonObject) {
         if (jsonObject.has(KEY_VALUE)) {
             valueElement.setValue(context.<U>deserialize(jsonObject.get(KEY_VALUE), valueClazz));
         }
@@ -72,7 +82,5 @@ public class OptionalInputSerializer<U, T extends ViewElement & OptionalInputEle
         if (jsonObject.has(KEY_ON_VALUE_CHANGED)) {
             valueElement.setOnValueChangedAction(jsonObject.get(KEY_ON_VALUE_CHANGED).getAsString());
         }
-
-        return valueElement;
     }
 }

@@ -1,0 +1,65 @@
+{
+  "title": "CheckboxLabel",
+  "description": "Label showing a checkbox/switch. A value of null means the box is neither checked nor not checked",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "CheckboxLabel"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "style": {
+      "description": "Style of the label",
+      "type": "string",
+      "enum": [
+        "BODY1",
+        "BODY1BOLD",
+        "BODY1LINK",
+        "BODY2",
+        "BODY2BOLD",
+        "HEADLINE1",
+        "HEADLINE2"
+      ]
+    },
+    "truncationType": {
+      "$ref": "truncationtype.json"
+    },
+    "textAlignment": {
+      "$ref": "halignment.json"
+    },
+    "maxLines": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "string"
+    },
+    "textColor": {
+      "$ref": "foregroundcolor.json"
+    },
+    "value": {
+      "type": "boolean"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "onValueChanged": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

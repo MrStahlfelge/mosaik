@@ -17,6 +17,7 @@ import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
+import org.ergoplatform.mosaik.model.ui.input.CheckboxLabel;
 import org.ergoplatform.mosaik.model.ui.input.DecimalInputField;
 import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField;
@@ -126,6 +127,9 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(IntegerInputField.class, new TextFieldSerializer<>(Long.class, IntegerInputField.class));
         gsonBuilder.registerTypeAdapter(DecimalInputField.class, new TextFieldSerializer<>(Long.class, DecimalInputField.class));
         gsonBuilder.registerTypeAdapter(ErgAmountInputField.class, new TextFieldSerializer<>(Long.class, ErgAmountInputField.class));
+        gsonBuilder.registerTypeAdapter(CheckboxLabel.class,
+                new OptionalInputWithLabelSerializer<>(new TypeToken<Boolean>() {
+                }.getType(), CheckboxLabel.class));
         gsonBuilder.registerTypeAdapter(ErgoAddressChooseButton.class,
                 new OptionalInputSerializer<>(new TypeToken<String>() {
                 }.getType(), ErgoAddressChooseButton.class));
