@@ -127,7 +127,9 @@ object ViewElementsDemoTextView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    ergAddress("9ewA9T53dy5qvAkcR5jVCtbaDW2XgWzbLPs5H4uCJJavmA4fzDx") {
+                        maxLines = 3 // applies only to the expanded view
+                    }
                 }
             }
 

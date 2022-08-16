@@ -44,6 +44,23 @@ fun <G : ViewGroup> G.ergAmount(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.ergAddress(
+    address: String,
+    style: LabelStyle? = null,
+    textAlignment: HAlignment? = null,
+    textColor: ForegroundColor? = null,
+    expand: Boolean = true,
+    init: (@MosaikDsl ErgoAddressLabel).() -> Unit = {}
+): ErgoAddressLabel =
+    viewElement(ErgoAddressLabel().apply {
+        this.text = address
+        style?.let { this.style = style }
+        textAlignment?.let { this.textAlignment = textAlignment }
+        textColor?.let { this.textColor = textColor }
+        this.isExpandOnClick = expand
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.fiatAmount(
     nanoErg: Long,
     style: LabelStyle? = null,

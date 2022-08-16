@@ -25,6 +25,8 @@ abstract class MosaikRuntime(
 
     abstract fun scanQrCode(actionId: String)
 
+    abstract fun onAddressLongPress(address: String)
+
     fun qrCodeScanned(actionId: String, scannedValue: String) {
         val action = viewTree.getAction(actionId) as? QrCodeAction
 

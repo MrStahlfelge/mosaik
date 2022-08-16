@@ -20,6 +20,8 @@ import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.layout.VAlignment;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
+import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel;
+import org.ergoplatform.mosaik.model.ui.text.ExpandableElement;
 import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel;
 import org.ergoplatform.mosaik.model.ui.text.TruncationType;
 
@@ -137,6 +139,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (propertyName.equals("onValueChangedAction") && value instanceof InputElement) {
             return "onValueChanged";
         }
+        if (propertyName.equals("expandOnClick") && value instanceof ExpandableElement) {
+            return "expand";
+        }
         if (propertyName.equals("requestUrl") && value instanceof LazyLoadBox) {
             return "url";
         }
@@ -158,6 +163,9 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
                     propertyName.equals("textColor") && label.getTextColor() == ForegroundColor.DEFAULT ||
                     propertyName.equals("truncationType") && label.getTruncationType() == TruncationType.END
             )
+                return null;
+        }
+        if (value instanceof ErgoAddressLabel && propertyName.equals("truncationType")) {
                 return null;
         }
         if (value instanceof ErgAmountLabel) {

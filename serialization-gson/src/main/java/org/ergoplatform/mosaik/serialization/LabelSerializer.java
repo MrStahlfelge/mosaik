@@ -12,6 +12,8 @@ import org.ergoplatform.mosaik.model.ui.ForegroundColor;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
+import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel;
+import org.ergoplatform.mosaik.model.ui.text.ExpandableElement;
 import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel;
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle;
 import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel;
@@ -36,6 +38,9 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
     // FiatAmountLabel
     public static final String KEY_FALLBACK_ERG = "fallbackToErg";
 
+    // ErgoAddressLabel
+    public static final String KEY_EXPAND_LABEL = "expand";
+
     private final Class<U> valueClass;
     private final Class<T> labelClass;
 
@@ -56,7 +61,7 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
         if (src.getMaxLines() > 0) {
             jsonObject.add(KEY_MAX_LINES, context.serialize(src.getMaxLines()));
         }
-        if (src.getTruncationType() != TruncationType.END) {
+        if (src.getTruncationType() != TruncationType.END && !(src instanceof ErgoAddressLabel)) {
             jsonObject.add(KEY_TRUNCATION_TYPE, context.serialize(src.getTruncationType()));
         }
         if (src.getTextAlignment() != HAlignment.START) {
@@ -79,6 +84,12 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
             FiatAmountLabel fiatAmountLabel = (FiatAmountLabel) src;
             if (fiatAmountLabel.isFallbackToErg()) {
                 jsonObject.add(KEY_FALLBACK_ERG, context.serialize(fiatAmountLabel.isFallbackToErg()));
+            }
+        }
+        if (src instanceof ExpandableElement) {
+            ExpandableElement expandableElement = (ExpandableElement) src;
+            if (!expandableElement.isExpandOnClick()) {
+                jsonObject.add(KEY_EXPAND_LABEL, context.serialize(expandableElement.isExpandOnClick()));
             }
         }
 
@@ -133,6 +144,13 @@ public class LabelSerializer<U, T extends StyleableTextLabel<U>> implements Json
             FiatAmountLabel fiatAmountLabel = (FiatAmountLabel) label;
             if (jsonObject.has(KEY_FALLBACK_ERG)) {
                 fiatAmountLabel.setFallbackToErg(jsonObject.get(KEY_FALLBACK_ERG).getAsBoolean());
+            }
+        }
+
+        if (label instanceof ExpandableElement) {
+            ExpandableElement expandableElement = (ExpandableElement) label;
+            if (jsonObject.has(KEY_EXPAND_LABEL)) {
+                expandableElement.setExpandOnClick(jsonObject.get(KEY_EXPAND_LABEL).getAsBoolean());
             }
         }
 

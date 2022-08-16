@@ -35,6 +35,7 @@ import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
 import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel;
+import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel;
 import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel;
 import org.ergoplatform.mosaik.model.ui.text.Label;
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel;
@@ -138,6 +139,7 @@ public class MosaikSerializer {
                 }.getType(), WalletChooseButton.class));
         gsonBuilder.registerTypeAdapter(Button.class, new ButtonSerializer());
         gsonBuilder.registerTypeAdapter(Label.class, new LabelSerializer<>(String.class, Label.class));
+        gsonBuilder.registerTypeAdapter(ErgoAddressLabel.class, new LabelSerializer<>(String.class, ErgoAddressLabel.class));
         gsonBuilder.registerTypeAdapter(ErgAmountLabel.class, new LabelSerializer<>(Long.class, ErgAmountLabel.class));
         gsonBuilder.registerTypeAdapter(FiatAmountLabel.class, new LabelSerializer<>(Long.class, FiatAmountLabel.class));
         gsonBuilder.registerTypeAdapter(LoadingIndicator.class, new LoadingIndicatorSerializer());

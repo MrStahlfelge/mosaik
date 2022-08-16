@@ -101,6 +101,10 @@ class ViewTreeTest : TestCase() {
 
                 }
 
+                override fun onAddressLongPress(address: String) {
+
+                }
+
                 override fun pasteToClipboard(text: String) {
 
                 }

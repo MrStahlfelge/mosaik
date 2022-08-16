@@ -39,14 +39,14 @@ import java.util.Set;
 
 public class MosaikSerializerTest extends TestCase {
 
-    public static int TEST_MOSAIK_VERSION = 0;
+    public static int TEST_MOSAIK_VERSION = MosaikContext.LIBRARY_MOSAIK_VERSION;
 
     public void testJsonRoundTrip() throws GenerationException, ValidationException, JsonProcessingException {
         // collect available actions
         LinkedList<Action> actions = new LinkedList<>();
         for (Class<? extends Action> actionClass : findAllActions(Action.class.getPackage().getName())) {
             Since annotation = actionClass.getAnnotation(Since.class);
-            int sinceVersion = annotation != null ? annotation.value() : 1;
+            int sinceVersion = annotation != null ? annotation.value() : (TEST_MOSAIK_VERSION + 1);
 
             if (sinceVersion <= TEST_MOSAIK_VERSION) {
                 try {
@@ -77,7 +77,7 @@ public class MosaikSerializerTest extends TestCase {
 
         for (Class<? extends ViewElement> viewElementClass : findAllViewElements(ViewElement.class.getPackage().getName())) {
             Since annotation = viewElementClass.getAnnotation(Since.class);
-            int sinceVersion = annotation != null ? annotation.value() : 1;
+            int sinceVersion = annotation != null ? annotation.value() : (TEST_MOSAIK_VERSION + 1);
 
             if (sinceVersion <= TEST_MOSAIK_VERSION) {
                 try {

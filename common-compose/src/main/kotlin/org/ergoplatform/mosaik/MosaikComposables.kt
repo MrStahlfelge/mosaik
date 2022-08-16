@@ -41,10 +41,7 @@ import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.*
-import org.ergoplatform.mosaik.model.ui.text.Button
-import org.ergoplatform.mosaik.model.ui.text.LabelStyle
-import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel
-import org.ergoplatform.mosaik.model.ui.text.TruncationType
+import org.ergoplatform.mosaik.model.ui.text.*
 
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
@@ -602,16 +599,33 @@ private fun MosaikCheckboxLabel(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MosaikLabel(
     treeElement: TreeElement,
-    newModifier: Modifier
+    modifier: Modifier
 ) {
     val element = treeElement.element as StyleableTextLabel<*>
-    val text = LabelFormatter.getFormattedText(element, treeElement)
+    val text = remember(treeElement.createdAtContentVersion) {
+        LabelFormatter.getFormattedText(element, treeElement)
+    }
+
+    val expandable = (element is ExpandableElement && element.isExpandOnClick)
+    val expanded = remember { mutableStateOf(false) }
+
+    val newModifier = if (expandable) {
+        // we already have onLongClick defined by MosaikTreeElement(), but it is overwritten
+        // by clickable() - so we need to set the combinedClickable again
+        modifier.combinedClickable(
+            onClick = { expanded.value = !expanded.value },
+            onLongClick = treeElement::longPressed,
+        )
+    } else modifier
+
+    val maxLines = if (expandable && !expanded.value) 1 else element.maxLines
 
     if (text != null) {
-        if (element.truncationType == TruncationType.MIDDLE && element.maxLines == 1)
+        if (element.truncationType == TruncationType.MIDDLE && maxLines == 1)
             MiddleEllipsisText(
                 text,
                 newModifier,
@@ -636,7 +650,7 @@ private fun MosaikLabel(
             Text(
                 text,
                 newModifier,
-                maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
+                maxLines = if (maxLines <= 0) Int.MAX_VALUE else maxLines,
                 textAlign = (when (element.textAlignment) {
                     HAlignment.START -> TextAlign.Start
                     HAlignment.CENTER -> TextAlign.Center

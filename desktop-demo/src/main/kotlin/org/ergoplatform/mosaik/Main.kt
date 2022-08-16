@@ -103,6 +103,18 @@ fun main() {
                     clipboard.setContents(selection, selection)
                 }
 
+                override fun onAddressLongPress(address: String) {
+                    showDialog(
+                        MosaikDialog(
+                            "Address $address was long-clicked",
+                            "Copy",
+                            "OK",
+                            { pasteToClipboard(address) },
+                            null
+                        )
+                    )
+                }
+
                 override fun runErgoPayAction(action: ErgoPayAction) {
                     showDialog(
                         MosaikDialog(

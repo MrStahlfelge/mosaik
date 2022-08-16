@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik
 import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.input.*
+import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel
 import java.util.*
 
 /**
@@ -52,7 +53,10 @@ class TreeElement(
 
     val children: List<TreeElement> get() = _children
 
-    val respondsToClick: Boolean get() = element.onClickAction != null
+    val respondsToClick: Boolean get() =
+        element.onClickAction != null || element.onLongPressAction != null
+                || element is WalletChooseButton || element is ErgoAddressChooseButton
+                || element is ErgoAddressLabel
 
     override fun equals(other: Any?): Boolean {
         return if (other is TreeElement) {
