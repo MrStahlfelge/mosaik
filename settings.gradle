@@ -9,3 +9,12 @@
 
 rootProject.name = 'ergo-mosaik'
 include('common-model')
+include('common-model-ktx')
+include('serialization-gson')
+include('serialization-jackson')
+include('common-runtime')
+include('clientconnector-okhttp')
+include('common-compose')
+include('desktop-demo')
+include('backend-demo')
+include('backend-demo-kotlin')

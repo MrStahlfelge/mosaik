@@ -1,0 +1,21 @@
+{
+  "title": "BrowserAction",
+  "description": "Action containing an URL that will make the system browser to pop up.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "BrowserAction"
+    },
+    "id": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "url"
+  ]
+}

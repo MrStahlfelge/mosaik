@@ -1,0 +1,20 @@
+{
+  "title": "View content",
+  "description": "View with actions that can be referenced",
+  "type": "object",
+  "properties": {
+    "view": {
+      "$ref": "viewelement.json"
+    },
+    "actions": {
+      "description": "Actions in this (or subsequent) view",
+      "type": "array",
+      "items": {
+        "$ref": "action.json"
+      }
+    }
+  },
+  "required": [
+    "view"
+  ]
+}

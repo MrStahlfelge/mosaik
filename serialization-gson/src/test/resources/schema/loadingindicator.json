@@ -1,0 +1,29 @@
+{
+  "title": "LoadingIndicator",
+  "description": "Shows a spinner/loading indicator",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "LoadingIndicator"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "size": {
+      "description": "Size of the indicator",
+      "type": "string",
+      "enum": [
+        "SMALL",
+        "MEDIUM"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

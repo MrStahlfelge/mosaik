@@ -1,0 +1,21 @@
+{
+  "title": "NavigateAction",
+  "description": "Action containing a new URL to switch to another Mosaik app",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "NavigateAction"
+    },
+    "id": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "url"
+  ]
+}

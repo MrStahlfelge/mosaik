@@ -1,0 +1,31 @@
+{
+  "title": "ErgoAddressChooseButton",
+  "description": "Button type element to let the user choose a single of his addresses",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "ErgoAddressChooseButton"
+    },
+    "onValueChangedAction": {
+      "description": "Action to be started when value was changed",
+      "type": "string"
+    },
+    "address": {
+      "description": "Initial address set",
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "mandatory": {
+      "type": "boolean"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

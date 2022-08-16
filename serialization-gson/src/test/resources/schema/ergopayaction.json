@@ -1,0 +1,24 @@
+{
+  "title": "ErgoPayAction",
+  "description": "Action containing an ErgoPay URL that will make the wallet app switch to ErgoPay. When user navigates back, they will come back to the current {@link org.ergoplatform.mosaik.model.ui.RootView}.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "ErgoPayAction"
+    },
+    "url": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "onFinished": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "url"
+  ]
+}

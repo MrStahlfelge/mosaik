@@ -1,0 +1,33 @@
+{
+  "title": "DialogAction",
+  "description": "Shows an error or info dialog that is shown modal on top of the current view.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "DialogAction"
+    },
+    "id": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "positiveButtonText": {
+      "type": "string"
+    },
+    "negativeButtonText": {
+      "type": "string"
+    },
+    "onPositiveButtonClicked": {
+      "type": "string"
+    },
+    "onNegativeButtonClicked": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "id",
+    "message"
+  ]
+}

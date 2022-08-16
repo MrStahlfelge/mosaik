@@ -1,0 +1,43 @@
+{
+  "title": "LazyLoadBox",
+  "description": "LazyLoad shows a loading indicator placeholder and fetches a {@link ViewElement} that replaces the LazyLoadBox element when successfully loaded. Best to be used with {@link LoadingIndicator}. <p> In difference to BackendRequestAction, this one always makes a GET request to the given URL and does not disable user input. It is applicable for fetching informational data that is not mandatory. The request response must be a {@link ViewElement}",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "LazyLoadBox"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "children": {
+      "description": "Children in this view",
+      "type": "array",
+      "items": {
+        "$ref": "viewelement.json"
+      }
+    },
+    "url": {
+      "type": "string"
+    },
+    "errorView": {
+      "$ref": "viewelement.json"
+    }
+  },
+  "required": [
+    "type",
+    "url"
+  ]
+}

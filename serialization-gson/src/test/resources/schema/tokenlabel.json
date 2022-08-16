@@ -1,0 +1,48 @@
+{
+  "title": "TokenLabel",
+  "description": "Label showing a token name and balance formatted. The label is clickable with a default TokenInformationAction if no other action is set",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "TokenLabel"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "tokenId": {
+      "description": "TokenId to show details for",
+      "type": "string"
+    },
+    "tokenName": {
+      "description": "Token display name shown if not known by application",
+      "type": "string"
+    },
+    "decimals": {
+      "description": "Decimals amount is formatted with if not known by application",
+      "type": "integer"
+    },
+    "amount": {
+      "description": "Amount to show",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "type",
+    "tokenId",
+    "amount",
+    "decimals"
+  ]
+}

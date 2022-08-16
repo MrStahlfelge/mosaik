@@ -1,0 +1,21 @@
+{
+  "appVersion": %APPVERSION%,
+  "action": {
+    "type": "ChangeSiteAction",
+    "id": "1f7ec63b-5c62-4197-bdde-3202fb7f77c6",
+    "newContent": {
+      "view": {
+        "type": "Box",
+        "children": [
+          {
+            "type": "IntegerInputField",
+            "id": "input",
+            "placeholder": "Number",
+            "value": "String not allowed"
+          }
+        ],
+        "id": "invalidInitialValue"
+      }
+    }
+  }
+}
