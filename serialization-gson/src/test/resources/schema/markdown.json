@@ -1,0 +1,36 @@
+{
+  "title": "MarkDown",
+  "description": "shows markdown content - supported features depend on Mosaik executor",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "MarkDown"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "content": {
+      "type": "string"
+    },
+    "contentAlignment": {
+      "$ref": "halignment.json"
+    }
+  },
+  "required": [
+    "type",
+    "content"
+  ]
+}

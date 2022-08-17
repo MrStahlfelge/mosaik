@@ -80,6 +80,9 @@
         "$ref": "qrcode.json"
     },
     {
+        "$ref": "markdown.json"
+    },
+    {
       "$ref": "card.json"
     },
     {

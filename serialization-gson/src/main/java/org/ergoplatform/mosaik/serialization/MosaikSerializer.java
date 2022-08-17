@@ -16,6 +16,7 @@ import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
+import org.ergoplatform.mosaik.model.ui.MarkDown;
 import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.CheckboxLabel;
@@ -147,7 +148,8 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(LazyLoadBox.class, new LazyLoadBoxSerializer());
         gsonBuilder.registerTypeAdapter(Icon.class, new IconSerializer());
         gsonBuilder.registerTypeAdapter(Image.class, new ImageSerializer());
-        gsonBuilder.registerTypeAdapter(QrCode.class, new QrCodeSerializer());
+        gsonBuilder.registerTypeAdapter(QrCode.class, new StringContentSerializer<>(QrCode.class));
+        gsonBuilder.registerTypeAdapter(MarkDown.class, new StringContentSerializer<>(MarkDown.class));
         gsonBuilder.registerTypeAdapter(HorizontalRule.class, new HorizontalRuleSerializer());
         gsonBuilder.registerTypeAdapter(DropDownList.class, new DropDownListSerializer());
 

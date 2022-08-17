@@ -13,6 +13,7 @@ import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.Image;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator;
+import org.ergoplatform.mosaik.model.ui.MarkDown;
 import org.ergoplatform.mosaik.model.ui.QrCode;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.CheckboxLabel;
@@ -144,6 +145,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "QrCode":
                 clazz = QrCode.class;
+                break;
+            case "MarkDown":
+                clazz = MarkDown.class;
                 break;
             case "Icon":
                 clazz = Icon.class;

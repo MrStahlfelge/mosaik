@@ -8,12 +8,14 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
- * shows a QR code
+ * shows markdown content - supported features depend on Mosaik executor
  */
 @Since(1)
-public class QrCode extends ViewElement implements StringContentElement {
+public class MarkDown extends ViewElement implements StringContentElement {
     @Nonnull
     String content = "";
+    @Nonnull
+    private HAlignment contentAlignment = HAlignment.START;
 
     @Nonnull
     @Override
@@ -29,13 +31,12 @@ public class QrCode extends ViewElement implements StringContentElement {
     @Nonnull
     @Override
     public HAlignment getContentAlignment() {
-        // QrCode has no real alignment, but we return START here so that the serializers omit the field
-        return HAlignment.START;
+        return contentAlignment;
     }
 
     @Override
     public void setContentAlignment(@Nonnull HAlignment contentAlignment) {
-        throw new UnsupportedOperationException("setContentAlignment not supported for QrCode");
+        this.contentAlignment = contentAlignment;
     }
 
     @Override
@@ -43,12 +44,12 @@ public class QrCode extends ViewElement implements StringContentElement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        QrCode qrCode = (QrCode) o;
-        return Objects.equals(getContent(), qrCode.getContent());
+        MarkDown that = (MarkDown) o;
+        return Objects.equals(getContent(), that.getContent()) && getContentAlignment() == that.getContentAlignment();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getContent());
+        return Objects.hash(super.hashCode(), getContent(), getContentAlignment());
     }
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.ergoplatform.mosaik.model.ui.ForegroundColor;
 import org.ergoplatform.mosaik.model.ui.Icon;
 import org.ergoplatform.mosaik.model.ui.LazyLoadBox;
+import org.ergoplatform.mosaik.model.ui.StringContentElement;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.InputElement;
 import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
@@ -167,7 +168,7 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
                 return null;
         }
         if (value instanceof ErgoAddressLabel && propertyName.equals("truncationType")) {
-                return null;
+            return null;
         }
         if (value instanceof ErgAmountLabel) {
             ErgAmountLabel label = (ErgAmountLabel) value;
@@ -198,6 +199,10 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         }
         if (value instanceof StyleableInputButton && propertyName.equals("style")
                 && ((StyleableInputButton) value).getStyle() == StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY) {
+            return null;
+        }
+        if (value instanceof StringContentElement && propertyName.equals("contentAlignment")
+                && ((StringContentElement) value).getContentAlignment() == HAlignment.START) {
             return null;
         }
 

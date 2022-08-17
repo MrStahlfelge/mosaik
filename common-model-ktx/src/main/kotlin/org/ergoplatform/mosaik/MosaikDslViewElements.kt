@@ -118,6 +118,17 @@ fun <G : ViewGroup> G.qrCode(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.markDown(
+    content: String,
+    alignment: HAlignment? = null,
+    init: (@MosaikDsl MarkDown).() -> Unit = {}
+): MarkDown =
+    viewElement(MarkDown().apply {
+        this.content = content
+        alignment?.let { this.contentAlignment = alignment }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.icon(
     iconType: IconType,
     size: Icon.Size? = null,

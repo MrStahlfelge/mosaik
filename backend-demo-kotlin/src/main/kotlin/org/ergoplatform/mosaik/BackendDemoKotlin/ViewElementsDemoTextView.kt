@@ -135,7 +135,7 @@ object ViewElementsDemoTextView {
 
             card(Padding.DEFAULT) {
                 column(Padding.DEFAULT) {
-                    label("MarkupLabel", style = LabelStyle.HEADLINE2)
+                    label("MarkDown label", style = LabelStyle.HEADLINE2)
 
                     label(
                         "Shows (some) formatted text elements."
@@ -143,7 +143,14 @@ object ViewElementsDemoTextView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    markDown("""
+                        ## Test
+                                                
+                        * List 1
+                        * List 2
+                        
+                        And a [link to the repo](https://github.com/MrStahlfelge/mosaik)
+                    """.trimIndent(), alignment = HAlignment.CENTER)
                 }
             }
 
