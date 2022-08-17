@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
+
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -7,6 +9,7 @@ import javax.annotation.Nullable;
 /**
  * shows a QR code
  */
+@Since(1)
 public class QrCode extends ViewElement {
     @Nullable String content;
 

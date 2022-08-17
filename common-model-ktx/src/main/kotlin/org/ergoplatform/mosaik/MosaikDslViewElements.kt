@@ -109,6 +109,15 @@ fun <G : ViewGroup> G.image(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.qrCode(
+    content: String,
+    init: (@MosaikDsl QrCode).() -> Unit = {}
+): QrCode =
+    viewElement(QrCode().apply {
+        this.content = content
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.icon(
     iconType: IconType,
     size: Icon.Size? = null,

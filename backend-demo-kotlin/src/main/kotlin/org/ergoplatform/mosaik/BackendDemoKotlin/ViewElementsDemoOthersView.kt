@@ -117,7 +117,7 @@ object ViewElementsDemoOthersView {
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    qrCode("This is any content string")
 
                 }
             }

@@ -1,0 +1,33 @@
+{
+  "title": "QrCode",
+  "description": "shows a QR code",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "QrCode"
+    },
+    "id": {
+      "description": "The unique identifier for the element. Optional.",
+      "type": "string"
+    },
+    "onLongPress": {
+      "description": "Action to be started when long press is performed",
+      "type": "string"
+    },
+    "onClick": {
+      "description": "Action to be started when click or tap is performed",
+      "type": "string"
+    },
+    "visible": {
+      "description": "Visibility of this object. Optional, defaults to true",
+      "type": "boolean"
+    },
+    "content": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "content"
+  ]
+}
