@@ -151,6 +151,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is Image -> {
             MosaikImage(treeElement, newModifier)
         }
+
+        is QrCode -> MosaikQrCode(treeElement, newModifier)
+
         is StyleableInputButton<*> -> {
             MosaikInputButton(treeElement, newModifier)
         }
@@ -213,6 +216,23 @@ fun MosaikInputButton(treeElement: TreeElement, modifier: Modifier) {
                 else if (element.style == StyleableInputButton.InputButtonStyle.ICON_PRIMARY) ForegroundColor.PRIMARY
                 else ForegroundColor.DEFAULT
             )
+        )
+    }
+}
+
+@Composable
+fun MosaikQrCode(treeElement: TreeElement, modifier: Modifier) {
+    val element = treeElement.element as QrCode
+
+    MosaikComposeConfig.convertQrCodeContentToImageBitmap?.let { convertMethod ->
+        val qrCodeImage = remember(treeElement.createdAtContentVersion) {
+            convertMethod(element.content)
+        }
+
+        Image(
+            qrCodeImage,
+            null,
+            modifier.size(MosaikComposeConfig.qrCodeSize)
         )
     }
 }

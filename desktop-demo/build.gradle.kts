@@ -4,8 +4,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {
@@ -15,6 +15,12 @@ dependencies {
 
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
+
+    // Qr Code generation
+    arrayOf("core","kotlin").forEach()
+    { implementation("org.boofcv:boofcv-$it:0.40.1") {
+        exclude("org.boofcv", "boofcv-swing")
+    } }
 }
 
 compose.desktop {

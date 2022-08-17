@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import boofcv.alg.fiducial.qrcode.QrCodeEncoder
+import boofcv.alg.fiducial.qrcode.QrCodeGeneratorImage
+import boofcv.kotlin.asBufferedImage
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import org.ergoplatform.mosaik.model.MosaikContext
@@ -47,6 +51,11 @@ fun main() {
         MosaikLogger.logger = MosaikLogger.DefaultLogger
         MosaikComposeConfig.convertByteArrayToImageBitmap =
             { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
+        MosaikComposeConfig.convertQrCodeContentToImageBitmap = { text ->
+            val qr = QrCodeEncoder().addAutomatic(text).fixate()
+            val generator = QrCodeGeneratorImage(15).render(qr)
+            generator.gray.asBufferedImage().toComposeImageBitmap()
+        }
         MosaikComposeConfig.interceptReturnForImeAction = true
 
         val json = this.javaClass.getResource("/default_tree.json")!!.readText()

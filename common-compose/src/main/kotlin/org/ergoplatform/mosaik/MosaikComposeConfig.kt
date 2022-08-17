@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.dp
 
 object MosaikComposeConfig {
 
@@ -20,6 +21,16 @@ object MosaikComposeConfig {
      * mandatory to set, how to convert a bitmap into a ByteArray
      */
     lateinit var convertByteArrayToImageBitmap: (ByteArray) -> ImageBitmap
+
+    /**
+     * need to be set for [QrCode] to display
+     */
+    var convertQrCodeContentToImageBitmap: ((String) -> ImageBitmap)? = null
+
+    /**
+     * size to display the image element containing the qr code
+     */
+    var qrCodeSize = 400.dp
 
     /**
      * set the scroll bar alpha value when no scrolling is performed
