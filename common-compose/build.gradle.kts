@@ -19,6 +19,7 @@ publishing {
 
 dependencies {
     api(project(":common-runtime"))
+    api("org.jetbrains:markdown-jvm:0.3.1")
 
     api(compose.runtime)
     api(compose.foundation)

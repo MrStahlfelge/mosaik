@@ -160,6 +160,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is HorizontalRule -> {
             MosaikHorizontalRule(treeElement, newModifier)
         }
+
+        is MarkDown -> MosaikMarkDown(treeElement, newModifier)
+
         else -> {
             Text("Unsupported view element: ${element.javaClass.simpleName}", newModifier)
         }
@@ -555,12 +558,7 @@ private fun MosaikButton(
             Text(
                 element.text ?: "",
                 maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
-                textAlign = (when (element.textAlignment) {
-                    HAlignment.START -> TextAlign.Start
-                    HAlignment.CENTER -> TextAlign.Center
-                    HAlignment.END -> TextAlign.End
-                    HAlignment.JUSTIFY -> TextAlign.Justify
-                }),
+                textAlign = element.textAlignment.toTextAlign(),
                 color = if (element.isEnabled) textButtonTextColor else textButtonColorDisabled,
                 overflow = TextOverflow.Ellipsis,
                 style = labelStyle(LabelStyle.BODY2BOLD),
@@ -576,12 +574,7 @@ private fun MosaikButton(
             Text(
                 element.text ?: "",
                 maxLines = if (element.maxLines <= 0) Int.MAX_VALUE else element.maxLines,
-                textAlign = (when (element.textAlignment) {
-                    HAlignment.START -> TextAlign.Start
-                    HAlignment.CENTER -> TextAlign.Center
-                    HAlignment.END -> TextAlign.End
-                    HAlignment.JUSTIFY -> TextAlign.Justify
-                }),
+                textAlign = element.textAlignment.toTextAlign(),
                 overflow = TextOverflow.Ellipsis,
             )
         }
@@ -667,12 +660,7 @@ private fun MosaikLabel(
             MiddleEllipsisText(
                 text,
                 newModifier,
-                textAlign = (when (element.textAlignment) {
-                    HAlignment.START -> TextAlign.Start
-                    HAlignment.CENTER -> TextAlign.Center
-                    HAlignment.END -> TextAlign.End
-                    HAlignment.JUSTIFY -> TextAlign.Justify
-                }),
+                textAlign = element.textAlignment.toTextAlign(),
                 style = labelStyle(element.style),
                 color = foregroundColor(element.textColor)
             )
@@ -689,12 +677,7 @@ private fun MosaikLabel(
                 text,
                 newModifier,
                 maxLines = if (maxLines <= 0) Int.MAX_VALUE else maxLines,
-                textAlign = (when (element.textAlignment) {
-                    HAlignment.START -> TextAlign.Start
-                    HAlignment.CENTER -> TextAlign.Center
-                    HAlignment.END -> TextAlign.End
-                    HAlignment.JUSTIFY -> TextAlign.Justify
-                }),
+                textAlign = element.textAlignment.toTextAlign(),
                 overflow = TextOverflow.Ellipsis,
                 style = labelStyle(element.style),
                 color = foregroundColor(element.textColor)
@@ -831,6 +814,14 @@ private fun Padding.toCompose(): Dp =
         Padding.DEFAULT -> 16.dp
         Padding.ONE_AND_A_HALF_DEFAULT -> 24.dp
         Padding.TWICE -> 32.dp
+    }
+
+fun HAlignment.toTextAlign(): TextAlign =
+    when (this) {
+        HAlignment.START -> TextAlign.Start
+        HAlignment.CENTER -> TextAlign.Center
+        HAlignment.END -> TextAlign.End
+        HAlignment.JUSTIFY -> TextAlign.Justify
     }
 
 var labelStyle: (LabelStyle) -> TextStyle = { labelStyle ->
