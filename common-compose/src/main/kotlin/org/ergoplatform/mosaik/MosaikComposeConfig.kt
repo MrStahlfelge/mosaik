@@ -25,7 +25,7 @@ object MosaikComposeConfig {
     /**
      * need to be set for [QrCode] to display
      */
-    var convertQrCodeContentToImageBitmap: ((String) -> ImageBitmap)? = null
+    var convertQrCodeContentToImageBitmap: ((String) -> ImageBitmap?)? = null
 
     /**
      * size to display the image element containing the qr code

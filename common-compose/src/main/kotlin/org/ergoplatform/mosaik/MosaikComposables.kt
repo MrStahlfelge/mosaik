@@ -232,11 +232,13 @@ fun MosaikQrCode(treeElement: TreeElement, modifier: Modifier) {
             convertMethod(element.content)
         }
 
-        Image(
-            qrCodeImage,
-            null,
-            modifier.size(MosaikComposeConfig.qrCodeSize)
-        )
+        qrCodeImage?.let {
+            Image(
+                qrCodeImage,
+                null,
+                modifier.width(MosaikComposeConfig.qrCodeSize)
+            )
+        }
     }
 }
 
