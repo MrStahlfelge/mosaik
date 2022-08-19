@@ -173,8 +173,10 @@ object ViewElementsDemoInputView {
                     if (mosaikContext.mosaikVersion >= 1)
                         checkboxLabel(
                             "checkboxLabel",
-                            "Check this to confirm something",
-                        )
+                            "Check this to confirm something, label can be very long and might\nbreak to another line",
+                        ) {
+                            textColor = ForegroundColor.PRIMARY
+                        }
                     else
                         needHigherMosaikVersionLabel(1)
                 }
