@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import org.ergoplatform.mosaik.model.ui.MarkDown
-import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.MarkdownElementTypes
@@ -50,25 +49,37 @@ fun MosaikMarkDown(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as MarkDown
     val content = element.content
 
+    MarkDown(
+        content,
+        modifier,
+        textAlign = element.contentAlignment.toTextAlign(),
+        openUriMethod = treeElement.viewTree.mosaikRuntime::openBrowser,
+    )
+}
+
+@Composable
+fun MarkDown(
+    content: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start,
+    openUriMethod: ((String) -> Unit)? = null
+) {
     CompositionLocalProvider(LocalUriHandler provides object : UriHandler {
         override fun openUri(uri: String) {
-            treeElement.viewTree.mosaikRuntime.openBrowser(uri)
+            openUriMethod?.invoke(uri)
         }
     }) {
         Column(
             modifier,
-            horizontalAlignment = when (element.contentAlignment) {
-                HAlignment.START -> Alignment.Start
-                HAlignment.CENTER -> Alignment.CenterHorizontally
-                HAlignment.END -> Alignment.End
-                HAlignment.JUSTIFY -> Alignment.Start
+            horizontalAlignment = when (textAlign) {
+                TextAlign.Center -> Alignment.CenterHorizontally
+                TextAlign.End, TextAlign.Right -> Alignment.End
+                else -> Alignment.Start
             }
         ) {
-            val parsedTree = remember(treeElement.createdAtContentVersion) {
+            val parsedTree = remember(content) {
                 MarkdownParser(GFMFlavourDescriptor()).buildMarkdownTreeFromString(content)
             }
-
-            val textAlign = element.contentAlignment.toTextAlign()
 
             CompositionLocalProvider(LocalReferenceLinkHandler provides ReferenceLinkHandlerImpl()) {
                 parsedTree.children.forEach { node ->
