@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.Padding
@@ -8,7 +9,7 @@ import org.ergoplatform.mosaik.model.ui.text.Button
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
 object ViewElementsDemoTextView {
-    fun getView() = mosaikView {
+    fun getView(mosaikContext: MosaikContext) = mosaikView {
         column {
 
             // example for reusing parts of views - see ViewElementsDemoCommon.kt for source
@@ -143,14 +144,19 @@ object ViewElementsDemoTextView {
 
                     box(Padding.DEFAULT)
 
-                    markDown("""
+                    if (mosaikContext.mosaikVersion >= 1) {
+                        markDown(
+                            """
                         ## Test
                                                 
                         * List 1
                         * List 2
                         
                         And a [link to the repo](https://github.com/MrStahlfelge/mosaik)
-                    """.trimIndent(), alignment = HAlignment.CENTER)
+                        """.trimIndent(), alignment = HAlignment.CENTER
+                        )
+                    } else
+                        needHigherMosaikVersionLabel(1)
                 }
             }
 

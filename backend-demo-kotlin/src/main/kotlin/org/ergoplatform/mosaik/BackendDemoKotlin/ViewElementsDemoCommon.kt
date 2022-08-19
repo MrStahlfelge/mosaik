@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.model.ui.ViewGroup
 import org.ergoplatform.mosaik.model.ui.layout.Column
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.VAlignment
@@ -25,3 +26,5 @@ fun @MosaikDsl Column.addHeader(title: String) {
     }
 }
 
+fun <G : ViewGroup> G.needHigherMosaikVersionLabel(versionNeeded: Int) =
+    label("Your Mosaik executor does not support this element (version $versionNeeded needed)")

@@ -1,13 +1,11 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -60,6 +58,8 @@ class ViewElementsDemoController {
 
         }
 
+    fun Map<String, String>.toContext() = MosaikSerializer.fromContextHeadersMap(this)
+
     // the following are the defined responses for backend requests
     // Since they are constant, a backend request wouldn't be necessary, but is done
     // here to demonstrate the implementation
@@ -71,15 +71,15 @@ class ViewElementsDemoController {
     )
 
     @PostMapping("/viewelements/textelementview")
-    fun changeToTextElementView() = backendResponse(
+    fun changeToTextElementView(@RequestHeader headers: Map<String, String>) = backendResponse(
         APP_VERSION,
-        changeView(ViewElementsDemoTextView.getView())
+        changeView(ViewElementsDemoTextView.getView(headers.toContext()))
     )
 
     @PostMapping("/viewelements/inputelementview")
-    fun changeToInputElementView() = backendResponse(
+    fun changeToInputElementView(@RequestHeader headers: Map<String, String>) = backendResponse(
         APP_VERSION,
-        changeView(ViewElementsDemoInputView.getView())
+        changeView(ViewElementsDemoInputView.getView(headers.toContext()))
     )
 
     @PostMapping("/viewelements/otherelementview")

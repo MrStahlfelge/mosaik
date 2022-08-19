@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
 import org.ergoplatform.mosaik.model.ui.IconType
 import org.ergoplatform.mosaik.model.ui.input.StyleableInputButton
@@ -9,7 +10,7 @@ import org.ergoplatform.mosaik.model.ui.layout.VAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
 object ViewElementsDemoInputView {
-    fun getView() = mosaikView {
+    fun getView(mosaikContext: MosaikContext) = mosaikView {
         column {
 
             // example for reusing parts of views - see ViewElementsDemoCommon.kt for source
@@ -131,7 +132,11 @@ object ViewElementsDemoInputView {
                         "FiatOrErgAmountInputField is like ErgAmountInputField, but users can input amounts in their " +
                                 "preferred fiat currency and it gets automatically converted into nanoERG."
                     )
-                    ergAmountInputField("fiatOrErgAmountInput", "Fiat or ERG amount", canUseFiatInput = true) {
+                    ergAmountInputField(
+                        "fiatOrErgAmountInput",
+                        "Fiat or ERG amount",
+                        canUseFiatInput = true
+                    ) {
                         minValue = 1000L * 1000L * 1000L
                         value = minValue
                     }
@@ -165,10 +170,13 @@ object ViewElementsDemoInputView {
                         "A label with a checkbox the user can select."
                     )
 
-                    checkboxLabel(
-                        "checkboxLabel",
-                        "Check this to confirm something",
-                    )
+                    if (mosaikContext.mosaikVersion >= 1)
+                        checkboxLabel(
+                            "checkboxLabel",
+                            "Check this to confirm something",
+                        )
+                    else
+                        needHigherMosaikVersionLabel(1)
                 }
             }
 
@@ -186,7 +194,10 @@ object ViewElementsDemoInputView {
                     box(Padding.DEFAULT)
 
                     ergoWalletChooser("walletAddresses")
-                    ergoWalletChooser("walletAddresses2", style = StyleableInputButton.InputButtonStyle.ICON_SECONDARY)
+                    ergoWalletChooser(
+                        "walletAddresses2",
+                        style = StyleableInputButton.InputButtonStyle.ICON_SECONDARY
+                    )
                 }
             }
 
@@ -202,7 +213,10 @@ object ViewElementsDemoInputView {
                     box(Padding.DEFAULT)
 
                     ergoAddressChooser("ergoAddress")
-                    ergoAddressChooser("ergoAddress2", style = StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY)
+                    ergoAddressChooser(
+                        "ergoAddress2",
+                        style = StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY
+                    )
                 }
             }
 
