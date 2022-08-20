@@ -152,7 +152,13 @@ object ViewElementsDemoTextView {
                         * List 1
                         * List 2
                         
-                        And a [link to the repo](https://github.com/MrStahlfelge/mosaik)
+                        And a [link to the repo](https://github.com/MrStahlfelge/mosaik), **bold** text, 
+                        _italic_ text, and a link to www.ergoplatform.com
+                        
+                        Some special chars: < > " ' & and `code`
+                        
+                        1. List 1
+                        2. List 2
                         """.trimIndent(), alignment = HAlignment.CENTER
                         )
                     } else
