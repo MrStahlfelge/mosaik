@@ -83,8 +83,11 @@ abstract class MosaikRuntime(
     var appManifest: MosaikManifest? = null
         private set
     private val _appUrlStack = LinkedList<UrlHistoryEntry>()
-    val appUrlHistory: List<String> get() = _appUrlStack.map { it.url }
-    val appUrl: String? get() = if (_appUrlStack.isNotEmpty()) appUrlHistory.first() else null
+    val appUrlHistory: List<String>
+        get() = synchronized(_appUrlStack) {
+            _appUrlStack.toMutableList().map { it.url }
+        }
+    val appUrl: String? get() = appUrlHistory.firstOrNull()
 
     fun runAction(actionId: String) {
         viewTree.getAction(actionId)?.let { runAction(it) }
@@ -261,7 +264,9 @@ abstract class MosaikRuntime(
 
     private fun navigatedTo(urlHistoryEntry: UrlHistoryEntry, manifest: MosaikManifest) {
         if (appUrl != urlHistoryEntry.url)
-            _appUrlStack.addFirst(urlHistoryEntry)
+            synchronized(_appUrlStack) {
+                _appUrlStack.addFirst(urlHistoryEntry)
+            }
         appLoaded?.invoke(manifest)
     }
 
@@ -271,9 +276,11 @@ abstract class MosaikRuntime(
      */
     open fun navigateBack(): Boolean {
         return if (canNavigateBack()) {
-            _appUrlStack.remove()
-            val lastApp = _appUrlStack.first
-            loadMosaikApp(lastApp.url, lastApp.referrer)
+            synchronized(_appUrlStack) {
+                _appUrlStack.remove()
+                val lastApp = _appUrlStack.first
+                loadMosaikApp(lastApp.url, lastApp.referrer)
+            }
             true
         } else
             false

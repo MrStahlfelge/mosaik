@@ -93,7 +93,7 @@ open class OkHttpBackendConnector(
         return try {
             serializer.fetchActionResponseFromJson(json)
         } catch (t: Throwable) {
-            throw IllegalArgumentException("Could not parse FetchActionResonse:\n${t.message}", t)
+            throw IllegalArgumentException("Could not parse FetchActionResponse:\n${t.message}", t)
         }
     }
 
