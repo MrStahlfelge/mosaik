@@ -164,10 +164,12 @@ fun ViewContent.copyToClipboard(
 fun ViewContent.backendRequest(
     url: String,
     id: String? = null,
+    postValues: BackendRequestAction.PostValueType = BackendRequestAction.PostValueType.ALL,
     init: (@MosaikDsl BackendRequestAction).() -> Unit = {}
 ): BackendRequestAction {
     val backendRequestAction = BackendRequestAction()
     backendRequestAction.url = url
+    backendRequestAction.postValues = postValues
 
     return addAction(backendRequestAction, id, init)
 }
