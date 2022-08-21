@@ -88,9 +88,12 @@ fun ViewContent.invokeErgoPay(
 fun invokeErgoPay(
     url: String,
     id: String? = null,
+    onFinishedAction: Action,
     init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
 ): ErgoPayAction {
-    return initAction(buildErgoPayAction(url), id, init)
+    return initAction(buildErgoPayAction(url).apply {
+        onFinished = onFinishedAction.id
+    }, id, init)
 }
 
 private fun buildErgoPayAction(url: String): ErgoPayAction {
