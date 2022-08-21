@@ -194,7 +194,7 @@ fun MosaikInputButton(treeElement: TreeElement, modifier: Modifier) {
 
             Button(
                 onClick = treeElement::clicked,
-                modifier = modifier.width(96.dp * 3),
+                modifier = modifier.widthIn(min = 96.dp * 2, max = 96.dp * 3),
                 colors = when (element.style) {
                     StyleableInputButton.InputButtonStyle.BUTTON_PRIMARY -> Button.ButtonStyle.PRIMARY
                     StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY -> Button.ButtonStyle.SECONDARY
