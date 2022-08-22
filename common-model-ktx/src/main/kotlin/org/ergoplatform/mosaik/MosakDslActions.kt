@@ -75,12 +75,12 @@ fun ViewContent.navigateToApp(
 @MosaikDsl
 fun ViewContent.invokeErgoPay(
     url: String,
-    onFinishedAction: Action,
+    onFinishedAction: Action? = null,
     id: String? = null,
     init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
 ): ErgoPayAction {
     return addAction(buildErgoPayAction(url).apply {
-        onFinished = onFinishedAction.id
+        onFinished = onFinishedAction?.id
     }, id, init)
 }
 
@@ -88,11 +88,11 @@ fun ViewContent.invokeErgoPay(
 fun invokeErgoPay(
     url: String,
     id: String? = null,
-    onFinishedAction: Action,
+    onFinishedAction: Action? = null,
     init: (@MosaikDsl ErgoPayAction).() -> Unit = {}
 ): ErgoPayAction {
     return initAction(buildErgoPayAction(url).apply {
-        onFinished = onFinishedAction.id
+        onFinished = onFinishedAction?.id
     }, id, init)
 }
 
