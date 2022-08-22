@@ -89,11 +89,11 @@ public class DialogAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DialogAction that = (DialogAction) o;
-        return Objects.equals(getMessage(), that.getMessage()) && Objects.equals(getPositiveButtonText(), that.getPositiveButtonText()) && Objects.equals(getNegativeButtonText(), that.getNegativeButtonText()) && Objects.equals(getOnPositiveButtonClicked(), that.getOnPositiveButtonClicked()) && Objects.equals(getOnNegativeButtonClicked(), that.getOnNegativeButtonClicked());
+        return Objects.equals(getMessage(), that.getMessage()) && Objects.equals(getPositiveButtonText(), that.getPositiveButtonText()) && Objects.equals(getNegativeButtonText(), that.getNegativeButtonText()) && Objects.equals(getOnPositiveButtonClicked(), that.getOnPositiveButtonClicked()) && Objects.equals(getOnNegativeButtonClicked(), that.getOnNegativeButtonClicked()) && getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMessage(), getPositiveButtonText(), getNegativeButtonText(), getOnPositiveButtonClicked(), getOnNegativeButtonClicked());
+        return Objects.hash(getMessage(), getPositiveButtonText(), getNegativeButtonText(), getOnPositiveButtonClicked(), getOnNegativeButtonClicked(), getId());
     }
 }

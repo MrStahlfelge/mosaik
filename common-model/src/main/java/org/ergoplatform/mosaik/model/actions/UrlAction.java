@@ -42,11 +42,11 @@ public abstract class UrlAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UrlAction urlAction = (UrlAction) o;
-        return Objects.equals(getUrl(), urlAction.getUrl());
+        return Objects.equals(getUrl(), urlAction.getUrl()) && getId().equals(urlAction.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUrl());
+        return Objects.hash(getUrl(), getId());
     }
 }

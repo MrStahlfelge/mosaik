@@ -48,11 +48,11 @@ public class CopyClipboardAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CopyClipboardAction that = (CopyClipboardAction) o;
-        return Objects.equals(getText(), that.getText());
+        return Objects.equals(getText(), that.getText()) && getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getText());
+        return Objects.hash(getText(), getId());
     }
 }

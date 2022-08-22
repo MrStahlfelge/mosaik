@@ -54,11 +54,11 @@ public class ChangeSiteAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChangeSiteAction that = (ChangeSiteAction) o;
-        return Objects.equals(getNewContent(), that.getNewContent());
+        return Objects.equals(getNewContent(), that.getNewContent()) && getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNewContent());
+        return Objects.hash(getNewContent(), getId());
     }
 }

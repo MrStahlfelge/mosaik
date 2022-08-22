@@ -49,11 +49,11 @@ public class TokenInformationAction implements Action {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TokenInformationAction that = (TokenInformationAction) o;
-        return Objects.equals(getTokenId(), that.getTokenId());
+        return Objects.equals(getTokenId(), that.getTokenId()) && getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTokenId());
+        return Objects.hash(getTokenId(), getId());
     }
 }
