@@ -23,6 +23,8 @@ public class DropDownList extends ViewElement implements OptionalInputElement<St
     @Nonnull
     private Map<String, String> entries = new HashMap<>();
     private boolean mandatory = true;
+    @Nullable
+    private String placeholder;
 
     @Override
     @Nullable
@@ -54,6 +56,15 @@ public class DropDownList extends ViewElement implements OptionalInputElement<St
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Nullable
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(@Nullable String placeholder) {
+        this.placeholder = placeholder;
     }
 
     @Nonnull

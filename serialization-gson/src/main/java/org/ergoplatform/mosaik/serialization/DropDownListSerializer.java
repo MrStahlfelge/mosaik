@@ -23,6 +23,7 @@ public class DropDownListSerializer implements JsonSerializer<DropDownList>, Jso
     public static final String KEY_ON_VALUE_CHANGED = "onValueChanged";
     public static final String KEY_MANDATORY = "mandatory";
     public static final String KEY_ENTRIES = "entries";
+    public static final String KEY_PLACEHOLDER = "placeholder";
 
     @Override
     public JsonElement serialize(DropDownList src, Type typeOfSrc, JsonSerializationContext context) {
@@ -39,6 +40,9 @@ public class DropDownListSerializer implements JsonSerializer<DropDownList>, Jso
         }
         if (!src.isMandatory()) {
             jsonObject.add(KEY_MANDATORY, context.serialize(src.isMandatory()));
+        }
+        if (src.getPlaceholder() != null) {
+            jsonObject.add(KEY_PLACEHOLDER, context.serialize(src.getPlaceholder()));
         }
         jsonObject.add(KEY_ENTRIES, context.serialize(src.getEntries()));
 
@@ -63,6 +67,9 @@ public class DropDownListSerializer implements JsonSerializer<DropDownList>, Jso
         }
         if (jsonObject.has(KEY_MANDATORY)) {
             dropDownList.setMandatory(jsonObject.get(KEY_MANDATORY).getAsBoolean());
+        }
+        if (jsonObject.has(KEY_PLACEHOLDER)) {
+            dropDownList.setPlaceholder(jsonObject.get(KEY_PLACEHOLDER).getAsString());
         }
         dropDownList.setEntries(context.<Map>deserialize(jsonObject.get(KEY_ENTRIES), HashMap.class));
 
