@@ -534,10 +534,12 @@ private fun getTextFieldStateForElement(treeElement: TreeElement) =
     // keep everything the user entered, as long as the [ViewTree] is not changed
     remember(treeElement.createdAtContentVersion) {
         val currentValue = treeElement.currentValueAsString
+        val selectAll =
+            (treeElement.element as? TextField<*>)?.let { !it.isReadOnly && it.isEnabled } ?: false
         mutableStateOf(
             TextFieldValue(
                 currentValue,
-                selection = TextRange(0, currentValue.length)
+                selection = TextRange(0, if (selectAll) currentValue.length else 0)
             )
         )
     }
