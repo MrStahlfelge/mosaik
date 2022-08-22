@@ -494,8 +494,8 @@ fun MosaikTextField(
                 ),
                 readOnly = element.isReadOnly,
                 label = { element.placeholder?.let { Text(it) } },
-                trailingIcon = {
-                    element.endIcon?.getImageVector()?.let { iv ->
+                trailingIcon = element.endIcon?.getImageVector()?.let { iv ->
+                    {
                         val icon = @Composable { Icon(iv, null) }
 
                         if (element.onEndIconClicked != null)
