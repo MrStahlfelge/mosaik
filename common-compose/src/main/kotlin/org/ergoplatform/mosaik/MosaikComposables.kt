@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -55,7 +56,10 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
             // the view root should be scrollable if it is a column, otherwise it will fill
             // the max height
             val scrollable = viewTreeRoot.element is Column
-            val scrollState = rememberScrollState()
+            val scrollState =
+                rememberSaveable(viewTreeRoot.createdAtContentVersion, saver = ScrollState.Saver) {
+                    ScrollState(0)
+                }
             val sizeModifier =
                 if (scrollable && MosaikComposeConfig.VerticalScrollbar != null) {
                     Modifier.fillMaxWidth().verticalScroll(scrollState)
