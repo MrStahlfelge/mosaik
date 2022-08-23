@@ -156,7 +156,7 @@ object ViewElementsDemoInputView {
                         "dropDownList", mapOf(
                             "1" to "First item",
                             "2" to "Second item",
-                            "3" to "Third item",
+                            "3" to "Third item, very long so might ellipsize",
                         ), "2"
                     )
                 }
