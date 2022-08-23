@@ -2,6 +2,7 @@ package org.ergoplatform.mosaik
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -208,6 +209,7 @@ fun MosaikInputButton(treeElement: TreeElement, modifier: Modifier) {
                     StyleableInputButton.InputButtonStyle.BUTTON_SECONDARY -> Button.ButtonStyle.SECONDARY
                     else -> throw IllegalStateException("Unreachable")
                 }.toButtonColors(),
+                shape = RoundedCornerShape(MosaikStyleConfig.buttonShapeRadius),
                 enabled = element.isEnabled
             ) {
                 Text(
@@ -581,6 +583,7 @@ private fun MosaikButton(
             onClick = treeElement::clicked,
             modifier = buttonModifier,
             colors = element.style.toButtonColors(),
+            shape = RoundedCornerShape(MosaikStyleConfig.buttonShapeRadius),
             enabled = element.isEnabled
         ) {
             Text(
@@ -728,7 +731,11 @@ private fun MosaikLabel(
 
 @Composable
 fun MosaikCard(modifier: Modifier, treeElement: TreeElement) {
-    Card(modifier, elevation = 4.dp) {
+    Card(
+        modifier,
+        elevation = 4.dp,
+        shape = RoundedCornerShape(MosaikStyleConfig.cardShapeRadius)
+    ) {
         MosaikBox(Modifier, treeElement)
     }
 }

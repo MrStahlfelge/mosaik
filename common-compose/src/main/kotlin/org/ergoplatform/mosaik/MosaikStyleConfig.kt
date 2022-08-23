@@ -1,6 +1,7 @@
 package org.ergoplatform.mosaik
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 /**
  * Change members to adjust Mosaik style as needed
@@ -16,4 +17,6 @@ object MosaikStyleConfig {
     var textButtonTextColor = primaryLabelColor
     var textButtonColorDisabled = secondaryLabelColor
 
+    var cardShapeRadius = 4.dp
+    var buttonShapeRadius = 4.dp
 }
