@@ -247,8 +247,8 @@ fun main() {
                     )
                 }
 
-                override fun runTokenInformationAction(action: TokenInformationAction) {
-                    openBrowser("https://explorer.ergoplatform.com/en/token/${action.tokenId}")
+                override fun runTokenInformationAction(tokenId: String) {
+                    openBrowser("https://explorer.ergoplatform.com/en/token/$tokenId")
                 }
             }
 

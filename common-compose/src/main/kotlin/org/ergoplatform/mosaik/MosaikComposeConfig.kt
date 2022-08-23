@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import org.ergoplatform.mosaik.model.ui.text.TokenLabel
 
 object MosaikComposeConfig {
 
@@ -58,4 +59,14 @@ object MosaikComposeConfig {
     ) -> Unit
 
     var VerticalScrollbar: @Composable (BoxScope.(ScrollState) -> Unit)? = null
+
+    var TokenLabel: @Composable (
+        properties: TokenLabel,
+        modifier: Modifier,
+        content: @Composable (tokenName: String, decimals: Int, modifier: Modifier) -> Unit
+    ) -> Unit =
+        // default is some kind of no-op implementation
+        { properties, modifier, content ->
+            content(properties.tokenName ?: properties.tokenId, properties.decimals, modifier)
+        }
 }

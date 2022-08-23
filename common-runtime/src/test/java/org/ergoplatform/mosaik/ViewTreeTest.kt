@@ -136,7 +136,7 @@ class ViewTreeTest : TestCase() {
                     get() = false
                     set(value) {}
 
-                override fun runTokenInformationAction(action: TokenInformationAction) {
+                override fun runTokenInformationAction(tokenId: String) {
 
                 }
 

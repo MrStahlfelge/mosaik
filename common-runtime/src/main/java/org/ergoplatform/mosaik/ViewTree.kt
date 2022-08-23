@@ -5,13 +5,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.Action
-import org.ergoplatform.mosaik.model.ui.*
+import org.ergoplatform.mosaik.model.ui.Image
+import org.ergoplatform.mosaik.model.ui.LazyLoadBox
+import org.ergoplatform.mosaik.model.ui.ViewElement
 import org.ergoplatform.mosaik.model.ui.input.ErgoAddressChooseButton
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton
 import org.ergoplatform.mosaik.model.ui.layout.Box
 import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel
+import org.ergoplatform.mosaik.model.ui.text.TokenLabel
 
 /**
  * the complete tree of [ViewElement]'s and is context.
@@ -261,27 +264,38 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     /**
      * called when user clicked or tapped an element
      */
-    fun onItemClicked(element: TreeElement) {
-        when (element.element) {
+    fun onItemClicked(treeElement: TreeElement) {
+        val element = treeElement.element
+        when (element) {
             is ErgoAddressChooseButton -> {
-                element.id?.let { mosaikRuntime.showErgoAddressChooser(it) }
+                treeElement.id?.let { mosaikRuntime.showErgoAddressChooser(it) }
             }
             is WalletChooseButton -> {
-                element.id?.let { mosaikRuntime.showErgoWalletChooser(it) }
+                treeElement.id?.let { mosaikRuntime.showErgoWalletChooser(it) }
             }
-            else -> runActionFromUserInteraction(element.element.onClickAction)
+            is TokenLabel -> {
+                if (element.onClickAction != null)
+                    runActionFromUserInteraction(element.onClickAction)
+                else
+                    mosaikRuntime.runTokenInformationAction(element.tokenId)
+            }
+            else -> runActionFromUserInteraction(element.onClickAction)
         }
     }
 
     /**
      * called when user long pressed an element
      */
-    fun onItemLongClicked(element: TreeElement) {
-        when (element.element) {
+    fun onItemLongClicked(treeElement: TreeElement) {
+        val element = treeElement.element
+        when (element) {
             is ErgoAddressLabel -> {
-                element.element.text?.let { mosaikRuntime.onAddressLongPress(it) }
+                if (element.onLongPressAction == null)
+                    element.text?.let { mosaikRuntime.onAddressLongPress(it) }
+                else
+                    runActionFromUserInteraction(element.onLongPressAction)
             }
-            else -> runActionFromUserInteraction(element.element.onLongPressAction)
+            else -> runActionFromUserInteraction(element.onLongPressAction)
         }
     }
 

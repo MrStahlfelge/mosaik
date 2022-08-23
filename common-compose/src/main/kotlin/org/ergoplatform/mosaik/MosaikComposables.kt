@@ -43,6 +43,7 @@ import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.*
 import org.ergoplatform.mosaik.model.ui.layout.*
 import org.ergoplatform.mosaik.model.ui.text.*
+import java.math.BigDecimal
 
 @Composable
 fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
@@ -128,6 +129,9 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
         is StyleableTextLabel<*> -> {
             MosaikLabel(treeElement, newModifier)
         }
+
+        is TokenLabel -> MosaikTokenLabel(treeElement, newModifier)
+
         is Column -> {
             MosaikColumn(newModifier, treeElement)
         }
@@ -635,6 +639,34 @@ private fun MosaikCheckboxLabel(
         Spacer(Modifier.size(8.dp))
 
         MosaikLabel(treeElement, Modifier)
+    }
+}
+
+@Composable
+private fun MosaikTokenLabel(
+    treeElement: TreeElement,
+    outerModifier: Modifier
+) {
+    val element = treeElement.element as TokenLabel
+
+    MosaikComposeConfig.TokenLabel(element, outerModifier) { tokenName, decimals, modifier ->
+
+        val text = remember(treeElement.createdAtContentVersion, tokenName, decimals) {
+            (element.amount?.let { amount ->
+                BigDecimal(amount).movePointLeft(decimals).toPlainString() + " "
+            } ?: "") + tokenName
+        }
+
+        Text(
+            text,
+            modifier,
+            maxLines = 1,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+            style = labelStyle(element.style),
+            color = foregroundColor(element.textColor)
+        )
+
     }
 }
 
