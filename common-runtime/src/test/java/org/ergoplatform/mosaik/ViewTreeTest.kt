@@ -69,6 +69,14 @@ class ViewTreeTest : TestCase() {
                         }, url)
                     }
 
+                    override fun getAbsoluteUrl(appUrl: String?, url: String): String {
+                        throw UnsupportedOperationException()
+                    }
+
+                    override fun isDynamicImageUrl(absoluteUrl: String): Boolean {
+                        throw UnsupportedOperationException()
+                    }
+
                     override fun fetchAction(
                         url: String,
                         baseUrl: String?,
