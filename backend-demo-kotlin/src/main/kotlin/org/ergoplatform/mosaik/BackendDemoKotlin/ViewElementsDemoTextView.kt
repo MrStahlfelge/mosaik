@@ -105,14 +105,22 @@ object ViewElementsDemoTextView {
                     label("TokenLabel", style = LabelStyle.HEADLINE2)
 
                     label(
-                        "Label showing a token name and balance formatted. The label is " +
+                        "Label showing a token name and optional balance formatted. The label is " +
                                 "clickable which will open detailed token information provided by " +
-                                "the Mosaik executor app. Not styleable. "
+                                "the Mosaik executor app. " +
+                                "It can be decorated or undecorated. The decoration is up to the Mosaik executor, " +
+                                "most will show a verification sign and/or token logos."
                     )
 
                     box(Padding.DEFAULT)
 
-                    label("(Not implemented yet)")
+                    tokenLabel(
+                        "03faf2cb329f2e90d6d23b58d91bbb6c046aa143261cc21f52fbe2824bfcbf04",
+                        "SigUSD",
+                        2000,
+                        2
+                    )
+                    tokenLabel("03faf2cb329f2e90d6d23b58d91bbb6c046aa143261cc21f52fbe2824bfcbf04", "SigUSD")
                 }
             }
 

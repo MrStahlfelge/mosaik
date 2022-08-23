@@ -78,6 +78,27 @@ fun <G : ViewGroup> G.fiatAmount(
     }, init)
 
 @MosaikDsl
+fun <G : ViewGroup> G.tokenLabel(
+    tokenId: String,
+    fallbackName: String?,
+    amount: Long? = null,
+    decimals: Int = 0,
+    style: LabelStyle? = null,
+    textColor: ForegroundColor? = null,
+    decorated: Boolean = true,
+    init: (@MosaikDsl TokenLabel).() -> Unit = {}
+): TokenLabel =
+    viewElement(TokenLabel().apply {
+        this.setTokenId(tokenId)
+        this.tokenName = fallbackName
+        this.amount = amount
+        this.decimals = decimals
+        this.isDecorated = decorated
+        style?.let { this.style = style }
+        textColor?.let { this.textColor = textColor }
+    }, init)
+
+@MosaikDsl
 fun <G : ViewGroup> G.button(
     text: String,
     style: Button.ButtonStyle? = null,
