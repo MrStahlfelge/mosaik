@@ -2,7 +2,6 @@ package org.ergoplatform.mosaik
 
 import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
-import org.ergoplatform.mosaik.model.MosaikApp
 import org.ergoplatform.mosaik.model.MosaikContext
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
@@ -36,7 +35,7 @@ open class OkHttpBackendConnector(
             val mosaikRelLink = checkForMosaikRelTag(json)
             if (mosaikRelLink != null) {
                 // found a mosaik rel tag, so let's load from there
-                return loadMosaikApp(makeAbsoluteUrl(url, mosaikRelLink), referrer)
+                return loadMosaikApp(getAbsoluteUrl(url, mosaikRelLink), referrer)
             }
         }
         return MosaikBackendConnector.AppLoaded(
@@ -80,7 +79,7 @@ open class OkHttpBackendConnector(
         values: Map<String, Any?>,
         referrer: String?
     ): FetchActionResponse {
-        val httpUrl = makeAbsoluteUrl(baseUrl, url)
+        val httpUrl = getAbsoluteUrl(baseUrl, url)
         val json = try {
             httpPostStringSync(
                 httpUrl,
@@ -102,7 +101,7 @@ open class OkHttpBackendConnector(
         baseUrl: String?,
         referrer: String
     ): ViewContent {
-        val httpUrl = makeAbsoluteUrl(baseUrl, url)
+        val httpUrl = getAbsoluteUrl(baseUrl, url)
         val (_, json) = fetchHttpGetStringSync(
             httpUrl,
             Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
@@ -111,14 +110,16 @@ open class OkHttpBackendConnector(
         return serializer.viewContentFromJson(json)
     }
 
-    private fun makeAbsoluteUrl(baseUrl: String?, url: String): String {
+    override fun getAbsoluteUrl(baseUrl: String?, url: String): String {
         val loadUrl = if (baseUrl == null || url.contains("://")) url
         else baseUrl.trimEnd('/') + "/" + url.trimStart('/')
         return loadUrl
     }
 
+    override fun isDynamicImageUrl(absoluteUrl: String): Boolean = absoluteUrl.contains('?')
+
     override fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray =
-        fetchHttpGetBytes(makeAbsoluteUrl(baseUrl, url), referrer)
+        fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
 
     private fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
         val builder = Request.Builder().url(url)

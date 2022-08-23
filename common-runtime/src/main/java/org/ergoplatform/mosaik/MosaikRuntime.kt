@@ -9,6 +9,7 @@ import java.util.*
 
 abstract class MosaikRuntime(
     val backendConnector: MosaikBackendConnector,
+    val imageCacheSizeBytes: Long = 1000L * 1000L,
 ) {
 
     abstract val coroutineScope: CoroutineScope
@@ -296,16 +297,23 @@ abstract class MosaikRuntime(
         showError(t)
     }
 
+    private val imageCache = ImageCache(backendConnector, imageCacheSizeBytes)
+    fun currentRootContentVersion() = viewTree.content?.createdAtContentVersion ?: 0
+
     /**
-     * Downloads an image, blocking. In case of an error an empty byte array is returned
+     * Downloads an image. In case of an error an empty byte array is returned
      */
-    fun downloadImage(url: String): ByteArray {
-        return try {
-            backendConnector.fetchImage(url, appUrl, appUrl)
-        } catch (t: Throwable) {
-            MosaikLogger.logWarning("Could not download image $url", t)
-            ByteArray(0)
-        }
+    suspend fun downloadImage(url: String, scope: CoroutineScope): ByteArray {
+        return imageCache.getImage(
+            url,
+            appUrl,
+            currentRootContentVersion(),
+            scope
+        )
+    }
+
+    fun viewTreeChanged() {
+        imageCache.pruneCache(currentRootContentVersion())
     }
 
     /**

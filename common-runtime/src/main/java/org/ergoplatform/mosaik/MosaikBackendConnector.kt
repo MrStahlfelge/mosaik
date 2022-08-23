@@ -45,5 +45,16 @@ interface MosaikBackendConnector {
         referrer: String?
     ): ByteArray
 
+    /**
+     * returns the absolute url for an app resource, resolves any relative links
+     * defaults to the original, unaltered url
+     */
+    fun getAbsoluteUrl(appUrl: String?, url: String): String
+
+    /**
+     * returns true if an image is, based on its URL, dynamic and should not be cached
+     */
+    fun isDynamicImageUrl(absoluteUrl: String): Boolean
+
     data class AppLoaded(val mosaikApp: MosaikApp, val appUrl: String)
 }

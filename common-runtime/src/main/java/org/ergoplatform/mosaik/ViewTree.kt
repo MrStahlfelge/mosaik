@@ -126,6 +126,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
     private fun notifyViewTreeChanged() {
         if (!changingViewTree) {
             _modificationFlow.value = Pair(_modificationFlow.value.first + 1, content)
+            mosaikRuntime.viewTreeChanged()
         }
     }
 
@@ -184,7 +185,7 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
         registerJobFor(treeElement) { scope ->
             MosaikLogger.logDebug("Start downloading image for ${treeElement.idOrUuid}...")
             withContext(Dispatchers.IO) {
-                val bytes = mosaikRuntime.downloadImage((treeElement.element as Image).url)
+                val bytes = mosaikRuntime.downloadImage((treeElement.element as Image).url, scope)
                 if (scope.isActive) {
                     MosaikLogger.logDebug("Downloading image for ${treeElement.idOrUuid} done.")
                     resourceMap[treeElement.idOrUuid] = bytes
