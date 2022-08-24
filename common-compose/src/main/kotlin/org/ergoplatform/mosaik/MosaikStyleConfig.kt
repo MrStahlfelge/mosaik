@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik
 
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
@@ -19,4 +20,5 @@ object MosaikStyleConfig {
 
     var cardShapeRadius = 4.dp
     var buttonShapeRadius = 4.dp
+    var buttonPadding = ButtonDefaults.ContentPadding
 }

@@ -210,6 +210,7 @@ fun MosaikInputButton(treeElement: TreeElement, modifier: Modifier) {
                     else -> throw IllegalStateException("Unreachable")
                 }.toButtonColors(),
                 shape = RoundedCornerShape(MosaikStyleConfig.buttonShapeRadius),
+                contentPadding = MosaikStyleConfig.buttonPadding,
                 enabled = element.isEnabled
             ) {
                 Text(
@@ -584,6 +585,7 @@ private fun MosaikButton(
             modifier = buttonModifier,
             colors = element.style.toButtonColors(),
             shape = RoundedCornerShape(MosaikStyleConfig.buttonShapeRadius),
+            contentPadding = MosaikStyleConfig.buttonPadding,
             enabled = element.isEnabled
         ) {
             Text(
