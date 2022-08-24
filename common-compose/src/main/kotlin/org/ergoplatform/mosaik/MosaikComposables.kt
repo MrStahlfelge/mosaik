@@ -55,23 +55,22 @@ fun MosaikViewTree(viewTree: ViewTree, modifier: Modifier = Modifier) {
         modification.second?.let { viewTreeRoot ->
             // Crossfade animation here caused some elements to not update
 
-            // the view root should be scrollable if it is a column, otherwise it will fill
-            // the max height
-            val scrollable = viewTreeRoot.element is Column
+            // the view root should be positioned at top if it is a column, otherwise it will center
+            val positionAtTop = viewTreeRoot.element is Column
             val scrollState =
                 rememberSaveable(viewTreeRoot.createdAtContentVersion, saver = ScrollState.Saver) {
                     ScrollState(0)
                 }
             val sizeModifier =
-                if (scrollable && MosaikComposeConfig.VerticalScrollbar != null) {
-                    Modifier.fillMaxWidth().verticalScroll(scrollState)
-                } else if (scrollable) {
-                    Modifier.fillMaxWidth()
-                        .drawVerticalScrollbar(scrollState)
-                        .verticalScroll(scrollState)
-                } else Modifier.fillMaxSize()
+                if (positionAtTop) Modifier.fillMaxWidth() else Modifier.fillMaxSize()
+            val scrollModifier =
+                if (MosaikComposeConfig.VerticalScrollbar != null) {
+                    sizeModifier.verticalScroll(scrollState)
+                } else sizeModifier
+                    .drawVerticalScrollbar(scrollState)
+                    .verticalScroll(scrollState)
 
-            Box(sizeModifier) {
+            Box(scrollModifier) {
                 MosaikTreeElement(
                     viewTreeRoot,
                     Modifier.alpha(if (locked) .3f else 1f)
