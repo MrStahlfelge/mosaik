@@ -80,6 +80,13 @@ abstract class MosaikRuntime(
         )
     }
 
+    /**
+     * called when an app failed to load. Defaults to showError, but can be overriden
+     */
+    open fun appNotLoadedError(appUrl: String, error: Throwable) {
+        showError(error)
+    }
+
     val viewTree = ViewTree(this)
     var appManifest: MosaikManifest? = null
         private set
@@ -161,12 +168,15 @@ abstract class MosaikRuntime(
         loadMosaikApp(action.url, appUrl)
     }
 
+    var connectToServerJob: Job? = null
+
     open fun runBackendRequest(action: BackendRequestAction) {
         if (action.postValues == BackendRequestAction.PostValueType.ALL)
             viewTree.ensureValuesAreCorrect()
 
         viewTree.uiLocked = true
-        coroutineScope.launch(Dispatchers.IO) {
+        connectToServerJob?.cancel()
+        connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
             try {
                 val fetchActionResponse =
                     backendConnector.fetchAction(
@@ -181,13 +191,15 @@ abstract class MosaikRuntime(
                     if (appVersion != appManifest!!.appVersion) ReloadAction().apply { id = "" }
                     else fetchActionResponse.action
 
-                withContext(Dispatchers.Main) {
-                    runAction(newAction)
+                if (isActive) {
+                    withContext(Dispatchers.Main) {
+                        runAction(newAction)
+                    }
                 }
             } catch (ce: ConnectionException) {
                 MosaikLogger.logError("Connection error running Mosaik backend request", ce)
                 // don't raise an error for connection exceptions
-                showError(ce)
+                if (isActive) showError(ce)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error running Mosaik backend request", t)
                 raiseError(t)
@@ -242,21 +254,28 @@ abstract class MosaikRuntime(
      */
     open fun loadMosaikApp(url: String, referrer: String? = null) {
         viewTree.uiLocked = true
-        coroutineScope.launch(Dispatchers.IO) {
+        connectToServerJob?.cancel()
+        connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
             try {
                 val loadAppResponse = backendConnector.loadMosaikApp(url, referrer)
-                val mosaikApp = loadAppResponse.mosaikApp
-                appManifest = mosaikApp.manifest
+                if (isActive) {
+                    val mosaikApp = loadAppResponse.mosaikApp
+                    appManifest = mosaikApp.manifest
 
-                viewTree.setRootView(mosaikApp)
-                navigatedTo(UrlHistoryEntry(loadAppResponse.appUrl, referrer), mosaikApp.manifest)
+                    viewTree.setRootView(mosaikApp)
+                    navigatedTo(
+                        UrlHistoryEntry(loadAppResponse.appUrl, referrer),
+                        mosaikApp.manifest
+                    )
+                }
             } catch (ce: ConnectionException) {
                 MosaikLogger.logError("Connection error loading Mosaik app", ce)
                 // do not raise an error
-                showError(ce)
+                if (isActive) appNotLoadedError(url, ce)
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error loading Mosaik app", t)
-                raiseError(t)
+                raiseError(t, silent = true)
+                if (isActive) appNotLoadedError(url, t)
             }
 
             viewTree.uiLocked = false
@@ -292,9 +311,11 @@ abstract class MosaikRuntime(
     /**
      * an error that is shown to user and reported to the error report url
      */
-    open fun raiseError(t: Throwable) {
+    open fun raiseError(t: Throwable, silent: Boolean = false) {
         // TODO report error to error report url
-        showError(t)
+
+        if (!silent)
+            showError(t)
     }
 
     private val imageCache = ImageCache(backendConnector, imageCacheSizeBytes)
