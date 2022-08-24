@@ -42,7 +42,7 @@ open class OkHttpBackendConnector(
             try {
                 serializer.firstRequestResponseFromJson(json)
             } catch (t: Throwable) {
-                throw IllegalArgumentException("$url did not send a valid response.")
+                throw NoMosaikAppException(url, t)
             }, url
         )
     }
