@@ -406,8 +406,8 @@ data class MosaikDialog(
     val message: String,
     val positiveButtonText: String,
     val negativeButtonText: String?,
-    val positiveButtonClicked: Runnable?,
-    val negativeButtonClicked: Runnable?
+    val positiveButtonClicked: (() -> Unit)?,
+    val negativeButtonClicked: (() -> Unit)?
 )
 
 data class UrlHistoryEntry(val url: String, val referrer: String?)

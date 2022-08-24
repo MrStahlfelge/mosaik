@@ -36,7 +36,7 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                 TextButton(
                     onClick = {
                         dialog.dismiss()
-                        mosaikDialog.positiveButtonClicked?.run()
+                        mosaikDialog.positiveButtonClicked?.invoke()
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                 ) {
@@ -51,7 +51,7 @@ fun MosaikComposeDialog(dialog: MosaikComposeDialogHandler) {
                     TextButton(
                         onClick = {
                             dialog.dismiss()
-                            mosaikDialog.negativeButtonClicked?.run()
+                            mosaikDialog.negativeButtonClicked?.invoke()
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MosaikStyleConfig.textButtonTextColor),
                     ) {
