@@ -43,6 +43,11 @@ object MosaikComposeConfig {
      */
     var scrollMaxAlpha = 1f
 
+    /**
+     * if true, text input field contents are preselected when the textfield is editable.
+     */
+    var preselectEditableInputs = true
+
     // workaround for Compose Compatibiliy between Android and Desktop
     // just route to Compose implementations in platform code
 

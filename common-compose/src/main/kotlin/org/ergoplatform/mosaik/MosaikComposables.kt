@@ -542,7 +542,8 @@ private fun getTextFieldStateForElement(treeElement: TreeElement) =
     remember(treeElement.createdAtContentVersion) {
         val currentValue = treeElement.currentValueAsString
         val selectAll =
-            (treeElement.element as? TextField<*>)?.let { !it.isReadOnly && it.isEnabled } ?: false
+            MosaikComposeConfig.preselectEditableInputs && ((treeElement.element as? TextField<*>)
+                ?.let { !it.isReadOnly && it.isEnabled } ?: false)
         mutableStateOf(
             TextFieldValue(
                 currentValue,
