@@ -174,9 +174,10 @@ abstract class MosaikRuntime(
         if (action.postValues == BackendRequestAction.PostValueType.ALL)
             viewTree.ensureValuesAreCorrect()
 
+        val formerJob = connectToServerJob
         viewTree.uiLocked = true
-        connectToServerJob?.cancel()
         connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
+            formerJob?.cancel()
             try {
                 val fetchActionResponse =
                     backendConnector.fetchAction(
@@ -200,6 +201,9 @@ abstract class MosaikRuntime(
                 MosaikLogger.logError("Connection error running Mosaik backend request", ce)
                 // don't raise an error for connection exceptions
                 if (isActive) showError(ce)
+            } catch (t: CancellationException) {
+                // we can safely ignore this here. it can happen when the backend request
+                // starts a new backend request, reload or navigateToApp action.
             } catch (t: Throwable) {
                 MosaikLogger.logError("Error running Mosaik backend request", t)
                 raiseError(t)
@@ -253,9 +257,10 @@ abstract class MosaikRuntime(
      * starts loading a new Mosaik app. Please make sure this is not called twice simultaneously.
      */
     open fun loadMosaikApp(url: String, referrer: String? = null) {
+        val formerJob = connectToServerJob
         viewTree.uiLocked = true
-        connectToServerJob?.cancel()
         connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
+            formerJob?.cancel()
             try {
                 val loadAppResponse = backendConnector.loadMosaikApp(url, referrer)
                 if (isActive) {
