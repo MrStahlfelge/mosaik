@@ -410,9 +410,9 @@ abstract class MosaikRuntime(
 data class MosaikDialog(
     val message: String,
     val positiveButtonText: String,
-    val negativeButtonText: String?,
-    val positiveButtonClicked: (() -> Unit)?,
-    val negativeButtonClicked: (() -> Unit)?
+    val negativeButtonText: String? = null,
+    val positiveButtonClicked: (() -> Unit)? = null,
+    val negativeButtonClicked: (() -> Unit)? = null
 )
 
 data class UrlHistoryEntry(val url: String, val referrer: String?)
