@@ -526,6 +526,9 @@ fun MosaikTextField(
                     focusedLabelColor = defaultLabelColor,
                     unfocusedLabelColor = secondaryLabelColor,
                     trailingIconColor = secondaryLabelColor,
+                    errorLabelColor = primaryLabelColor,
+                    errorLeadingIconColor = primaryLabelColor,
+                    errorTrailingIconColor = primaryLabelColor,
                 )
             )
         }
