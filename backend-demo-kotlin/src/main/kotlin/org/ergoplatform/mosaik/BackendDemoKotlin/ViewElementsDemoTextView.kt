@@ -125,6 +125,10 @@ object ViewElementsDemoTextView {
                         null,
                         decorated = false
                     )
+                    tokenLabel(
+                        "87f5a614e40399c40ad9b2ffe521f9576e34824ddfd29d246f019bb4599866b4",
+                        "NFT",
+                    )
                 }
             }
 
