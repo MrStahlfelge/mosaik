@@ -13,8 +13,7 @@ import org.ergoplatform.mosaik.model.ui.ViewElement;
 import org.ergoplatform.mosaik.model.ui.input.DropDownList;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class DropDownListSerializer implements JsonSerializer<DropDownList>, JsonDeserializer<DropDownList> {
 
@@ -71,7 +70,7 @@ public class DropDownListSerializer implements JsonSerializer<DropDownList>, Jso
         if (jsonObject.has(KEY_PLACEHOLDER)) {
             dropDownList.setPlaceholder(jsonObject.get(KEY_PLACEHOLDER).getAsString());
         }
-        dropDownList.setEntries(context.<Map>deserialize(jsonObject.get(KEY_ENTRIES), HashMap.class));
+        dropDownList.setEntries(context.<LinkedHashMap>deserialize(jsonObject.get(KEY_ENTRIES), LinkedHashMap.class));
 
         return dropDownList;
     }

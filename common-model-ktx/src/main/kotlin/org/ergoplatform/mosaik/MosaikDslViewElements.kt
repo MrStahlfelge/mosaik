@@ -275,7 +275,7 @@ fun <G : ViewGroup> G.dropDownList(
 ): DropDownList =
     viewElement(DropDownList().apply {
         this.id = id
-        this.entries = entries
+        this.entries = if (entries is LinkedHashMap) entries else LinkedHashMap(entries)
         this.value = initialValue
     }, init)
 

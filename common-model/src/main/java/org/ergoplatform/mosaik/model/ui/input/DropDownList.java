@@ -3,8 +3,7 @@ package org.ergoplatform.mosaik.model.ui.input;
 import org.ergoplatform.mosaik.model.Since;
 import org.ergoplatform.mosaik.model.ui.ViewElement;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,7 @@ public class DropDownList extends ViewElement implements OptionalInputElement<St
     private String onValueChangedAction;
     private boolean enabled = true;
     @Nonnull
-    private Map<String, String> entries = new HashMap<>();
+    private LinkedHashMap<String, String> entries = new LinkedHashMap<>();
     private boolean mandatory = true;
     @Nullable
     private String placeholder;
@@ -68,11 +67,11 @@ public class DropDownList extends ViewElement implements OptionalInputElement<St
     }
 
     @Nonnull
-    public Map<String, String> getEntries() {
+    public LinkedHashMap<String, String> getEntries() {
         return entries;
     }
 
-    public void setEntries(@Nonnull Map<String, String> entries) {
+    public void setEntries(@Nonnull LinkedHashMap<String, String> entries) {
         Objects.requireNonNull(entries);
         this.entries = entries;
     }
