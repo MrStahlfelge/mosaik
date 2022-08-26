@@ -35,9 +35,11 @@ open class OkHttpBackendConnector(
             val mosaikRelLink = checkForMosaikRelTag(json)
             if (mosaikRelLink != null) {
                 // found a mosaik rel tag, so let's load from there
+                MosaikLogger.logDebug("Redirect found to $mosaikRelLink")
                 return loadMosaikApp(getAbsoluteUrl(url, mosaikRelLink), referrer)
             }
         }
+        MosaikLogger.logDebug("App JSON loaded from $url: $json")
         return MosaikBackendConnector.AppLoaded(
             try {
                 serializer.firstRequestResponseFromJson(json)
@@ -89,6 +91,7 @@ open class OkHttpBackendConnector(
         } catch (ioe: IOException) {
             throw ConnectionException(ioe)
         }
+        MosaikLogger.logDebug("Action JSON loaded from $url: $json")
         return try {
             serializer.fetchActionResponseFromJson(json)
         } catch (t: Throwable) {
@@ -106,7 +109,7 @@ open class OkHttpBackendConnector(
             httpUrl,
             Headers.of(serializer.contextHeadersMap(getContextFor(httpUrl), referrer))
         )
-
+        MosaikLogger.logDebug("View content JSON loaded from $url: $json")
         return serializer.viewContentFromJson(json)
     }
 
