@@ -15,6 +15,7 @@ import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton
 import org.ergoplatform.mosaik.model.ui.layout.Box
 import org.ergoplatform.mosaik.model.ui.text.ErgoAddressLabel
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel
+import kotlin.math.max
 
 /**
  * the complete tree of [ViewElement]'s and is context.
@@ -63,11 +64,18 @@ class ViewTree(val mosaikRuntime: MosaikRuntime) {
      */
     val uiLockedState: StateFlow<Boolean> get() = _uiLocked
     private val _uiLocked = MutableStateFlow(false)
-    var uiLocked: Boolean
-        get() = _uiLocked.value
-        set(value) {
-            _uiLocked.value = value
-        }
+    val uiLocked: Boolean get() = _uiLocked.value
+    private var lockCount = 0 // we have recursive locking of the UI, boolean flag is not sufficient
+
+    fun lockUi() {
+        lockCount++
+        _uiLocked.value = true
+    }
+
+    fun unlockUi() {
+        lockCount = max(lockCount - 1, 0)
+        _uiLocked.value = lockCount > 0
+    }
 
     /**
      * replaces the view completely
