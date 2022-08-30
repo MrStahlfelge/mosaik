@@ -73,6 +73,7 @@ class ActionsDemoBackendRequestController {
                                         "Platform: ${context.walletAppPlatform}\n" +
                                         "GUID: ${context.guid}\n" +
                                         "Language: ${context.language}\n" +
+                                        "Time Zone Offset: ${context.timeZone}\n" +
                                         "Mosaik Executor version: ${context.mosaikVersion}\n",
                                 LabelStyle.BODY2
                             )

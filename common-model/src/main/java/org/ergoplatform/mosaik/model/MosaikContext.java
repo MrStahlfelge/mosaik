@@ -43,9 +43,14 @@ public class MosaikContext {
     @Nonnull
     public final Platform walletAppPlatform;
 
+    /**
+     * information about user's time zone offset to UTC, in minutes
+     */
+    public final int timeZone;
+
     public MosaikContext(int mosaikVersion, @Nonnull String guid, @Nonnull String language,
                          @Nonnull String walletAppName, @Nonnull String walletAppVersion,
-                         @Nonnull Platform walletAppPlatform) {
+                         @Nonnull Platform walletAppPlatform, int timeZone) {
         this.mosaikVersion = mosaikVersion;
         this.walletAppVersion = walletAppVersion;
         this.walletAppPlatform = walletAppPlatform;
@@ -57,6 +62,8 @@ public class MosaikContext {
         this.guid = guid;
         this.language = language;
         this.walletAppName = walletAppName;
+
+        this.timeZone = timeZone;
     }
 
     public enum Platform {

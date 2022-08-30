@@ -32,7 +32,6 @@ import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
-import org.ergoplatform.mosaik.model.actions.TokenInformationAction
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -68,7 +67,8 @@ fun main() {
             Locale.getDefault().language,
             "demoapp",
             "1",
-            MosaikContext.Platform.DESKTOP
+            MosaikContext.Platform.DESKTOP,
+            (TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 60000)
         )
 
         val backendConnector =

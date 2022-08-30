@@ -27,12 +27,13 @@ public class MosaikSerializer {
     }
 
     public static MosaikContext fromContextHeadersMap(Map<String, String> headersMap) {
+        String timeZoneString = headersMap.get(HTTP_HEADER_PREFIX + "timezone");
         return new MosaikContext(Integer.parseInt(headersMap.getOrDefault(HTTP_HEADER_PREFIX + "mosaikversion", "0")),
                 headersMap.get(HTTP_HEADER_PREFIX + "guid"),
                 headersMap.get(HTTP_HEADER_PREFIX + "language"),
                 headersMap.get(HTTP_HEADER_PREFIX + "walletappname"),
                 headersMap.get(HTTP_HEADER_PREFIX + "walletappversion"),
-                MosaikContext.Platform.valueOf(headersMap.get(HTTP_HEADER_PREFIX + "walletappplatform"))
-        );
+                MosaikContext.Platform.valueOf(headersMap.get(HTTP_HEADER_PREFIX + "walletappplatform")),
+                timeZoneString != null ? Integer.parseInt(timeZoneString) : 0);
     }
 }

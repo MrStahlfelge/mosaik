@@ -19,7 +19,8 @@ class OkHttpBackendConnectorTest {
                     "",
                     "",
                     "",
-                    MosaikContext.Platform.DESKTOP
+                    MosaikContext.Platform.DESKTOP,
+                    0
                 )
             })
 
