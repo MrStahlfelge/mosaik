@@ -61,6 +61,25 @@ public class MosaikManifest {
     public final int cacheLifetime;
 
     /**
+     * Action ID to call when the app is loaded for the first time or reloaded. Can be used to
+     * automatically launch a {@link org.ergoplatform.mosaik.model.actions.ChangeSiteAction}
+     * setting up the view.
+     * Note that other action types are not allowed to be used.
+     */
+    @Nullable
+    @Since(2)
+    public String onAppLoadedAction;
+
+    /**
+     * Action ID to call when a resize of the application leads to a change of the
+     * {@link MosaikContext#walletAppPlatform} value.
+     * Useable action types are ReloadAction, ChangeSiteAction, BackendRequestAction
+     */
+    @Nullable
+    @Since(2)
+    public String onResizeAction;
+
+    /**
      * Any errors logged while running the Mosaik app will be logged to this address (POST-Request)
      */
     @Nullable
