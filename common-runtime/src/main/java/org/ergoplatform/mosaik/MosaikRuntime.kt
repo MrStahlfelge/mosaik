@@ -97,6 +97,12 @@ abstract class MosaikRuntime(
         }
     val appUrl: String? get() = appUrlHistory.firstOrNull()
 
+    open suspend fun runOnMainThread(method: () -> Unit) {
+        withContext(Dispatchers.Main) {
+            method()
+        }
+    }
+
     fun runAction(actionId: String) {
         viewTree.getAction(actionId)?.let { runAction(it) }
     }
@@ -193,7 +199,7 @@ abstract class MosaikRuntime(
                     else fetchActionResponse.action
 
                 if (isActive) {
-                    withContext(Dispatchers.Main) {
+                    runOnMainThread {
                         runAction(newAction)
                     }
                 }
