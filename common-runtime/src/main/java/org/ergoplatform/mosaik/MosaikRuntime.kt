@@ -108,7 +108,7 @@ abstract class MosaikRuntime(
     }
 
     open fun runAction(action: Action) {
-        MosaikLogger.logDebug("Running action ${action.id}...")
+        MosaikLogger.logDebug("Running action ${action.id} (${action.javaClass.simpleName})...")
         try {
             when (action) {
                 is QrCodeAction -> {
@@ -185,6 +185,7 @@ abstract class MosaikRuntime(
         connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
             formerJob?.cancel()
             try {
+                MosaikLogger.logDebug("Loading action from ${action.url}...")
                 val fetchActionResponse =
                     backendConnector.fetchAction(
                         action.url,
@@ -268,6 +269,7 @@ abstract class MosaikRuntime(
         connectToServerJob = coroutineScope.launch(Dispatchers.IO) {
             formerJob?.cancel()
             try {
+                MosaikLogger.logDebug("Loading app from $url...")
                 val loadAppResponse = backendConnector.loadMosaikApp(url, referrer)
                 if (isActive) {
                     val mosaikApp = loadAppResponse.mosaikApp
