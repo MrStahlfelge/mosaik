@@ -174,9 +174,19 @@ object ViewElementsDemoTextView {
                         Some special chars: < > " ' & and `code`
                         
                         1. List 1
-                        2. List 2
-                        """.trimIndent(), alignment = HAlignment.CENTER
+                        2. List 2""".trimIndent(), alignment = HAlignment.CENTER
                         )
+
+                        label(
+                            "And with few elements:"
+                        )
+
+                        markDown(
+                            """A [link to the repo](https://github.com/MrStahlfelge/mosaik), **bold** text, 
+                        _italic_ text, and a link to www.ergoplatform.com, `code`"""
+                                .trimIndent(), alignment = HAlignment.CENTER
+                        )
+
                     } else
                         needHigherMosaikVersionLabel(1)
                 }
