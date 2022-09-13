@@ -64,6 +64,11 @@ Can be used on Android and Desktop.
 
 Depends on common-runtime and Jetbrains Compose. For use in Mosaik executors building up on Compose.
 
+### common-abstractui
+Kotlin. A set of helper methods to manage rendering the Mosaik UI on non-declarative UI frameworks.
+
+Depends on common-runtime. For use in Mosaik executors.
+
 ## Demo modules
 
 ### desktop-demo
