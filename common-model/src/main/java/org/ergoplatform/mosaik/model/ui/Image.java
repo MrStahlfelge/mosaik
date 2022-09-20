@@ -58,6 +58,8 @@ public class Image extends ViewElement {
     public enum Size {
         SMALL,
         MEDIUM,
-        LARGE
+        LARGE,
+        @Since(2)
+        XXL
     }
 }

@@ -263,6 +263,7 @@ fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
             Image.Size.SMALL -> 62.dp
             Image.Size.MEDIUM -> 124.dp
             Image.Size.LARGE -> 258.dp
+            Image.Size.XXL -> 520.dp
         }
     )
 
