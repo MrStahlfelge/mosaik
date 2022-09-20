@@ -33,6 +33,7 @@ import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.Grid;
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
@@ -117,6 +118,7 @@ public class MosaikSerializer {
         gsonBuilder.registerTypeAdapter(ViewElement.class, new ViewElementSerializer());
         gsonBuilder.registerTypeAdapter(Box.class, new BoxSerializer<>(Box.class));
         gsonBuilder.registerTypeAdapter(Card.class, new BoxSerializer<>(Card.class));
+        gsonBuilder.registerTypeAdapter(Grid.class, new GridSerializer());
         gsonBuilder.registerTypeAdapter(Row.class, new LinearLayoutSerializer());
         gsonBuilder.registerTypeAdapter(Row.class, new RowDeserializer());
         gsonBuilder.registerTypeAdapter(Column.class, new LinearLayoutSerializer());

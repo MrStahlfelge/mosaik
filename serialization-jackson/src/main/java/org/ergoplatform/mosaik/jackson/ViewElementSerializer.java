@@ -14,6 +14,7 @@ import org.ergoplatform.mosaik.model.ui.input.OptionalInputElement;
 import org.ergoplatform.mosaik.model.ui.input.StyleableInputButton;
 import org.ergoplatform.mosaik.model.ui.input.TextField;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
+import org.ergoplatform.mosaik.model.ui.layout.Grid;
 import org.ergoplatform.mosaik.model.ui.layout.HAlignment;
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.LinearLayout;
@@ -204,6 +205,16 @@ public class ViewElementSerializer extends StdSerializer<ViewElement> {
         if (value instanceof StringContentElement && propertyName.equals("contentAlignment")
                 && ((StringContentElement) value).getContentAlignment() == HAlignment.START) {
             return null;
+        }
+
+        if (value instanceof Grid) {
+            Grid grid = (Grid) value;
+            if (propertyName.equals("elementSize")) {
+                if (grid.getElementSize() == Grid.ElementSize.SMALL)
+                    return null;
+                else
+                    return "size";
+            }
         }
 
         if (propertyName.equals("visible") && value.isVisible()) {

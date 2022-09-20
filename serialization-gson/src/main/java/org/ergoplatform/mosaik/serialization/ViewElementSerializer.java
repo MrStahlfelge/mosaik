@@ -30,6 +30,7 @@ import org.ergoplatform.mosaik.model.ui.input.WalletChooseButton;
 import org.ergoplatform.mosaik.model.ui.layout.Box;
 import org.ergoplatform.mosaik.model.ui.layout.Card;
 import org.ergoplatform.mosaik.model.ui.layout.Column;
+import org.ergoplatform.mosaik.model.ui.layout.Grid;
 import org.ergoplatform.mosaik.model.ui.layout.HorizontalRule;
 import org.ergoplatform.mosaik.model.ui.layout.Row;
 import org.ergoplatform.mosaik.model.ui.text.Button;
@@ -166,6 +167,9 @@ public class ViewElementSerializer implements JsonSerializer<ViewElement>, JsonD
                 break;
             case "CheckboxLabel":
                 clazz = CheckboxLabel.class;
+                break;
+            case "Grid":
+                clazz = Grid.class;
                 break;
             default:
                 throw new JsonParseException("View Element with name " + elementName + " not known.");
