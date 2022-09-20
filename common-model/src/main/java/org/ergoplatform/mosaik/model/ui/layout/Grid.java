@@ -18,7 +18,8 @@ public class Grid extends ViewElement implements LayoutElement {
     @Nonnull
     private Padding padding = Padding.NONE;
     private final List<ViewElement> children = new ArrayList<>();
-    @Nonnull ElementSize elementSize = ElementSize.SMALL;
+    @Nonnull
+    ElementSize elementSize = ElementSize.SMALL;
 
     @Nonnull
     public ElementSize getElementSize() {
@@ -26,6 +27,7 @@ public class Grid extends ViewElement implements LayoutElement {
     }
 
     public void setElementSize(@Nonnull ElementSize elementSize) {
+        Objects.requireNonNull(elementSize);
         this.elementSize = elementSize;
     }
 

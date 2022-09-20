@@ -11,7 +11,7 @@ import org.ergoplatform.mosaik.model.ui.layout.VAlignment
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 
 object ViewElementsDemoLayoutView {
-    fun getView() =
+    fun getView(baseUrl: String) =
         mosaikView {
 
             column {
@@ -180,6 +180,24 @@ object ViewElementsDemoLayoutView {
                                     }
                                 }
                             }
+                        }
+                    }
+
+                }
+
+                card(Padding.DEFAULT) {
+
+                    column(Padding.DEFAULT, spacing = Padding.DEFAULT) {
+
+                        label("Grid", style = LabelStyle.HEADLINE2)
+
+                        label(
+                            "Grid is a responsive element presenting child elements in a grid-style layout. " +
+                                    "The number of columns is determined by the min element width."
+                        )
+
+                        button("Show as own app") {
+                            onClickAction(navigateToApp("$baseUrl/viewelements/grid"))
                         }
                     }
 

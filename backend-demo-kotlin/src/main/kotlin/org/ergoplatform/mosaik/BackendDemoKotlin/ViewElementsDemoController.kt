@@ -3,6 +3,9 @@ package org.ergoplatform.mosaik.BackendDemoKotlin
 import org.ergoplatform.mosaik.*
 import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.ui.ForegroundColor
+import org.ergoplatform.mosaik.model.ui.Image
+import org.ergoplatform.mosaik.model.ui.layout.Grid
+import org.ergoplatform.mosaik.model.ui.layout.HAlignment
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.springframework.web.bind.annotation.*
@@ -65,9 +68,13 @@ class ViewElementsDemoController {
     // here to demonstrate the implementation
 
     @PostMapping("/viewelements/layoutview")
-    fun changeToLayoutView() = backendResponse(
+    fun changeToLayoutView(servletRequest: HttpServletRequest) = backendResponse(
         APP_VERSION,
-        changeView(ViewElementsDemoLayoutView.getView())
+        changeView(
+            ViewElementsDemoLayoutView.getView(
+                servletRequest.requestURL.toString().substringBefore("/viewelements")
+            )
+        )
     )
 
     @PostMapping("/viewelements/textelementview")
@@ -87,6 +94,32 @@ class ViewElementsDemoController {
         APP_VERSION,
         changeView(ViewElementsDemoOthersView.getView())
     )
+
+    @GetMapping("/viewelements/grid")
+    fun gridViewApp() = mosaikApp(
+        "View elements Grid demo",
+        appVersion = APP_VERSION,
+    ) {
+        val urls = listOf(
+            "https://picsum.photos/700",
+            "https://picsum.photos/400/600",
+            "https://picsum.photos/700/400",
+        )
+        grid(elementSize = Grid.ElementSize.MEDIUM) {
+            for (i in 1..11) {
+
+                column(Padding.HALF_DEFAULT) {
+                    layout(HAlignment.CENTER, 1) {
+                        image(urls[i % urls.size]) {
+                            size = Image.Size.XXL
+                        }
+                    }
+                    label("Element $i", LabelStyle.HEADLINE2)
+                }
+
+            }
+        }
+    }
 
     // Lazy box view content responses
     @GetMapping("/viewelements/slowView")

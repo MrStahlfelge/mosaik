@@ -171,6 +171,8 @@ fun MosaikTreeElement(treeElement: TreeElement, modifier: Modifier = Modifier) {
 
         is MarkDown -> MosaikMarkDown(treeElement, newModifier)
 
+        is Grid -> MosaikGrid(treeElement, newModifier)
+
         else -> {
             Text("Unsupported view element: ${element.javaClass.simpleName}", newModifier)
         }

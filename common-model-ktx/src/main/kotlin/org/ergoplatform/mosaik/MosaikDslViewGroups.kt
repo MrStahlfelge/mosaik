@@ -72,6 +72,28 @@ fun <G : ViewGroup> G.column(
     }, init)
 
 @MosaikDsl
+fun ViewContent.grid(
+    padding: Padding? = Padding.DEFAULT,
+    elementSize: Grid.ElementSize = Grid.ElementSize.SMALL,
+    init: (@MosaikDsl Grid).() -> Unit
+): Grid =
+    viewElement(Grid().apply {
+        padding?.let { this.padding = padding }
+        this.elementSize = elementSize
+    }, init)
+
+@MosaikDsl
+fun <G : ViewGroup> G.grid(
+    padding: Padding? = Padding.DEFAULT,
+    elementSize: Grid.ElementSize = Grid.ElementSize.SMALL,
+    init: (@MosaikDsl Grid).() -> Unit
+): Grid =
+    viewElement(Grid().apply {
+        padding?.let { this.padding = padding }
+        this.elementSize = elementSize
+    }, init)
+
+@MosaikDsl
 fun ViewContent.row(
     padding: Padding? = Padding.DEFAULT,
     spacing: Padding? = null,
