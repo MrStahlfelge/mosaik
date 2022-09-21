@@ -74,12 +74,20 @@ public class Grid extends ViewElement implements LayoutElement {
         /**
          * Might display a two-column layout on bigger phones
          */
-        MIN, // 240dp
+        MIN,
         /**
-         * Will display a one-column layout on nearly all phones
+         * Will display a one-column layout on nearly all phones, more columns everywhere else
          */
-        SMALL, // 320 dp
-        MEDIUM, // 420 dp
-        LARGE // 520 dp
+        SMALL,
+        /**
+         * Will display a three-column layout on desktops and large tablets in landscape,
+         * two columns on most tablets in landscape, one column everywhere else
+         */
+        MEDIUM,
+        /**
+         * Will display a two column layout on desktops and large tablets in landscape, one column
+         * everywhere else
+         */
+        LARGE
     }
 }

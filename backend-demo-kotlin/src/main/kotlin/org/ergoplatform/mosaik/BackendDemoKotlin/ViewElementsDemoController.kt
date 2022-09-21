@@ -117,15 +117,16 @@ class ViewElementsDemoController {
             grid(elementSize = Grid.ElementSize.MEDIUM) {
                 for (i in 1..11) {
 
-                    column(Padding.HALF_DEFAULT) {
-                        layout(HAlignment.CENTER, 1) {
-                            image(urls[i % urls.size]) {
-                                size = Image.Size.XXL
+                    card(Padding.HALF_DEFAULT) {
+                        column(Padding.HALF_DEFAULT) {
+                            layout(HAlignment.CENTER, 1) {
+                                image(urls[i % urls.size]) {
+                                    size = Image.Size.LARGE
+                                }
                             }
+                            label("Element $i", LabelStyle.HEADLINE2)
                         }
-                        label("Element $i", LabelStyle.HEADLINE2)
                     }
-
                 }
             }
         }

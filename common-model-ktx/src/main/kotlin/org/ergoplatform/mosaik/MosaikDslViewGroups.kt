@@ -84,7 +84,7 @@ fun ViewContent.grid(
 
 @MosaikDsl
 fun <G : ViewGroup> G.grid(
-    padding: Padding? = Padding.DEFAULT,
+    padding: Padding? = null,
     elementSize: Grid.ElementSize = Grid.ElementSize.SMALL,
     init: (@MosaikDsl Grid).() -> Unit
 ): Grid =

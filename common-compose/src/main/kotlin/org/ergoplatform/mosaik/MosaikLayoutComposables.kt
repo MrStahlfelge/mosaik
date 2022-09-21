@@ -15,7 +15,7 @@ internal fun MosaikGrid(
     val element = treeElement.element as Grid
 
     val minColumWidth = when (element.elementSize) {
-        Grid.ElementSize.MIN -> 240.dp
+        Grid.ElementSize.MIN -> 200.dp
         Grid.ElementSize.SMALL -> 320.dp
         Grid.ElementSize.MEDIUM -> 420.dp
         Grid.ElementSize.LARGE -> 520.dp
