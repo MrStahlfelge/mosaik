@@ -114,7 +114,7 @@ class ViewElementsDemoController {
                 "https://picsum.photos/400/600",
                 "https://picsum.photos/700/400",
             )
-            grid(elementSize = Grid.ElementSize.MEDIUM) {
+            grid(elementSize = Grid.ElementSize.MEDIUM, padding = Padding.HALF_DEFAULT) {
                 for (i in 1..11) {
 
                     card(Padding.HALF_DEFAULT) {
