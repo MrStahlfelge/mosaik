@@ -96,27 +96,37 @@ class ViewElementsDemoController {
     )
 
     @GetMapping("/viewelements/grid")
-    fun gridViewApp() = mosaikApp(
+    fun gridViewApp(
+        @RequestHeader headers: Map<String, String>,
+    ) = mosaikApp(
         "View elements Grid demo",
         appVersion = APP_VERSION,
     ) {
-        val urls = listOf(
-            "https://picsum.photos/700",
-            "https://picsum.photos/400/600",
-            "https://picsum.photos/700/400",
-        )
-        grid(elementSize = Grid.ElementSize.MEDIUM) {
-            for (i in 1..11) {
+        val context = MosaikSerializer.fromContextHeadersMap(headers)
 
-                column(Padding.HALF_DEFAULT) {
-                    layout(HAlignment.CENTER, 1) {
-                        image(urls[i % urls.size]) {
-                            size = Image.Size.XXL
+        if (context.mosaikVersion < 2) {
+            box {
+                needHigherMosaikVersionLabel(2)
+            }
+        } else {
+            val urls = listOf(
+                "https://picsum.photos/700",
+                "https://picsum.photos/400/600",
+                "https://picsum.photos/700/400",
+            )
+            grid(elementSize = Grid.ElementSize.MEDIUM) {
+                for (i in 1..11) {
+
+                    column(Padding.HALF_DEFAULT) {
+                        layout(HAlignment.CENTER, 1) {
+                            image(urls[i % urls.size]) {
+                                size = Image.Size.XXL
+                            }
                         }
+                        label("Element $i", LabelStyle.HEADLINE2)
                     }
-                    label("Element $i", LabelStyle.HEADLINE2)
-                }
 
+                }
             }
         }
     }
