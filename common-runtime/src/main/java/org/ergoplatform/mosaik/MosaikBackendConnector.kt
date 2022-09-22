@@ -46,7 +46,7 @@ interface MosaikBackendConnector {
     ): ByteArray
 
     /**
-     * reports an error to the given url
+     * reports an error to the given url. This method should not throw any exceptions
      */
     fun reportError(reportUrl: String, appUrl: String, t: Throwable)
 

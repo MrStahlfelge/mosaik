@@ -125,11 +125,15 @@ open class OkHttpBackendConnector(
         fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
 
     override fun reportError(reportUrl: String, appUrl: String, t: Throwable) {
-        httpPostStringSync(
-            reportUrl,
-            t.stackTraceToString(),
-            Headers.of(serializer.contextHeadersMap(getContextFor(appUrl), null))
-        )
+        try {
+            httpPostStringSync(
+                reportUrl,
+                t.stackTraceToString(),
+                Headers.of(serializer.contextHeadersMap(getContextFor(appUrl), null))
+            )
+        } catch (t: Throwable) {
+            MosaikLogger.logError("Error reporting error", t)
+        }
     }
 
     private fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
