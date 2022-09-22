@@ -39,10 +39,10 @@ internal fun MosaikGrid(
                 }
             } else {
                 treeElement.children.chunked(numRows).forEach { rowElements ->
-                    Row(Modifier.fillMaxWidth()) {
+                    Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
                         rowElements.forEach { childElement ->
                             key(childElement.idOrUuid) {
-                                MosaikTreeElement(childElement, Modifier.weight(1f))
+                                MosaikTreeElement(childElement, Modifier.weight(1f).fillMaxHeight())
                             }
                         }
                         for (i in 1..(numRows - rowElements.size)) {

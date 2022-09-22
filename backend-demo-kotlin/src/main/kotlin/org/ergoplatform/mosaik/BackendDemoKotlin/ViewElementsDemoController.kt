@@ -115,9 +115,17 @@ class ViewElementsDemoController {
                 "https://picsum.photos/700/400",
             )
             grid(elementSize = Grid.ElementSize.MEDIUM, padding = Padding.HALF_DEFAULT) {
-                for (i in 1..11) {
+                for (i in 1..9) {
 
                     card(Padding.HALF_DEFAULT) {
+                        val gridelmentid = "gridelement$i"
+                        id = gridelmentid
+                        onClickAction(changeView(mosaikView {
+                            box {
+                                id = gridelmentid
+                                label("Element $i clicked")
+                            }
+                        }))
                         column(Padding.HALF_DEFAULT) {
                             layout(HAlignment.CENTER, 1) {
                                 image(urls[i % urls.size]) {

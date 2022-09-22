@@ -193,7 +193,9 @@ object ViewElementsDemoLayoutView {
 
                         label(
                             "Grid is a responsive element presenting child elements in a grid-style layout. " +
-                                    "The number of columns is determined by the min element width."
+                                    "The number of columns is determined by the min element width.\n" +
+                                    "It is best suited to be used on full width, so it is presented as an own " +
+                                    "app here."
                         )
 
                         button("Show as own app") {
