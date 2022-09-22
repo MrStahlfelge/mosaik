@@ -101,6 +101,10 @@ class ViewTreeTest : TestCase() {
                     ): ByteArray {
                         throw UnsupportedOperationException()
                     }
+
+                    override fun reportError(reportUrl: String, appUrl: String, t: Throwable) {
+                        throw UnsupportedOperationException()
+                    }
                 }) {
                 override val coroutineScope: CoroutineScope
                     get() = GlobalScope
