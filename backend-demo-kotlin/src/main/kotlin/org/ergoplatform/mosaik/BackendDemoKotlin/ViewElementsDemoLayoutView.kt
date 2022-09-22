@@ -57,6 +57,7 @@ object ViewElementsDemoLayoutView {
                                     tintColor = ForegroundColor.PRIMARY
                                 )
                             }
+                            icon(IconType.CROSS, tintColor = ForegroundColor.PRIMARY)
                         }
 
                     }
