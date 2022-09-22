@@ -1,29 +1,30 @@
 package org.ergoplatform.mosaik.BackendDemoKotlin
 
 import org.ergoplatform.mosaik.*
+import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.ui.Icon
 import org.ergoplatform.mosaik.model.ui.IconType
 import org.ergoplatform.mosaik.model.ui.LoadingIndicator
 import org.ergoplatform.mosaik.model.ui.layout.Padding
 import org.ergoplatform.mosaik.model.ui.text.LabelStyle
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
 @CrossOrigin
 class ErrorDemoController {
+    private val logger = LoggerFactory.getLogger(this.javaClass)
+
     @GetMapping("/errors")
     fun viewElementsApp(request: HttpServletRequest) =
         mosaikApp(
             "Mosaik errors demo",
             appVersion = APP_VERSION,
-
-            ) {
+            errorReportUrl = request.requestURL.toString().substringBefore("/errors") + "/errorreport",
+        ) {
 
             // add the reload app action so that we can use it in the views by naming its ID
             reloadApp(RELOAD_APP_ACTION_ID)
@@ -154,4 +155,9 @@ class ErrorDemoController {
         )
     }
 
+    @PostMapping("/errorreport")
+    fun errorReported(@RequestBody error: String, @RequestHeader headers: Map<String, String>) {
+        val context = MosaikSerializer.fromContextHeadersMap(headers)
+        logger.info("Error reported:\n$context\n$error")
+    }
 }

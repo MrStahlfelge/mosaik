@@ -46,6 +46,11 @@ interface MosaikBackendConnector {
     ): ByteArray
 
     /**
+     * reports an error to the given url
+     */
+    fun reportError(reportUrl: String, appUrl: String, t: Throwable)
+
+    /**
      * returns the absolute url for an app resource, resolves any relative links
      * defaults to the original, unaltered url
      */

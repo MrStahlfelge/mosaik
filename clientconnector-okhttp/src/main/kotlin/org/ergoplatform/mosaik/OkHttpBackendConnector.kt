@@ -124,6 +124,14 @@ open class OkHttpBackendConnector(
     override fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray =
         fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
 
+    override fun reportError(reportUrl: String, appUrl: String, t: Throwable) {
+        httpPostStringSync(
+            reportUrl,
+            t.stackTraceToString(),
+            Headers.of(serializer.contextHeadersMap(getContextFor(appUrl), null))
+        )
+    }
+
     private fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
         val builder = Request.Builder().url(url)
         referrer?.let { builder.header("Referer", referrer) }

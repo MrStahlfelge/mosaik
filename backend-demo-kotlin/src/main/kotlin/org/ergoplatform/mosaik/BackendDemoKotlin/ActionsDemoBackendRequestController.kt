@@ -69,12 +69,7 @@ class ActionsDemoBackendRequestController {
                             label(
                                 "Every backend requests get information about the user's context. " +
                                         "This is your's:\n" +
-                                        "App: ${context.walletAppName} ${context.walletAppVersion}\n" +
-                                        "Platform: ${context.walletAppPlatform}\n" +
-                                        "GUID: ${context.guid}\n" +
-                                        "Language: ${context.language}\n" +
-                                        "Time Zone Offset: ${context.timeZone}\n" +
-                                        "Mosaik Executor version: ${context.mosaikVersion}\n",
+                                        context.toString(),
                                 LabelStyle.BODY2
                             )
                         } catch (t: Throwable) {

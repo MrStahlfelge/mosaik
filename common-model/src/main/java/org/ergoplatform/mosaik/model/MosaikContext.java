@@ -71,4 +71,14 @@ public class MosaikContext {
         TABLET,
         PHONE
     }
+
+    @Override
+    public String toString() {
+        return "App: " + walletAppName + " " + walletAppVersion + "\n" +
+                "Platform: " + walletAppPlatform + "\n" +
+                "GUID: " + guid + "\n" +
+                "Language: " + language + "\n" +
+                "Time Zone Offset: " + timeZone + "\n" +
+                "Mosaik Executor version: " + mosaikVersion + "\n";
+    }
 }
