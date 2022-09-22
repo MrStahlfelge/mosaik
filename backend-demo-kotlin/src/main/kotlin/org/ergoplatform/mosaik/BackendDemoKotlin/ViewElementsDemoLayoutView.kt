@@ -14,15 +14,15 @@ object ViewElementsDemoLayoutView {
     fun getView(baseUrl: String) =
         mosaikView {
 
-            column {
-
+            column(childAlignment = HAlignment.JUSTIFY) {
                 // example for reusing parts of views - see ViewElementsDemoCommon.kt for source
                 addHeader("Layout elements")
 
                 label(
                     "View source on GitHub",
                     style = LabelStyle.BODY1LINK,
-                    textColor = ForegroundColor.PRIMARY
+                    textColor = ForegroundColor.PRIMARY,
+                    textAlignment = HAlignment.CENTER,
                 ) {
                     onClickAction(openBrowser("https://github.com/MrStahlfelge/mosaik/blob/develop/backend-demo-kotlin/src/main/kotlin/org/ergoplatform/mosaik/BackendDemoKotlin/ViewElementsDemoLayoutView.kt"))
                 }
@@ -230,27 +230,28 @@ object ViewElementsDemoLayoutView {
                 }
                 card(Padding.DEFAULT) {
 
-                    column(Padding.NONE) {
+                    layout(HAlignment.JUSTIFY, VAlignment.CENTER) {
+                        column(Padding.NONE) {
 
-                        column(Padding.DEFAULT) {
-                            label("Horizontal rule", style = LabelStyle.HEADLINE2)
+                            column(Padding.DEFAULT) {
+                                label("Horizontal rule", style = LabelStyle.HEADLINE2)
 
-                            label(
-                                "Use the horizontal rule as a separator when needed."
-                            )
-                        }
+                                label(
+                                    "Use the horizontal rule as a separator when needed."
+                                )
+                            }
 
-                        hr(Padding.TWICE)
+                            hr(Padding.TWICE)
 
-                        column(Padding.DEFAULT) {
-                            label(
-                                "This is another section."
-                            )
+                            column(Padding.DEFAULT) {
+                                label(
+                                    "This is another section."
+                                )
+                            }
                         }
                     }
 
                 }
-
             }
 
         }

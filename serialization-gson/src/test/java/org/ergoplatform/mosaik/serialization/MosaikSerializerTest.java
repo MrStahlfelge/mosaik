@@ -115,7 +115,9 @@ public class MosaikSerializerTest extends TestCase {
             }
         }
 
-        column.addChild(new Box(), HAlignment.END, 2);
+        Column chilAlignmentColumn = new Column();
+        chilAlignmentColumn.setAlignmentForAdded(HAlignment.JUSTIFY);
+        column.addChild(chilAlignmentColumn, HAlignment.END, 2);
         column.setSpacing(Padding.DEFAULT);
 
         MosaikApp content = new MosaikApp();

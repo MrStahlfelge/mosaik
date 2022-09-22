@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * LinearLayout places items stacked on the screen
@@ -58,7 +59,7 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
 
     @Override
     public void addChild(@Nonnull ViewElement element) {
-        addChild(element, defaultChildAlignment(), 0);
+        addChild(element, addedChildAlignment != null ? addedChildAlignment : defaultChildAlignment(), 0);
     }
 
     public abstract CSA defaultChildAlignment();
@@ -111,5 +112,15 @@ public abstract class LinearLayout<CSA> extends ViewElement implements LayoutEle
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getPadding(), getSpacing(), getChildren(), childAlignment, childWeight);
+    }
+
+    @Nullable
+    private CSA addedChildAlignment = null;
+
+    /**
+     * @param childAlignment alignment to be used for added children
+     */
+    public void setAlignmentForAdded(@Nullable CSA childAlignment) {
+        this.addedChildAlignment = childAlignment;
     }
 }

@@ -53,22 +53,26 @@ fun <G : ViewGroup> G.lazyLoadBox(
 fun ViewContent.column(
     padding: Padding? = Padding.DEFAULT,
     spacing: Padding? = null,
+    childAlignment: HAlignment? = null,
     init: (@MosaikDsl Column).() -> Unit
 ): Column =
     viewElement(Column().apply {
         padding?.let { this.padding = padding }
         spacing?.let { this.spacing = spacing }
+        setAlignmentForAdded(childAlignment)
     }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.column(
     padding: Padding? = null,
     spacing: Padding? = null,
+    childAlignment: HAlignment? = null,
     init: (@MosaikDsl Column).() -> Unit
 ): Column =
     viewElement(Column().apply {
         padding?.let { this.padding = padding }
         spacing?.let { this.spacing = spacing }
+        setAlignmentForAdded(childAlignment)
     }, init)
 
 @MosaikDsl
@@ -97,28 +101,31 @@ fun <G : ViewGroup> G.grid(
 fun ViewContent.row(
     padding: Padding? = Padding.DEFAULT,
     spacing: Padding? = null,
+    childAlignment: VAlignment? = null,
     init: (@MosaikDsl Row).() -> Unit
 ): Row =
     viewElement(Row().apply {
         padding?.let { this.padding = padding }
         spacing?.let { this.spacing = spacing }
+        setAlignmentForAdded(childAlignment)
     }, init)
 
 @MosaikDsl
 fun <G : ViewGroup> G.row(
     padding: Padding? = null,
     spacing: Padding? = null,
+    childAlignment: VAlignment? = null,
     packed: Boolean? = false,
     init: (@MosaikDsl Row).() -> Unit
 ): Row =
     viewElement(Row().apply {
         padding?.let { this.padding = padding }
         spacing?.let { this.spacing = spacing }
+        setAlignmentForAdded(childAlignment)
         packed?.let { this.isPacked = packed }
     }, init)
 
-@MosaikDsl
-abstract class LayoutingViewGroup<S : ViewGroup>(val realViewGroup: S) : ViewGroup {
+private abstract class LayoutingViewGroup<S : ViewGroup>(val realViewGroup: S) : ViewGroup {
     override fun getChildren(): MutableList<ViewElement> {
         return realViewGroup.children
     }

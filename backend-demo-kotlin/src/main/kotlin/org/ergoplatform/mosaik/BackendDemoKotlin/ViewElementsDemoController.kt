@@ -121,7 +121,7 @@ class ViewElementsDemoController {
                         val gridelmentid = "gridelement$i"
                         id = gridelmentid
                         onClickAction(changeView(mosaikView {
-                            box {
+                            card {
                                 id = gridelmentid
                                 label("Element $i clicked")
                             }
