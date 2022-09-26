@@ -73,6 +73,17 @@ fun ViewContent.navigateToApp(
 }
 
 @MosaikDsl
+fun navigateToApp(
+    url: String,
+    id: String? = null,
+    init: (@MosaikDsl NavigateAction).() -> Unit = {}
+): NavigateAction {
+    val browserAction = NavigateAction()
+    browserAction.url = url
+    return initAction(browserAction, id, init)
+}
+
+@MosaikDsl
 fun ViewContent.invokeErgoPay(
     url: String,
     onFinishedAction: Action? = null,
