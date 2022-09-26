@@ -94,7 +94,7 @@ class ViewTreeTest : TestCase() {
                         throw UnsupportedOperationException()
                     }
 
-                    override fun fetchImage(
+                    override suspend fun fetchImage(
                         url: String,
                         baseUrl: String?,
                         referrer: String?

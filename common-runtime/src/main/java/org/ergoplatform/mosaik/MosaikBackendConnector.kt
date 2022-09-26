@@ -39,7 +39,7 @@ interface MosaikBackendConnector {
     /**
      * loads an Image. Blocking, call on a background thread
      */
-    fun fetchImage(
+    suspend fun fetchImage(
         url: String,
         baseUrl: String?,
         referrer: String?

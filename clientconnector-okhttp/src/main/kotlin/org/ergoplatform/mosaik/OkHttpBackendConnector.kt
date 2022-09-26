@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.delay
 import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.MosaikContext
@@ -121,8 +122,19 @@ open class OkHttpBackendConnector(
 
     override fun isDynamicImageUrl(absoluteUrl: String): Boolean = absoluteUrl.contains('?')
 
-    override fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray =
-        fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
+    private var currentImageDownloads = 0
+    var maxSimultaneousImageDownloads = 20
+    override suspend fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray {
+        while (currentImageDownloads > maxSimultaneousImageDownloads) {
+            delay(75)
+        }
+        currentImageDownloads++
+        return try {
+            fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
+        } finally {
+            currentImageDownloads--
+        }
+    }
 
     override fun reportError(reportUrl: String, appUrl: String, t: Throwable) {
         try {
