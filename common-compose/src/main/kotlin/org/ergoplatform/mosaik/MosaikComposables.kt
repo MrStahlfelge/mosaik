@@ -343,6 +343,7 @@ private fun IconType.getImageVector() =
         IconType.REFRESH -> Icons.Default.Refresh
         IconType.DELETE -> Icons.Default.Delete
         IconType.CROSS -> Icons.Default.Close
+        IconType.SEARCH -> Icons.Default.Search
     }
 
 @Composable

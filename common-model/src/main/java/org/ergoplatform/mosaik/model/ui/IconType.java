@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik.model.ui;
 
+import org.ergoplatform.mosaik.model.Since;
+
 public enum IconType {
     INFO,
     WARN,
@@ -22,5 +24,7 @@ public enum IconType {
     FORWARD,
     SWITCH,
     QR_CODE,
-    QR_SCAN
+    QR_SCAN,
+    @Since(2)
+    SEARCH
 }
