@@ -1,6 +1,9 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.MosaikContext
@@ -122,17 +125,9 @@ open class OkHttpBackendConnector(
 
     override fun isDynamicImageUrl(absoluteUrl: String): Boolean = absoluteUrl.contains('?')
 
-    private var currentImageDownloads = 0
-    var maxSimultaneousImageDownloads = 20
     override suspend fun fetchImage(url: String, baseUrl: String?, referrer: String?): ByteArray {
-        while (currentImageDownloads > maxSimultaneousImageDownloads) {
-            delay(75)
-        }
-        currentImageDownloads++
-        return try {
+        return withContext(Dispatchers.IO) {
             fetchHttpGetBytes(getAbsoluteUrl(baseUrl, url), referrer)
-        } finally {
-            currentImageDownloads--
         }
     }
 
@@ -148,14 +143,51 @@ open class OkHttpBackendConnector(
         }
     }
 
-    private fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
+    private suspend fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
         val builder = Request.Builder().url(url)
         referrer?.let { builder.header("Referer", referrer) }
         val request = builder.build()
-        okClient.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            return response.body()!!.bytes()
+
+        var waiting = true
+        var returnBytes: ByteArray? = null
+        var error: Throwable? = null
+        val call = okClient.newCall(request)
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                error = e
+                waiting = false
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    response.use {
+                        if (!response.isSuccessful)
+                            error = IOException("Unexpected code $response")
+                        else
+                            returnBytes = response.body()!!.bytes()
+                    }
+                } catch (t: Throwable) {
+                    error = t
+                }
+                waiting = false
+            }
+        })
+
+        try {
+            while (waiting)
+                delay(75)
+        } catch (t: CancellationException) {
+            MosaikLogger.logDebug("Image download cancelled $url")
+            call.cancel()
+            error = t
         }
+
+        if (returnBytes != null)
+            return returnBytes!!
+        else if (error != null)
+            throw error!!
+        else
+            throw IllegalStateException()
     }
 
     private fun fetchHttpGetStringSync(httpUrl: String, headers: Headers): Pair<String?, String> {

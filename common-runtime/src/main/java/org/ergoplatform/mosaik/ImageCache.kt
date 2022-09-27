@@ -41,7 +41,8 @@ class ImageCache(
         val (cacheEntry, hadEntryBefore) = synchronized(cacheMap) {
             val existingImageCacheEntry = cacheMap[absoluteUrl]
 
-            val hadEntryBefore = existingImageCacheEntry != null
+            val hadEntryBefore = existingImageCacheEntry != null &&
+                    existingImageCacheEntry.content?.isEmpty() == false
 
             val cacheEntry = existingImageCacheEntry ?: ImageCache(
                 absoluteUrl,
@@ -51,7 +52,10 @@ class ImageCache(
 
             cacheEntry.lastAccessed = currentScreenContentVersion
 
-            if (!hadEntryBefore) cacheMap[absoluteUrl] = cacheEntry
+            if (!hadEntryBefore) {
+                cacheEntry.content = null
+                cacheMap[absoluteUrl] = cacheEntry
+            }
 
             Pair(cacheEntry, hadEntryBefore)
         }
