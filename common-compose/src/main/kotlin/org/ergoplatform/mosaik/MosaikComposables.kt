@@ -18,8 +18,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.ergoplatform.mosaik.MosaikStyleConfig.defaultLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.primaryButtonTextColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.primaryLabelColor
@@ -258,30 +262,34 @@ fun MosaikQrCode(treeElement: TreeElement, modifier: Modifier) {
 fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
     val element = treeElement.element as Image
     val imageBytes = treeElement.getResourceBytes
-    val modifierWithSize = modifier.size(
-        when (element.size) {
-            Image.Size.SMALL -> 62.dp
-            Image.Size.MEDIUM -> 124.dp
-            Image.Size.LARGE -> 258.dp
-            Image.Size.XXL -> 520.dp
-        }
-    )
+    val dpSize = when (element.size) {
+        Image.Size.SMALL -> 62.dp
+        Image.Size.MEDIUM -> 124.dp
+        Image.Size.LARGE -> 258.dp
+        Image.Size.XXL -> 520.dp
+    }
+    val pxSize = with(LocalDensity.current) { dpSize.toPx().toInt() }
+    val modifierWithSize = modifier.size(dpSize)
 
     // imageBytes null -> still downloading
     // imageBytes length 0 -> error
-
-    val imageBitmap = remember(imageBytes) {
-        if (imageBytes != null && imageBytes.isNotEmpty()) {
-
-            try {
-                MosaikComposeConfig.convertByteArrayToImageBitmap(imageBytes)
-            } catch (t: Throwable) {
-                MosaikLogger.logError("Could not load bitmap", t)
-                null
+    val imageBitmapState = remember { mutableStateOf<ImageBitmap?>(null) }
+    val processingState = remember(imageBytes, pxSize) { mutableStateOf(true) }
+    LaunchedEffect(imageBytes, pxSize) {
+        imageBitmapState.value = if (imageBytes != null && imageBytes.isNotEmpty()) {
+            withContext(Dispatchers.IO) {
+                try {
+                    MosaikComposeConfig.convertByteArrayToImageBitmap(imageBytes, pxSize)
+                } catch (t: Throwable) {
+                    MosaikLogger.logError("Could not load bitmap", t)
+                    null
+                }
             }
         } else null
+        processingState.value = false
     }
 
+    val imageBitmap = imageBitmapState.value
     if (imageBitmap != null) {
         Image(imageBitmap, null, modifierWithSize, contentScale = ContentScale.Inside)
     } else {
@@ -291,7 +299,7 @@ fun MosaikImage(treeElement: TreeElement, modifier: Modifier) {
                     Modifier.size(48.dp),
                     color = secondaryLabelColor,
                 )
-            else
+            else if (!processingState.value)
                 Icon(
                     IconType.ERROR.getImageVector(),
                     null,

@@ -49,7 +49,10 @@ fun main() {
 
         MosaikLogger.logger = MosaikLogger.DefaultLogger
         MosaikComposeConfig.convertByteArrayToImageBitmap =
-            { imageBytes -> loadImageBitmap(imageBytes.inputStream()) }
+            { imageBytes, pixelSize ->
+                // TODO make use of pixelsize to reduce overhead
+                loadImageBitmap(imageBytes.inputStream())
+            }
         MosaikComposeConfig.convertQrCodeContentToImageBitmap = { text ->
             val qr = QrCodeEncoder().addAutomatic(text).fixate()
             val generator = QrCodeGeneratorImage(15).render(qr)

@@ -19,9 +19,9 @@ object MosaikComposeConfig {
     var interceptReturnForImeAction = false
 
     /**
-     * mandatory to set, how to convert a bitmap into a ByteArray
+     * mandatory to set, how to convert a bitmap from a ByteArray
      */
-    lateinit var convertByteArrayToImageBitmap: (ByteArray) -> ImageBitmap
+    lateinit var convertByteArrayToImageBitmap: (ByteArray, pixelSize: Int) -> ImageBitmap
 
     /**
      * need to be set for [QrCode] to display
