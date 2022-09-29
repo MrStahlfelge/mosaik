@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.input.key.*
-import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -48,11 +47,7 @@ fun main() {
         val windowState = rememberWindowState()
 
         MosaikLogger.logger = MosaikLogger.DefaultLogger
-        MosaikComposeConfig.convertByteArrayToImageBitmap =
-            { imageBytes, pixelSize ->
-                // TODO make use of pixelsize to reduce overhead
-                loadImageBitmap(imageBytes.inputStream())
-            }
+        MosaikComposeConfig.convertByteArrayToImageBitmap = DesktopImageLoader::loadAndScaleImage
         MosaikComposeConfig.convertQrCodeContentToImageBitmap = { text ->
             val qr = QrCodeEncoder().addAutomatic(text).fixate()
             val generator = QrCodeGeneratorImage(15).render(qr)
