@@ -102,14 +102,15 @@ class ImageCache(
                 // leave all images that are loaded since last root element content version
                 // for all others: restrict to 1 mb, order by size
 
-                .sortedByDescending { it.content?.size }
+                .sortedBy { it.content?.size }
 
             cacheMap.clear()
             var currentSize = 0
 
             elements.forEach {
-                if (currentSize <= maxCacheSizeBytes || it.lastAccessed >= keepAllElementsFrom) {
-                    currentSize += (it.content?.size ?: 0)
+                val sizeWithImage = currentSize + (it.content?.size ?: 0)
+                if (sizeWithImage <= maxCacheSizeBytes || it.lastAccessed >= keepAllElementsFrom) {
+                    currentSize = sizeWithImage
                     cacheMap[it.url] = it
                 }
             }
