@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import java.lang.ref.SoftReference
 
 /**
  * Image Cache caches images for [maxCacheSizeBytes] at max, or for the last viewed content root.
@@ -14,10 +15,11 @@ class ImageCache(
     private val maxCacheSizeBytes: Long,
 ) {
 
-    private val cacheMap = HashMap<String, ImageCache>()
+    private val cacheMap = HashMap<String, ImageCacheElement>()
+    private val softCacheMap = HashMap<String, SoftReference<ImageCacheElement>>()
     private var lastRootElementContentVersion = 0
 
-    private data class ImageCache(
+    private data class ImageCacheElement(
         val url: String,
         var lastAccessed: Int,
         var content: ByteArray?
@@ -38,13 +40,18 @@ class ImageCache(
 
         val isDynamicUrl = backendConnector.isDynamicImageUrl(absoluteUrl)
 
+        // make sure to remove cancelled or failed entries
+        pruneCache(currentScreenContentVersion)
+
         val (cacheEntry, hadEntryBefore) = synchronized(cacheMap) {
-            val existingImageCacheEntry = cacheMap[absoluteUrl]
+            val existingImageCacheEntry = cacheMap[absoluteUrl] ?: softCacheMap[absoluteUrl]?.get()
 
-            val hadEntryBefore = existingImageCacheEntry != null &&
-                    existingImageCacheEntry.content?.isEmpty() == false
+            // this will pick up entries that still downloading or failed to download as well
+            // this is intended as a single picture can be used multiple times on the same page
+            // these entries are removed in pruneCache() method
+            val hadEntryBefore = existingImageCacheEntry != null
 
-            val cacheEntry = existingImageCacheEntry ?: ImageCache(
+            val cacheEntry = existingImageCacheEntry ?: ImageCacheElement(
                 absoluteUrl,
                 currentScreenContentVersion,
                 null
@@ -52,10 +59,8 @@ class ImageCache(
 
             cacheEntry.lastAccessed = currentScreenContentVersion
 
-            if (!hadEntryBefore) {
-                cacheEntry.content = null
+            if (!isDynamicUrl)
                 cacheMap[absoluteUrl] = cacheEntry
-            }
 
             Pair(cacheEntry, hadEntryBefore)
         }
@@ -79,6 +84,7 @@ class ImageCache(
             while (cacheEntry.content == null && scope.isActive) {
                 delay(50)
             }
+            MosaikLogger.logDebug("Image $url served from cache.")
 
             cacheEntry.content ?: ByteArray(0)
         }
@@ -88,7 +94,6 @@ class ImageCache(
         if (lastRootElementContentVersion == currentScreenContentVersion)
             return
 
-        val keepAllElementsFrom = lastRootElementContentVersion
         lastRootElementContentVersion = currentScreenContentVersion
 
         synchronized(cacheMap) {
@@ -97,10 +102,13 @@ class ImageCache(
             val elements = cacheMap.values.toList()
 
                 // delete entries with size 0 (could be because of connection issues)
-                .filterNot { it.content?.isEmpty() ?: true }
+                // keep the ones from this content version, could be still ongoing downloads
+                .filterNot {
+                    (it.content?.isEmpty() ?: true) && it.lastAccessed < currentScreenContentVersion
+                }
 
                 // leave all images that are loaded since last root element content version
-                // for all others: restrict to 1 mb, order by size
+                // for all others: restrict to maxCacheSizeBytes, order by size
 
                 .sortedBy { it.content?.size }
 
@@ -109,13 +117,17 @@ class ImageCache(
 
             elements.forEach {
                 val sizeWithImage = currentSize + (it.content?.size ?: 0)
-                if (sizeWithImage <= maxCacheSizeBytes || it.lastAccessed >= keepAllElementsFrom) {
+                if (sizeWithImage <= maxCacheSizeBytes || it.lastAccessed >= currentScreenContentVersion) {
                     currentSize = sizeWithImage
                     cacheMap[it.url] = it
+                } else if (it.content?.isNotEmpty() == true) {
+                    // store in soft cache map
+                    softCacheMap[it.url] = SoftReference(it)
                 }
             }
 
             MosaikLogger.logDebug("Kept ${cacheMap.size} images with $currentSize bytes")
+            MosaikLogger.logDebug("Soft-kept images with ${softCacheMap.values.sumOf { it.get()?.content?.size ?: 0 }} bytes")
         }
     }
 }
