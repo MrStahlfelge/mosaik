@@ -43,6 +43,7 @@ import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryButtonTextColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.secondaryLabelColor
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonColorDisabled
 import org.ergoplatform.mosaik.MosaikStyleConfig.textButtonTextColor
+import org.ergoplatform.mosaik.MosaikStyleConfig.textFieldBackgroundColor
 import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ui.*
 import org.ergoplatform.mosaik.model.ui.input.*
@@ -541,6 +542,7 @@ fun MosaikTextField(
                     errorLabelColor = primaryLabelColor,
                     errorLeadingIconColor = primaryLabelColor,
                     errorTrailingIconColor = primaryLabelColor,
+                    backgroundColor = textFieldBackgroundColor,
                 )
             )
         }

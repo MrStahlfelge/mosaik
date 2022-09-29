@@ -17,6 +17,7 @@ object MosaikStyleConfig {
     var secondaryButtonColor = Color.Black
     var textButtonTextColor = primaryLabelColor
     var textButtonColorDisabled = secondaryLabelColor
+    var textFieldBackgroundColor = Color.White
 
     var cardShapeRadius = 4.dp
     var buttonShapeRadius = 4.dp
