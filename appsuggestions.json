@@ -5,8 +5,13 @@
     "appUrl": "https://api.tokenjay.app/mosaik/ageusd"
   },
   {
+    "appName": "Box consolidator",
+    "appDescription": "Check your wallet's box age and count and consolidate or renew when necessary.",
+    "appUrl": "https://api.tokenjay.app/mosaik/boxconsolidation/"
+  },
+  {
     "appName": "Token burner",
-    "appDescription": "Burn unwanted tokens",
+    "appDescription": "Burn unwanted tokens, powered by TokenJay",
     "appUrl": "https://api.tokenjay.app/mosaik/tokenburn"
   }
 ]
