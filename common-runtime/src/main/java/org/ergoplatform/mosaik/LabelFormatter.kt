@@ -1,5 +1,7 @@
 package org.ergoplatform.mosaik
 
+import org.ergoplatform.mosaik.model.ui.ViewElement
+import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField
 import org.ergoplatform.mosaik.model.ui.text.*
 
 object LabelFormatter {
@@ -42,15 +44,15 @@ object LabelFormatter {
         }
     }
 
-    fun hasAlernativeText(element: StyleableTextLabel<*>, treeElement: TreeElement): Boolean =
-        element is ErgoAddressLabel
+    fun hasAlternativeText(element: ViewElement, treeElement: TreeElement): Boolean =
+        element is ErgoAddressLabel || element is ErgAddressInputField
 
     /**
      * returns an alternative text to be shown instead of the formatted text, if available.
      * This is suspending and can be used to load from database or network
      */
     suspend fun getAlternativeText(
-        element: StyleableTextLabel<*>,
+        element: ViewElement,
         treeElement: TreeElement
     ): String? {
 
@@ -60,6 +62,9 @@ object LabelFormatter {
                 getFormattedText(element, treeElement)?.let {
                     treeElement.viewTree.mosaikRuntime.getErgoAddressLabel(it)
                 }
+
+            is ErgAddressInputField ->
+                treeElement.viewTree.mosaikRuntime.getErgoAddressLabel(treeElement.currentValueAsString)
 
             else -> null
         }

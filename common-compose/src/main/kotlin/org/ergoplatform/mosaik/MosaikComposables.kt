@@ -444,6 +444,15 @@ fun MosaikTextField(
     val element = treeElement.element as TextField<*>
 
     val errorState = remember(treeElement.createdAtContentVersion) { mutableStateOf(false) }
+    val alternativeTextState = remember(
+        treeElement.createdAtContentVersion,
+        textFieldState.value.text
+    ) { mutableStateOf<String?>(null) }
+
+    if (LabelFormatter.hasAlternativeText(element, treeElement))
+        LaunchedEffect(treeElement.createdAtContentVersion, textFieldState.value.text) {
+            alternativeTextState.value = LabelFormatter.getAlternativeText(element, treeElement)
+        }
 
     Column(modifier.fillMaxWidth()) {
         val customTextSelectionColors = TextSelectionColors(
@@ -453,9 +462,9 @@ fun MosaikTextField(
 
         CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
             OutlinedTextField(
-                textFieldState.value,
+                alternativeTextState.value?.let { TextFieldValue(it) } ?: textFieldState.value,
                 onValueChange = {
-                    if (textFieldState.value.text != it.text) {
+                    if (textFieldState.value.text != it.text && alternativeTextState.value == null) {
                         errorState.value =
                             !treeElement.changeValueFromInput(it.text.ifEmpty { null })
                         valueChangeCallback?.invoke(treeElement.currentValue)
@@ -511,22 +520,31 @@ fun MosaikTextField(
                         TextField.ImeActionType.GO -> ImeAction.Go
                     }
                 ),
-                readOnly = element.isReadOnly,
+                readOnly = element.isReadOnly || alternativeTextState.value != null,
                 label = { element.placeholder?.let { Text(it) } },
-                trailingIcon = element.endIcon?.getImageVector()?.let { iv ->
+                trailingIcon = if (alternativeTextState.value != null && !element.isReadOnly) {
                     {
-                        val icon = @Composable { Icon(iv, null) }
-
-                        if (element.onEndIconClicked != null)
-                            IconButton(onClick = {
-                                treeElement.runActionFromUserInteraction(element.onEndIconClicked)
-                            }) {
-                                icon()
-                            }
-                        else
-                            icon()
+                        IconButton(onClick = {
+                            textFieldState.value = TextFieldValue()
+                            errorState.value = false
+                            treeElement.changeValueFromInput(null)
+                        }) { Icon(Icons.Default.Close, null) }
                     }
-                },
+                } else
+                    element.endIcon?.getImageVector()?.let { iv ->
+                        {
+                            val icon = @Composable { Icon(iv, null) }
+
+                            if (element.onEndIconClicked != null)
+                                IconButton(onClick = {
+                                    treeElement.runActionFromUserInteraction(element.onEndIconClicked)
+                                }) {
+                                    icon()
+                                }
+                            else
+                                icon()
+                        }
+                    },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     textColor = defaultLabelColor,
                     disabledTextColor = secondaryLabelColor,
@@ -706,7 +724,7 @@ private fun MosaikLabel(
     val alternativeTextState =
         remember(treeElement.createdAtContentVersion) { mutableStateOf<String?>(null) }
 
-    if (LabelFormatter.hasAlernativeText(element, treeElement))
+    if (LabelFormatter.hasAlternativeText(element, treeElement))
         LaunchedEffect(treeElement.createdAtContentVersion) {
             alternativeTextState.value = LabelFormatter.getAlternativeText(element, treeElement)
         }
