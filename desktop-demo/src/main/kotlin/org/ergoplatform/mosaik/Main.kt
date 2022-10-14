@@ -197,7 +197,7 @@ fun main() {
                             ergoAddress.matches(Regex("^[A-HJ-NP-Za-km-z1-9]*\$"))
                 }
 
-                override fun getErgoAddressLabel(ergoAddress: String): String? {
+                override suspend fun getErgoAddressLabel(ergoAddress: String): String? {
                     return if (ergoAddress.startsWith('9'))
                         "Mainnet $ergoAddress"
                     else if (ergoAddress.startsWith('3'))
@@ -206,7 +206,7 @@ fun main() {
                 }
 
                 override fun getErgoWalletLabel(firstAddress: String): String? =
-                    getErgoAddressLabel(firstAddress)
+                    runBlocking { getErgoAddressLabel(firstAddress) }
 
                 override fun formatString(string: StringConstant, values: String?): String {
                     return when (string) {

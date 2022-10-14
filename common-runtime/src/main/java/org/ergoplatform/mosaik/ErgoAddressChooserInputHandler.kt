@@ -1,5 +1,6 @@
 package org.ergoplatform.mosaik
 
+import kotlinx.coroutines.runBlocking
 import org.ergoplatform.mosaik.model.ui.input.InputElement
 
 class ErgoAddressChooserInputHandler(
@@ -11,7 +12,9 @@ class ErgoAddressChooserInputHandler(
         val address = currentValue as String?
 
         return if (address != null && mosaikRuntime.isErgoAddressValid(address))
-            mosaikRuntime.getErgoAddressLabel(address) ?: address
+            runBlocking { // TODO Mosaik runblocking here works because db is fast and Compose implementation
+                mosaikRuntime.getErgoAddressLabel(address)
+            } ?: address
         else mosaikRuntime.formatString(StringConstant.ChooseAddress)
     }
 

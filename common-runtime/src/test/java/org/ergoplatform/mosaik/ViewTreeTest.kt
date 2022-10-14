@@ -152,7 +152,7 @@ class ViewTreeTest : TestCase() {
                     return false
                 }
 
-                override fun getErgoAddressLabel(ergoAddress: String): String? {
+                override suspend fun getErgoAddressLabel(ergoAddress: String): String? {
                     return null
                 }
 

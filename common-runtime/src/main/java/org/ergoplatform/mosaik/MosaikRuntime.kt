@@ -375,7 +375,7 @@ abstract class MosaikRuntime(
     /**
      * return an address label, if available
      */
-    abstract fun getErgoAddressLabel(ergoAddress: String): String?
+    abstract suspend fun getErgoAddressLabel(ergoAddress: String): String?
 
     /**
      * return wallet label, if available
