@@ -1,9 +1,6 @@
 package org.ergoplatform.mosaik
 
-import org.ergoplatform.mosaik.model.ui.text.ErgAmountLabel
-import org.ergoplatform.mosaik.model.ui.text.FiatAmountLabel
-import org.ergoplatform.mosaik.model.ui.text.Label
-import org.ergoplatform.mosaik.model.ui.text.StyleableTextLabel
+import org.ergoplatform.mosaik.model.ui.text.*
 
 object LabelFormatter {
 
@@ -42,6 +39,29 @@ object LabelFormatter {
             }
 
             else -> element.text.toString()
+        }
+    }
+
+    fun hasAlernativeText(element: StyleableTextLabel<*>, treeElement: TreeElement): Boolean =
+        element is ErgoAddressLabel
+
+    /**
+     * returns an alternative text to be shown instead of the formatted text, if available.
+     * This is suspending and can be used to load from database or network
+     */
+    suspend fun getAlternativeText(
+        element: StyleableTextLabel<*>,
+        treeElement: TreeElement
+    ): String? {
+
+        return when (element) {
+
+            is ErgoAddressLabel ->
+                getFormattedText(element, treeElement)?.let {
+                    treeElement.viewTree.mosaikRuntime.getErgoAddressLabel(it)
+                }
+
+            else -> null
         }
     }
 }

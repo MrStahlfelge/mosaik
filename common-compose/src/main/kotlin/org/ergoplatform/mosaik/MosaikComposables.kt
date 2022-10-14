@@ -703,6 +703,14 @@ private fun MosaikLabel(
         LabelFormatter.getFormattedText(element, treeElement)
     }
 
+    val alternativeTextState =
+        remember(treeElement.createdAtContentVersion) { mutableStateOf<String?>(null) }
+
+    if (LabelFormatter.hasAlernativeText(element, treeElement))
+        LaunchedEffect(treeElement.createdAtContentVersion) {
+            alternativeTextState.value = LabelFormatter.getAlternativeText(element, treeElement)
+        }
+
     val expandable = (element is ExpandableElement && element.isExpandOnClick)
     val expanded = remember { mutableStateOf(false) }
 
@@ -718,9 +726,9 @@ private fun MosaikLabel(
     val maxLines = if (expandable && !expanded.value) 1 else element.maxLines
 
     if (text != null) {
-        if (element.truncationType == TruncationType.MIDDLE && maxLines == 1)
+        if (element.truncationType == TruncationType.MIDDLE && maxLines == 1 && alternativeTextState.value == null)
             MiddleEllipsisText(
-                text,
+                alternativeTextState.value ?: text,
                 newModifier,
                 textAlign = element.textAlignment.toTextAlign(),
                 style = labelStyle(element.style),
@@ -736,7 +744,7 @@ private fun MosaikLabel(
             }
 
             Text(
-                text,
+                alternativeTextState.value ?: text,
                 newModifier,
                 maxLines = if (maxLines <= 0) Int.MAX_VALUE else maxLines,
                 textAlign = element.textAlignment.toTextAlign(),
