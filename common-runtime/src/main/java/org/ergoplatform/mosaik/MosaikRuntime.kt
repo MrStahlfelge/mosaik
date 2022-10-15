@@ -332,7 +332,9 @@ abstract class MosaikRuntime(
      */
     open fun raiseError(t: Throwable, silent: Boolean = false) {
         appManifest?.errorReportUrl?.let { errorUrl ->
-            coroutineScope.launch(Dispatchers.IO) { backendConnector.reportError(errorUrl, appUrl!!, t) }
+            coroutineScope.launch(Dispatchers.IO) {
+                backendConnector.reportError(errorUrl, appUrl!!, t)
+            }
         }
 
         if (!silent)
@@ -397,13 +399,22 @@ abstract class MosaikRuntime(
     abstract fun showErgoWalletChooser(valueId: String)
 
     /**
-     * set the value for a value element in the current tree. Please note that not all elements
-     * are automatically updated by this in the view.
+     * set the value for a value element in the current tree. Please note that this only sets the
+     * internal value of elements. To replace the element in view, set [updateInView] param.
      */
-    fun setValue(valueId: String, newValue: Any?) {
+    fun setValue(valueId: String, newValue: Any?, updateInView: Boolean = false) {
         viewTree.findElementById(valueId)?.let { element ->
-            if (element.hasValue)
+            if (element.hasValue) {
                 element.valueChanged(newValue)
+                if (updateInView) {
+                    viewTree.setContentView(
+                        valueId,
+                        ViewContent(element.element.apply {
+                            (this as? InputElement<*>)?.value = element.currentValue
+                        })
+                    )
+                }
+            }
         }
     }
 

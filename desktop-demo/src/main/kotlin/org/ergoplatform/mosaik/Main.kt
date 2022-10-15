@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.PermContactCalendar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -31,6 +32,7 @@ import org.ergoplatform.mosaik.model.MosaikManifest
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
+import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -275,6 +277,20 @@ fun main() {
                     .fillMaxHeight(),
                 adapter = rememberScrollbarAdapter(scrollState)
             )
+        }
+
+        MosaikComposeConfig.getTextFieldTrailingIcon = { element ->
+            if (element is ErgAddressInputField) {
+                Pair(Icons.Default.PermContactCalendar) {
+                    TextInputDialog.showInputDialog(
+                        { address -> runtime.setValue(element.id!!, address, updateInView = true) },
+                        "Address chooser",
+                        "",
+                        "Enter a Ergo address here."
+                    )
+                }
+            } else
+                null
         }
 
         val viewTree = runtime.viewTree

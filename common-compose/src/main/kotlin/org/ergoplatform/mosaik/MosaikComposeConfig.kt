@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import org.ergoplatform.mosaik.model.ui.input.TextField
 import org.ergoplatform.mosaik.model.ui.text.TokenLabel
 
 object MosaikComposeConfig {
@@ -74,4 +76,9 @@ object MosaikComposeConfig {
         { properties, modifier, content ->
             content(properties.tokenName ?: properties.tokenId, properties.decimals, modifier)
         }
+
+    /**
+     * method that returns a trailing icon to use for text input fields that have no trailing icon set
+     */
+    var getTextFieldTrailingIcon: (TextField<*>) -> Pair<ImageVector, () -> Unit>? = { null }
 }

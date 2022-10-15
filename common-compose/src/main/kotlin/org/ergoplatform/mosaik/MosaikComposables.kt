@@ -544,7 +544,10 @@ fun MosaikTextField(
                             else
                                 icon()
                         }
-                    },
+                    } ?: MosaikComposeConfig.getTextFieldTrailingIcon(element)
+                        ?.let { (iv, onClick) ->
+                            { IconButton(onClick) { Icon(iv, null) } }
+                        },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     textColor = defaultLabelColor,
                     disabledTextColor = secondaryLabelColor,
