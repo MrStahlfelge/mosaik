@@ -280,7 +280,7 @@ fun main() {
         }
 
         MosaikComposeConfig.getTextFieldTrailingIcon = { element ->
-            if (element is ErgAddressInputField) {
+            if (element is ErgAddressInputField && element.isEnabled && !element.isReadOnly) {
                 Pair(Icons.Default.PermContactCalendar) {
                     TextInputDialog.showInputDialog(
                         { address -> runtime.setValue(element.id!!, address, updateInView = true) },

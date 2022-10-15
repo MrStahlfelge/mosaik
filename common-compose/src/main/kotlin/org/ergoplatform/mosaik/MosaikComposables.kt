@@ -522,7 +522,7 @@ fun MosaikTextField(
                 ),
                 readOnly = element.isReadOnly || alternativeTextState.value != null,
                 label = { element.placeholder?.let { Text(it) } },
-                trailingIcon = if (alternativeTextState.value != null && !element.isReadOnly) {
+                trailingIcon = if (alternativeTextState.value != null && !element.isReadOnly && element.isEnabled) {
                     {
                         IconButton(onClick = {
                             textFieldState.value = TextFieldValue()
