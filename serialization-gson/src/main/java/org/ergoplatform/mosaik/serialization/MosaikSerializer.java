@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import org.ergoplatform.mosaik.model.FetchActionResponse;
 import org.ergoplatform.mosaik.model.MosaikApp;
 import org.ergoplatform.mosaik.model.MosaikContext;
+import org.ergoplatform.mosaik.model.NotificationCheckResponse;
 import org.ergoplatform.mosaik.model.ViewContent;
 import org.ergoplatform.mosaik.model.actions.Action;
 import org.ergoplatform.mosaik.model.ui.Icon;
@@ -182,6 +183,14 @@ public class MosaikSerializer {
     public FetchActionResponse fetchActionResponseFromJson(String json) {
         try {
             return getGson(false).fromJson(json, FetchActionResponse.class);
+        } catch (Throwable t) {
+            throw new DeserializationException(t);
+        }
+    }
+
+    public NotificationCheckResponse notificationCheckResponseFromJson(String json) {
+        try {
+            return getGson(false).fromJson(json, NotificationCheckResponse.class);
         } catch (Throwable t) {
             throw new DeserializationException(t);
         }

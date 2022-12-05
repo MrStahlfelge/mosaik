@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.PermContactCalendar
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,6 +32,7 @@ import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
 import org.ergoplatform.mosaik.model.ui.input.ErgAddressInputField
+import org.ergoplatform.mosaik.model.ui.text.LabelStyle
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.awt.Desktop
 import java.awt.Toolkit
@@ -338,7 +338,29 @@ fun main() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(Modifier.fillMaxWidth()) {
-                        MosaikAppHeader(manifestState, runtime)
+                        MosaikAppHeader(
+                            onClickNotifications = {
+                                manifestState.value?.notificationCheckUrl?.let { url ->
+                                    GlobalScope.launch(Dispatchers.IO) {
+                                        val message = try {
+                                            val notificationResponse =
+                                                backendConnector.checkForNotification(
+                                                    backendConnector.getAbsoluteUrl(
+                                                        runtime.appUrl!!,
+                                                        url
+                                                    )
+                                                )
+
+                                            notificationResponse.message ?: "No notification"
+                                        } catch (t: Throwable) {
+                                            "Error checking notifications: $t"
+                                        }
+                                        dialogHandler.showDialog(MosaikDialog(message, "OK"))
+                                    }
+                                }
+                            },
+                            manifestState, runtime
+                        )
 
                         Row {
                             Column(Modifier.weight(2.0f)) {
@@ -365,6 +387,7 @@ fun main() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MosaikAppHeader(
+    onClickNotifications: () -> Unit,
     manifestState: MutableState<MosaikManifest?>,
     runtime: MosaikRuntime
 ) {
@@ -374,7 +397,21 @@ private fun MosaikAppHeader(
                 TextFieldValue(runtime.appUrl ?: "", selection = TextRange(0, 1000))
             )
         }
-        Text(manifestState.value?.appName ?: "(No app)")
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                manifestState.value?.appName ?: "(No app)",
+                Modifier.weight(1f).padding(horizontal = 16.dp),
+                style = labelStyle(LabelStyle.HEADLINE2),
+            )
+            IconButton(
+                onClickNotifications,
+                enabled = manifestState.value?.notificationCheckUrl != null
+            ) {
+                Icon(Icons.Default.NotificationsActive, null)
+            }
+        }
+
         TextField(
             urlTextFieldState.value,
             onValueChange = { value -> urlTextFieldState.value = value },

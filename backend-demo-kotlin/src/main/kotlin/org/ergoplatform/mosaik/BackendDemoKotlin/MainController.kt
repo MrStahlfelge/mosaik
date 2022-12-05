@@ -3,6 +3,7 @@ package org.ergoplatform.mosaik.BackendDemoKotlin
 import org.ergoplatform.mosaik.*
 import org.ergoplatform.mosaik.jackson.MosaikSerializer
 import org.ergoplatform.mosaik.model.MosaikApp
+import org.ergoplatform.mosaik.model.NotificationCheckResponse
 import org.ergoplatform.mosaik.model.actions.Action
 import org.ergoplatform.mosaik.model.ui.Image
 import org.ergoplatform.mosaik.model.ui.ViewElement
@@ -50,7 +51,7 @@ class MainController {
             appVersion = APP_VERSION,
             targetCanvasDimension = CANVAS,
             appIconUrl = serverRequestUrl + "applogo.png",
-
+            notificationCheckUrl = "checkNotifications",
             ) {
 
             column {
@@ -89,6 +90,19 @@ class MainController {
                     }
                 }
             }
+        }
+    }
+
+    @GetMapping("/appselect/checkNotifications")
+    @ResponseBody
+    fun checkNotifications(
+        @RequestHeader headers: Map<String, String>,
+        request: HttpServletRequest
+    ): NotificationCheckResponse {
+        return NotificationCheckResponse().apply {
+            val context = MosaikSerializer.fromContextHeadersMap(headers)
+            message = "This could be a notification. You requested from guid ${context.guid}"
+            nextCheck = 15 // check again in 15 minutes
         }
     }
 

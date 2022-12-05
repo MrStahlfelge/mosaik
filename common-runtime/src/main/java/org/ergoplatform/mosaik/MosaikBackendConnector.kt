@@ -2,6 +2,7 @@ package org.ergoplatform.mosaik
 
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.MosaikApp
+import org.ergoplatform.mosaik.model.NotificationCheckResponse
 import org.ergoplatform.mosaik.model.ViewContent
 
 /**
@@ -47,8 +48,14 @@ interface MosaikBackendConnector {
 
     /**
      * reports an error to the given url. This method should not throw any exceptions
+     * reportUrl is from [MosaikManifest#errorReportUrl]
      */
     fun reportError(reportUrl: String, appUrl: String, t: Throwable)
+
+    /**
+     * performs a check for notifications. notificationUrl is from [MosaikManifest]
+     */
+    fun checkForNotification(notificationUrl: String): NotificationCheckResponse
 
     /**
      * returns the absolute url for an app resource, resolves any relative links

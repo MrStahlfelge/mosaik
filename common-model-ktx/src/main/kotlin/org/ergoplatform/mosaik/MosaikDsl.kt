@@ -23,6 +23,7 @@ fun mosaikApp(
     targetCanvasDimension: MosaikManifest.CanvasDimension? = null,
     cacheLifetime: Int = 0,
     errorReportUrl: String? = null,
+    notificationCheckUrl: String? = null,
     init: (MosaikApp).() -> Unit
 ): MosaikApp {
     val appInfo = MosaikApp()
@@ -37,6 +38,7 @@ fun mosaikApp(
         this.appDescription = appDescription
         this.iconUrl = appIconUrl
         this.errorReportUrl = errorReportUrl
+        this.notificationCheckUrl = notificationCheckUrl
     }
 
     appInfo.view = Box()

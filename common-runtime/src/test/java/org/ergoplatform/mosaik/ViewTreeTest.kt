@@ -6,7 +6,6 @@ import kotlinx.coroutines.GlobalScope
 import org.ergoplatform.mosaik.model.*
 import org.ergoplatform.mosaik.model.actions.ErgoAuthAction
 import org.ergoplatform.mosaik.model.actions.ErgoPayAction
-import org.ergoplatform.mosaik.model.actions.TokenInformationAction
 import org.ergoplatform.mosaik.model.ui.layout.Box
 
 class ViewTreeTest : TestCase() {
@@ -103,6 +102,10 @@ class ViewTreeTest : TestCase() {
                     }
 
                     override fun reportError(reportUrl: String, appUrl: String, t: Throwable) {
+                        throw UnsupportedOperationException()
+                    }
+
+                    override fun checkForNotification(notificationUrl: String): NotificationCheckResponse {
                         throw UnsupportedOperationException()
                     }
                 }) {

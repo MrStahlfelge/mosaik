@@ -85,6 +85,14 @@ public class MosaikManifest {
     @Nullable
     public String errorReportUrl;
 
+    /**
+     * If set, Mosaik executors can perform a GET request to the given url to check for
+     * notifications from the dApp. See MosaikBackendConnector and {@link NotificationCheckResponse}
+     * for more details.
+     */
+    @Nullable
+    public String notificationCheckUrl;
+
     public MosaikManifest(@Nonnull String appName,
                           int appVersion, int targetMosaikVersion,
                           @Nullable CanvasDimension targetCanvasDimension,

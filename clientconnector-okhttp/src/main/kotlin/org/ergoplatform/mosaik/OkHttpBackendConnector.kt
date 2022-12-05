@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.*
 import org.ergoplatform.mosaik.model.FetchActionResponse
 import org.ergoplatform.mosaik.model.MosaikContext
+import org.ergoplatform.mosaik.model.NotificationCheckResponse
 import org.ergoplatform.mosaik.model.ViewContent
 import org.ergoplatform.mosaik.serialization.MosaikSerializer
 import java.io.IOException
@@ -141,6 +142,19 @@ open class OkHttpBackendConnector(
         } catch (t: Throwable) {
             MosaikLogger.logError("Error reporting error", t)
         }
+    }
+
+    override fun checkForNotification(notificationUrl: String): NotificationCheckResponse {
+        val (_, json) = try {
+            fetchHttpGetStringSync(
+                notificationUrl,
+                Headers.of(serializer.contextHeadersMap(getContextFor(notificationUrl), null))
+            )
+        } catch (ioe: IOException) {
+            throw ConnectionException(ioe)
+        }
+        MosaikLogger.logDebug("Notification check response JSON loaded from $notificationUrl: $json")
+        return serializer.notificationCheckResponseFromJson(json)
     }
 
     private suspend fun fetchHttpGetBytes(url: String, referrer: String?): ByteArray {
