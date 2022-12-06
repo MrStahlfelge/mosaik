@@ -12,8 +12,14 @@ public class NotificationCheckResponse {
     public String message;
 
     /**
-     * Defines in how many minutes a next check should be done. It is not guaranteed that a
-     * Mosaik executor will perform the check at that time.
+     * Timestamp of the message. This can be used to determine if the message is new and should
+     * be marked unread.
+     */
+    public int messageTs;
+
+    /**
+     * Defines in how many minutes a next check should be done (delta time interval). It is not
+     * guaranteed that a Mosaik executor will perform the check at that time.
      */
     public int nextCheck;
 }
