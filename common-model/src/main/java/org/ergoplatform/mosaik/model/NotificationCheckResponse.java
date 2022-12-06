@@ -15,7 +15,7 @@ public class NotificationCheckResponse {
      * Timestamp of the message. This can be used to determine if the message is new and should
      * be marked unread.
      */
-    public int messageTs;
+    public long messageTs;
 
     /**
      * Defines in how many minutes a next check should be done (delta time interval). It is not
