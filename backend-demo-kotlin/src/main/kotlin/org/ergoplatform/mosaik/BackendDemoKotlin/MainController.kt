@@ -52,7 +52,7 @@ class MainController {
             targetCanvasDimension = CANVAS,
             appIconUrl = serverRequestUrl + "applogo.png",
             notificationCheckUrl = "checkNotifications",
-            ) {
+        ) {
 
             column {
                 label("Welcome to the Mosaik demo backend") {
@@ -102,7 +102,8 @@ class MainController {
         return NotificationCheckResponse().apply {
             val context = MosaikSerializer.fromContextHeadersMap(headers)
             message = "This could be a notification. You requested from guid ${context.guid}"
-            nextCheck = 15 // check again in 15 minutes
+            messageTs = System.currentTimeMillis()
+            nextCheck = 0 // check again asap
         }
     }
 

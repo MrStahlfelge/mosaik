@@ -19,7 +19,8 @@ public class NotificationCheckResponse {
 
     /**
      * Defines in how many minutes a next check should be done (delta time interval). It is not
-     * guaranteed that a Mosaik executor will perform the check at that time.
+     * guaranteed that a Mosaik executor will perform the check at that time. 0 will make the
+     * check perform as soon as possible, depending on Executor.
      */
     public int nextCheck;
 }
